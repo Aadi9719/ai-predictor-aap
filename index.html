@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>AI Predictor 🔥</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+padding:20px;
+margin:0;
+}
+
+h1{
+text-align:center;
+color:#00ff99;
+}
+
+.box{
+background:#1e1e1e;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+font-size:18px;
+background:#222;
+color:white;
+box-sizing:border-box;
+outline:none;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:20px;
+border:none;
+border-radius:10px;
+background:#00ff99;
+color:black;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.02);
+}
+
+#result{
+margin-top:20px;
+font-size:20px;
+text-align:center;
+background:#222;
+padding:15px;
+border-radius:10px;
+line-height:1.8;
+color:yellow;
+animation:fadeIn 0.5s;
+}
+
+#history,
+#liveResults{
+margin-top:20px;
+max-height:300px;
+overflow:auto;
+}
+
+.historyItem{
+background:#222;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+animation:fadeIn 0.5s;
+}
+
+#timerBox{
+margin-top:20px;
+background:#222;
+padding:15px;
+border-radius:10px;
+font-size:26px;
+text-align:center;
+color:#00ff99;
+font-weight:bold;
+}
+
+#timer{
+color:yellow;
+}
+
+#stats{
+margin-top:20px;
+background:#222;
+padding:15px;
+border-radius:10px;
+}
+
+canvas{
+margin-top:20px;
+background:#222;
+padding:10px;
+border-radius:10px;
+}
+
+.liveBox{
+background:#222;
+padding:12px;
+border-radius:10px;
+margin-top:10px;
+}
+
+.statusGreen{
+color:#00ff99;
+font-weight:bold;
+}
+
+.statusRed{
+color:#ff4444;
+font-weight:bold;
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>AI Predictor 🔥</h1>
+
+<div class="box">
+
+<input type="number" id="n1" placeholder="Last Number 1">
+<input type="number" id="n2" placeholder="Last Number 2">
+<input type="number" id="n3" placeholder="Last Number 3">
+<input type="number" id="n4" placeholder="Last Number 4">
+<input type="number" id="n5" placeholder="Last Number 5">
+
+<button id="btn">
+Analyze AI
+</button>
+
+<button id="checkBtn">
+Check Result
+</button>
+
+<div id="result">
+Prediction Will Show Here
+</div>
+
+<div id="timerBox">
+Next Round In:
+<span id="timer">60</span>s
+</div>
+
+<div id="stats">
+
+<h2>AI Statistics</h2>
+
+<p id="totalResults">Total Results: 0</p>
+<p id="greenRate">Green: 0%</p>
+<p id="redRate">Red: 0%</p>
+<p id="bigRate">Big: 0%</p>
+<p id="smallRate">Small: 0%</p>
+
+</div>
+
+<h2 style="color:#00ff99;">
+History 🔥
+</h2>
+
+<div id="history"></div>
+
+<h2 style="color:#00ff99;">
+Live Results 🌐
+</h2>
+
+<div id="liveResults"></div>
+
+<h2 style="color:#00ff99;">
+AI Power Chart 📈
+</h2>
+
+<canvas id="resultChart"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+// STORAGE
+
+let historyData =
+JSON.parse(localStorage.getItem("aiHistory")) || [];
+
+let liveResults =
+JSON.parse(localStorage.getItem("liveResults")) || [];
+
+let aiWins =
+Number(localStorage.getItem("aiWins")) || 0;
+
+let aiLosses =
+Number(localStorage.getItem("aiLosses")) || 0;
+
+let allResults =
+JSON.parse(localStorage.getItem("allResults")) || [];
+
+let nextNumber = 0;
+
+let chart;
+
+// UPDATE HISTORY
+
+function updateHistory(){
+
+document.getElementById("history").innerHTML =
+
+historyData.map(item =>
+
+'<div class="historyItem">' +
+item +
+'</div>'
+
+).join("");
+
+}
+
+// UPDATE LIVE RESULTS
+
+function updateLiveResults(){
+
+document.getElementById("liveResults").innerHTML =
+
+liveResults.map(item =>
+
+'<div class="liveBox">' +
+'LIVE RESULT: ' +
+item +
+'</div>'
+
+).join("");
+
+}
+
+// SAVE LIVE RESULT
+
+function addLiveResult(result){
+
+liveResults.unshift(result);
+
+if(liveResults.length > 20){
+
+liveResults =
+liveResults.slice(0,20);
+
+}
+
+localStorage.setItem(
+"liveResults",
+JSON.stringify(liveResults)
+);
+
+updateLiveResults();
+
+}
+
+// LOAD
+
+updateHistory();
+updateLiveResults();
+
+let chartData =
+JSON.parse(
+localStorage.getItem("chartData")
+) || [];
+
+function updateChart(power){
+
+chartData.push(power);
+
+if(chartData.length > 20){
+chartData = chartData.slice(-20);
+}
+
+localStorage.setItem(
+"chartData",
+JSON.stringify(chartData)
+);
+
+if(window.myChart){
+window.myChart.destroy();
+}
+
+let ctx =
+document.getElementById("resultChart");
+
+window.myChart =
+new Chart(ctx,{
+type:"line",
+data:{
+labels:chartData.map((_,i)=>i+1),
+datasets:[{
+label:"Power Index",
+data:chartData
+}]
+}
+});
+
+}
+
+// TIMER
+
+let timeLeft = 60;
+
+setInterval(function(){
+
+timeLeft--;
+
+if(timeLeft <= 0){
+
+timeLeft = 60;
+
+}
+
+document.getElementById("timer").innerHTML =
+timeLeft;
+
+},1000);
+
+// CHART
+
+function updateChart(powerIndex){
+
+let ctx =
+document.getElementById("resultChart");
+
+if(chart){
+chart.destroy();
+}
+
+chart = new Chart(ctx, {
+
+type:"line",
+
+data:{
+
+labels:[
+"Confidence",
+"Signal",
+"Power"
+],
+
+datasets:[{
+
+label:"AI Strength",
+
+data:[
+powerIndex - 10,
+powerIndex - 5,
+powerIndex
+],
+
+borderWidth:3,
+tension:0.4
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+legend:{
+labels:{
+color:"white"
+}
+}
+},
+
+scales:{
+
+y:{
+ticks:{
+color:"white"
+}
+},
+
+x:{
+ticks:{
+color:"white"
+}
+}
+
+}
+
+}
+
+});
+
+}
+
+// ANALYZE
+
+document.getElementById("btn").onclick =
+function(){
+
+document.getElementById("result").innerHTML =
+"AI Analyzing... 🔥";
+
+// INPUTS
+
+let n1 =
+parseInt(document.getElementById("n1").value) || 0;
+
+let n2 =
+parseInt(document.getElementById("n2").value) || 0;
+
+let n3 =
+parseInt(document.getElementById("n3").value) || 0;
+
+let n4 =
+parseInt(document.getElementById("n4").value) || 0;
+
+let n5 =
+parseInt(document.getElementById("n5").value) || 0;
+
+let numbers = [n1,n2,n3,n4,n5];
+
+// SAVE RESULTS
+
+allResults.push(n1,n2,n3,n4,n5);
+
+if(allResults.length > 100){
+
+allResults =
+allResults.slice(-100);
+
+}
+
+localStorage.setItem(
+"allResults",
+JSON.stringify(allResults)
+);
+
+// ANALYSIS
+
+let green = 0;
+let red = 0;
+
+let big = 0;
+let small = 0;
+
+numbers.forEach(num => {
+
+if(num >= 5){
+big++;
+}else{
+small++;
+}
+
+if([1,3,7,9].includes(num)){
+green++;
+}
+
+if([2,4,6,8].includes(num)){
+red++;
+}
+
+});
+
+// COLOR
+
+let colorPrediction =
+green >= red ? "GREEN" : "RED";
+
+// BIG SMALL
+
+let bigSmallPrediction =
+big >= small ? "BIG" : "SMALL";
+
+// CONFIDENCE
+
+let confidence =
+75 + Math.floor(Math.random()*15);
+
+if(confidence > 95){
+confidence = 95;
+}
+
+// PATTERN ENGINE
+
+let patternDetected = "NORMAL";
+
+if(n4 === n5){
+
+patternDetected = "REPEAT";
+
+nextNumber = n5;
+
+}
+else if(n5 % 2 === 0){
+
+patternDetected = "RED TREND";
+
+let arr = [2,4,6,8];
+
+nextNumber =
+arr[Math.floor(Math.random()*4)];
+
+}
+else{
+
+patternDetected = "GREEN TREND";
+
+let arr = [1,3,7,9];
+
+nextNumber =
+arr[Math.floor(Math.random()*4)];
+
+}
+
+// SIGNAL
+
+let signalStrength = 50;
+
+if(confidence >= 80){
+signalStrength += 20;
+}
+
+if(patternDetected === "REPEAT"){
+signalStrength += 20;
+}
+
+if(signalStrength > 100){
+signalStrength = 100;
+}
+
+// ACCURACY
+
+let totalGames =
+aiWins + aiLosses;
+
+let accuracyRate = 0;
+
+if(totalGames > 0){
+
+accuracyRate = Math.floor(
+(aiWins / totalGames) * 100
+);
+
+}
+
+// AI SCORE
+
+let aiScore = Math.floor(
+(confidence + signalStrength) / 2
+);
+
+// POWER INDEX
+
+let powerIndex = Math.floor(
+(
+confidence +
+signalStrength +
+accuracyRate
+) / 3
+);
+
+if(powerIndex > 100){
+powerIndex = 100;
+}
+
+// POWER STATUS
+
+let powerStatus = "LOW ⚠️";
+
+if(powerIndex >= 80){
+
+powerStatus = "ULTRA 🔥";
+
+}
+else if(powerIndex >= 60){
+
+powerStatus = "STRONG ✅";
+
+}
+else{
+
+powerStatus = "MEDIUM ⚡";
+
+}
+
+// SIGNAL STATUS
+
+let signalStatus = "WEAK ❌";
+
+if(signalStrength >= 70){
+
+signalStatus = "STRONG ✅";
+
+}
+
+if(signalStrength >= 90){
+
+signalStatus = "ULTRA 🔥";
+
+}
+
+// HOT NUMBER
+
+let hotNumber =
+numbers[Math.floor(Math.random()*5)];
+
+// COLD NUMBER
+
+let coldNumber =
+Math.floor(Math.random()*10);
+
+// HISTORY
+
+historyData.unshift(
+
+"Color: " +
+colorPrediction +
+
+" | Next: " +
+nextNumber +
+
+" | Power: " +
+powerIndex
+
+);
+
+if(historyData.length > 20){
+
+historyData =
+historyData.slice(0,20);
+
+}
+
+localStorage.setItem(
+"aiHistory",
+JSON.stringify(historyData)
+);
+
+updateHistory();
+
+// RESULT
+
+document.getElementById("result").innerHTML =
+
+`
+AI Prediction 🔥
+
+<br><br>
+
+Color:
+${colorPrediction}
+
+<br><br>
+
+Big/Small:
+${bigSmallPrediction}
+
+<br><br>
+
+Confidence:
+${confidence}%
+
+<br><br>
+
+Signal Strength:
+${signalStrength}%
+
+<br><br>
+
+Signal Status:
+${signalStatus}
+
+<br><br>
+
+AI Score:
+${aiScore}/100
+
+<br><br>
+
+Power Index:
+${powerIndex}/100
+
+<br><br>
+
+Power Status:
+${powerStatus}
+
+<br><br>
+
+Accuracy Rate:
+${accuracyRate}%
+
+<br><br>
+
+Next Number:
+${nextNumber}
+
+<br><br>
+
+Hot Number:
+${hotNumber}
+
+<br><br>
+
+Cold Number:
+${coldNumber}
+
+<br><br>
+
+Pattern:
+${patternDetected}
+
+<br><br>
+
+AI Wins:
+${aiWins}
+
+<br><br>
+
+AI Losses:
+${aiLosses}
+
+`;
+
+// STATS
+
+document.getElementById("totalResults").innerHTML =
+"Total Results: " + historyData.length;
+
+document.getElementById("greenRate").innerHTML =
+"Green: " + Math.floor((green/5)*100) + "%";
+
+document.getElementById("redRate").innerHTML =
+"Red: " + Math.floor((red/5)*100) + "%";
+
+document.getElementById("bigRate").innerHTML =
+"Big: " + Math.floor((big/5)*100) + "%";
+
+document.getElementById("smallRate").innerHTML =
+"Small: " + Math.floor((small/5)*100) + "%";
+
+// UPDATE CHART
+
+updateChart(powerIndex);
+
+};
+
+// CHECK RESULT
+
+document.getElementById("checkBtn").onclick =
+function(){
+
+let actualResult =
+prompt("Enter Actual Result Number");
+
+if(actualResult === null){
+return;
+}
+
+actualResult = Number(actualResult);
+
+if(isNaN(actualResult)){
+
+alert("Enter Valid Number");
+return;
+
+}
+
+// LIVE RESULT SAVE
+
+addLiveResult(actualResult);
+
+// WIN LOSS
+
+if(actualResult === nextNumber){
+
+aiWins++;
+
+alert("AI WON ✅");
+
+}else{
+
+aiLosses++;
+
+alert("AI LOST ❌");
+
+}
+
+localStorage.setItem(
+"aiWins",
+aiWins
+);
+
+localStorage.setItem(
+"aiLosses",
+aiLosses
+);
+
+};
+
+</script>
+
+</body>
+</html>
