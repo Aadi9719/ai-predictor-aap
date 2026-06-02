@@ -836,5 +836,29 @@ aiLosses
 
 </script>
 
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyAs-yZs2elUl18PSoSG7C1AOSNfNuFvh3c",
+authDomain: "ai-predictor-c7658.firebaseapp.com",
+projectId: "ai-predictor-c7658",
+storageBucket: "ai-predictor-c7658.firebasestorage.app",
+messagingSenderId: "551796465700",
+appId: "1:551796465700:web:6983327a1b3fb5635d78b1",
+measurementId: "G-XTEWS4WTTK"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.db = db;
+
+console.log("Firebase Connected ✅");
+
+</script>
+
 </body>
 </html>
