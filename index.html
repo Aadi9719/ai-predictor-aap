@@ -164,6 +164,10 @@ Not Logged In
 Total Users: <span id="totalUsers">0</span>
 </div>
 
+<div id="userList" style="margin-top:10px;background:#222;padding:10px;border-radius:10px;">
+Loading Users...
+</div>
+  
 <div class="box">
 
 <input type="number" id="n1" placeholder="Last Number 1">
@@ -915,13 +919,31 @@ alert("Login Success ✅");
 }
 
 console.log("Firebase Connected ✅");
-  async function loadUsers(){
+
+async function loadUsers(){
 
   const snapshot =
   await getDocs(collection(db, "users"));
 
   document.getElementById("totalUsers").innerText =
   snapshot.size;
+
+  let html = "";
+
+  snapshot.forEach((userDoc) => {
+
+    const user = userDoc.data();
+
+    html += `
+      <div style="padding:8px;border-bottom:1px solid #444;">
+        👤 ${user.name || "No Name"}<br>
+        📧 ${user.email || "No Email"}
+      </div>
+    `;
+
+  });
+
+  document.getElementById("userList").innerHTML = html;
 
 }
 
