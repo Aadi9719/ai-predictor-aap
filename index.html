@@ -869,35 +869,32 @@ const provider = new GoogleAuthProvider();
 const loginBtn = document.getElementById("loginBtn");
 const userInfo = document.getElementById("userInfo");
 
-if(loginBtn){
+if (loginBtn) {
 
-loginBtn.onclick = async () => {
+  loginBtn.onclick = async () => {
 
-try {
+    try {
 
-const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
 
-userInfo.innerHTML =
-"👤 " + result.user.displayName;
+      userInfo.innerHTML =
+      "👤 " + result.user.displayName;
 
-alert("Login Success ✅");
+      alert("Login Success ✅");
 
-} catch(error) {
+    } catch (error) {
 
-console.log(error);
+      console.log(error);
 
-alert("ERROR: " + error.code);
+      alert("ERROR: " + error.code);
 
-}
+    }
 
-}
-
-};
+  };
 
 }
 
 console.log("Firebase Connected ✅");
-alert("Firebase Script Loaded ✅");
   
 </script>
 
