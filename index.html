@@ -846,6 +846,7 @@ aiLosses
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAs-yZs2elUl18PSoSG7C1AOSNfNuFvh3c",
@@ -862,8 +863,38 @@ const db = getFirestore(app);
 
 window.db = db;
 
-console.log("Firebase Connected ✅");
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
+const loginBtn = document.getElementById("loginBtn");
+const userInfo = document.getElementById("userInfo");
+
+if(loginBtn){
+
+loginBtn.onclick = async () => {
+
+try {
+
+const result = await signInWithPopup(auth, provider);
+
+userInfo.innerHTML =
+"👤 " + result.user.displayName;
+
+alert("Login Success ✅");
+
+} catch(error) {
+
+console.log(error);
+
+alert("Login Failed ❌");
+
+}
+
+};
+
+}
+
+console.log("Firebase Connected ✅");
 
 </script>
 
