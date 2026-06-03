@@ -845,7 +845,11 @@ aiLosses
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -877,10 +881,20 @@ if (loginBtn) {
 
       const result = await signInWithPopup(auth, provider);
 
-      userInfo.innerHTML =
-      "👤 " + result.user.displayName;
+await setDoc(
+  doc(db, "users", result.user.uid),
+  {
+    name: result.user.displayName,
+    email: result.user.email,
+    uid: result.user.uid,
+    loginTime: new Date().toISOString()
+  }
+);
 
-      alert("Login Success ✅");
+userInfo.innerHTML =
+"👤 " + result.user.displayName;
+
+alert("Login Success ✅");
 
     } catch (error) {
 
