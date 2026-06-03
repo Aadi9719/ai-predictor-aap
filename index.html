@@ -167,6 +167,18 @@ Total Users: <span id="totalUsers">0</span>
 <div id="userList" style="margin-top:10px;background:#222;padding:10px;border-radius:10px;">
 Loading Users...
 </div>
+
+<h3>📊 Prediction History</h3>
+
+<div id="predictionHistory"
+style="
+background:#222;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+">
+No Predictions Yet
+</div>
   
 <div class="box">
 
@@ -445,7 +457,7 @@ color:"white"
 // ANALYZE
 
 document.getElementById("btn").onclick =
-function(){
+async function(){
 
 document.getElementById("result").innerHTML =
 "AI Analyzing... 🔥";
@@ -659,6 +671,16 @@ numbers[Math.floor(Math.random()*5)];
 let coldNumber =
 Math.floor(Math.random()*10);
 
+await addDoc(
+  collection(db, "predictions"),
+  {
+    color: colorPrediction,
+    nextNumber: nextNumber,
+    power: powerIndex,
+    time: new Date().toISOString()
+  }
+);
+  
 // HISTORY
 
 historyData.unshift(
@@ -859,6 +881,7 @@ import {
   setDoc,
   collection,
   getDocs
+  addDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -948,6 +971,34 @@ async function loadUsers(){
 }
 
 loadUsers();
+
+async function loadPredictions(){
+
+  const snapshot =
+  await getDocs(collection(db,"predictions"));
+
+  let html = "";
+
+  snapshot.forEach((doc) => {
+
+    const p = doc.data();
+
+    html += `
+      <div style="padding:8px;border-bottom:1px solid #444;">
+      🎯 ${p.color}
+      | Next: ${p.nextNumber}
+      | Power: ${p.power}
+      </div>
+    `;
+
+  });
+
+  document.getElementById("predictionHistory").innerHTML =
+  html || "No Predictions Yet";
+
+}
+
+loadPredictions();
   
 </script>
 
