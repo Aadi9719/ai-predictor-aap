@@ -670,32 +670,6 @@ numbers[Math.floor(Math.random()*5)];
 
 let coldNumber =
 Math.floor(Math.random()*10);
-
-  let coldNumber =
-Math.floor(Math.random()*10);
-
-try {
-
-  alert("Before Save");
-
-  await addDoc(
-    collection(db, "predictions"),
-    {
-      color: colorPrediction,
-      nextNumber: nextNumber,
-      power: powerIndex,
-      time: new Date().toISOString()
-    }
-  );
-
-  alert("After Save");
-
-} catch(error) {
-
-  alert("SAVE ERROR: " + error.message);
-  console.log(error);
-
-}
   
 // HISTORY
 
