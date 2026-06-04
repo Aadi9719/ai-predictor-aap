@@ -673,6 +673,8 @@ Math.floor(Math.random()*10);
 
 alert("Before Save");
 
+try {
+  
 await addDoc(
   collection(db, "predictions"),
   {
@@ -682,6 +684,13 @@ await addDoc(
 );
 
 alert("After Save");
+
+} catch(error) {
+
+  alert("ERROR: " + error.code);
+  console.log(error);
+
+}
   
 // HISTORY
 
