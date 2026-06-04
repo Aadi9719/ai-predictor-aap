@@ -687,11 +687,12 @@ alert("After Save");
 
 } catch(error) {
 
-  alert("ERROR: " + error.code);
   console.log(error);
 
+  alert(error.message);
+
 }
-  
+
 // HISTORY
 
 historyData.unshift(
