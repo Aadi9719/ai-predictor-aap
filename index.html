@@ -947,11 +947,15 @@ if(
   "godaadi7@gmail.com"
 ){
 
+window.isAdmin = true;
+  
   document.getElementById("adminPanel").style.display =
   "block";
 
 }else{
 
+window.isAdmin = false;
+  
   document.getElementById("adminPanel").style.display =
   "none";
 
@@ -1060,6 +1064,13 @@ loadPredictions();
 document.getElementById("deletePredictionsBtn").onclick =
 async function(){
 
+if(!window.isAdmin){
+
+  alert("Admin Access Required ❌");
+  return;
+
+}
+  
   if(!confirm("Delete All Predictions?")){
     return;
   }
