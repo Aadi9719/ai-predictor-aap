@@ -165,6 +165,12 @@ Not Logged In
   <h3>👑 Admin Panel</h3>
 
   Total Users: <span id="totalUsers">0</span>
+
+  <p>🎯 Total Predictions: <span id="totalPredictions">0</span></p>
+
+<p>🔥 Latest Prediction:
+<span id="latestPrediction">None</span>
+</p>
   
 <div id="userList" style="margin-top:10px;background:#222;padding:10px;border-radius:10px;">
 Loading Users...
@@ -1012,12 +1018,20 @@ async function loadPredictions(){
   const snapshot =
   await getDocs(collection(db,"predictions"));
 
+document.getElementById("totalPredictions").innerText =
+snapshot.size;
+  
   let html = "";
-
+  
+let latest = "None";
+  
   snapshot.forEach((doc) => {
 
     const p = doc.data();
 
+latest =
+`${p.color} | ${p.nextNumber}`;
+    
     html += `
       <div style="padding:8px;border-bottom:1px solid #444;">
       🎯 ${p.color}
@@ -1028,6 +1042,9 @@ async function loadPredictions(){
 
   });
 
+document.getElementById("latestPrediction").innerText =
+latest;
+  
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
