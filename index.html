@@ -671,30 +671,16 @@ numbers[Math.floor(Math.random()*5)];
 let coldNumber =
 Math.floor(Math.random()*10);
 
-alert("Before Save");
+if(window.savePrediction){
 
-alert(typeof addDoc);
-  
-try {
-  
-await addDoc(
-  collection(db, "predictions"),
-  {
-    test: "working",
-    time: new Date().toISOString()
-  }
-);
-
-alert("After Save");
-
-} catch(error) {
-
-  console.log(error);
-
-  alert(error.message);
+  await window.savePrediction(
+    colorPrediction,
+    nextNumber,
+    powerIndex
+  );
 
 }
-
+  
 // HISTORY
 
 historyData.unshift(
@@ -986,6 +972,22 @@ async function loadUsers(){
 
 loadUsers();
 
+async function savePrediction(color, nextNumber, power){
+
+  await addDoc(
+    collection(db, "predictions"),
+    {
+      color: color,
+      nextNumber: nextNumber,
+      power: power,
+      time: new Date().toISOString()
+    }
+  );
+
+}
+
+  window.savePrediction = savePrediction;
+  
 async function loadPredictions(){
 
   const snapshot =
