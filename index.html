@@ -172,6 +172,14 @@ Not Logged In
 <span id="latestPrediction">None</span>
 </p>
 
+  <p>🟢 Green Predictions:
+<span id="greenCount">0</span>
+</p>
+
+<p>🔴 Red Predictions:
+<span id="redCount">0</span>
+</p>
+  
 <button id="deletePredictionsBtn">
 🗑️ Delete All Predictions
 </button>
@@ -1038,11 +1046,22 @@ snapshot.size;
   let html = "";
   
 let latest = "None";
+
+  let greenCount = 0;
+let redCount = 0;
   
   snapshot.forEach((doc) => {
 
     const p = doc.data();
 
+    if(p.color === "GREEN"){
+  greenCount++;
+}
+
+if(p.color === "RED"){
+  redCount++;
+}
+    
 latest =
 `${p.color} | ${p.nextNumber}`;
     
@@ -1058,6 +1077,12 @@ latest =
 
 document.getElementById("latestPrediction").innerText =
 latest;
+
+  document.getElementById("greenCount").innerText =
+greenCount;
+
+document.getElementById("redCount").innerText =
+redCount;
   
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
