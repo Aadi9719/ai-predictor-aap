@@ -707,14 +707,23 @@ Math.floor(Math.random()*10);
 
 if(window.savePrediction){
 
-  await window.savePrediction(
-    colorPrediction,
-    bigSmallPrediction,
-    nextNumber,
-    powerIndex
-  );
+  try{
 
-}
+    await window.savePrediction(
+      colorPrediction,
+      bigSmallPrediction,
+      nextNumber,
+      powerIndex
+    );
+
+  }catch(error){
+
+    alert(error.message);
+    console.log(error);
+
+  }
+
+  }
   
 // HISTORY
 
