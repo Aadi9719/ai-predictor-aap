@@ -898,7 +898,12 @@ import {
   addDoc,
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAs-yZs2elUl18PSoSG7C1AOSNfNuFvh3c",
@@ -1061,6 +1066,37 @@ latest;
 
 loadPredictions();
 
+  onAuthStateChanged(auth, (user) => {
+
+  if(user){
+
+    userInfo.innerHTML =
+    "👤 " + user.displayName;
+
+    if(
+      user.email &&
+      user.email.toLowerCase() ===
+      "godaadi7@gmail.com"
+    ){
+
+      window.isAdmin = true;
+
+      document.getElementById("adminPanel").style.display =
+      "block";
+
+    }else{
+
+      window.isAdmin = false;
+
+      document.getElementById("adminPanel").style.display =
+      "none";
+
+    }
+
+  }
+
+});
+  
 document.getElementById("deletePredictionsBtn").onclick =
 async function(){
 
