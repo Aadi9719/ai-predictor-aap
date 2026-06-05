@@ -179,6 +179,14 @@ Not Logged In
 <p>🔴 Red Predictions:
 <span id="redCount">0</span>
 </p>
+
+  <p>🔵 Big Predictions:
+<span id="bigCount">0</span>
+</p>
+
+<p>🟡 Small Predictions:
+<span id="smallCount">0</span>
+</p>
   
 <button id="deletePredictionsBtn">
 🗑️ Delete All Predictions
@@ -1050,6 +1058,9 @@ let latest = "None";
   let greenCount = 0;
 let redCount = 0;
   
+  let bigCount = 0;
+let smallCount = 0;
+  
   snapshot.forEach((doc) => {
 
     const p = doc.data();
@@ -1061,6 +1072,12 @@ let redCount = 0;
 if(p.color === "RED"){
   redCount++;
 }
+
+    if(p.nextNumber >= 5){
+  bigCount++;
+}else{
+  smallCount++;
+    }
     
 latest =
 `${p.color} | ${p.nextNumber}`;
@@ -1083,6 +1100,12 @@ greenCount;
 
 document.getElementById("redCount").innerText =
 redCount;
+
+  document.getElementById("bigCount").innerText =
+bigCount;
+
+document.getElementById("smallCount").innerText =
+smallCount;
   
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
