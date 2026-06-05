@@ -927,6 +927,21 @@ await setDoc(
 userInfo.innerHTML =
 "👤 " + result.user.displayName;
 
+if(
+  result.user.email.toLowerCase() ===
+  "godaadi7@gmail.com"
+){
+
+  document.getElementById("adminPanel").style.display =
+  "block";
+
+}else{
+
+  document.getElementById("adminPanel").style.display =
+  "none";
+
+}
+      
 alert("Login Success ✅");
 
     } catch (error) {
