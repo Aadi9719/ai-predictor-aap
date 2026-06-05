@@ -171,6 +171,10 @@ Not Logged In
 <p>🔥 Latest Prediction:
 <span id="latestPrediction">None</span>
 </p>
+
+<button id="deletePredictionsBtn">
+🗑️ Delete All Predictions
+</button>
   
 <div id="userList" style="margin-top:10px;background:#222;padding:10px;border-radius:10px;">
 Loading Users...
@@ -891,7 +895,8 @@ import {
   setDoc,
   collection,
   getDocs,
-  addDoc
+  addDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -1051,6 +1056,30 @@ latest;
 }
 
 loadPredictions();
+
+document.getElementById("deletePredictionsBtn").onclick =
+async function(){
+
+  if(!confirm("Delete All Predictions?")){
+    return;
+  }
+
+  const snapshot =
+  await getDocs(collection(db,"predictions"));
+
+  for(const predictionDoc of snapshot.docs){
+
+    await deleteDoc(
+      doc(db,"predictions",predictionDoc.id)
+    );
+
+  }
+
+  alert("All Predictions Deleted ✅");
+
+  loadPredictions();
+
+};
   
 </script>
 
