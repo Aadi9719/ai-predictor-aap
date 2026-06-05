@@ -187,6 +187,10 @@ Not Logged In
 <p>🟡 Small Predictions:
 <span id="smallCount">0</span>
 </p>
+
+  <p>🏆 Most Predicted Number:
+<span id="mostPredictedNumber">None</span>
+  </p>
   
 <button id="deletePredictionsBtn">
 🗑️ Delete All Predictions
@@ -1060,11 +1064,16 @@ let redCount = 0;
   
   let bigCount = 0;
 let smallCount = 0;
+
+  let numberCounts = {};
   
   snapshot.forEach((doc) => {
 
     const p = doc.data();
-
+    
+numberCounts[p.nextNumber] =
+(numberCounts[p.nextNumber] || 0) + 1;
+    
     if(p.color === "GREEN"){
   greenCount++;
 }
@@ -1106,6 +1115,23 @@ bigCount;
 
 document.getElementById("smallCount").innerText =
 smallCount;
+
+  let mostNumber = "None";
+let maxCount = 0;
+
+for(const num in numberCounts){
+
+  if(numberCounts[num] > maxCount){
+
+    maxCount = numberCounts[num];
+    mostNumber = num;
+
+  }
+
+}
+
+document.getElementById("mostPredictedNumber").innerText =
+mostNumber;
   
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
