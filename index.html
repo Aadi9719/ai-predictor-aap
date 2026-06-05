@@ -709,6 +709,7 @@ if(window.savePrediction){
 
   await window.savePrediction(
     colorPrediction,
+    bigSmallPrediction,
     nextNumber,
     powerIndex
   );
@@ -1037,6 +1038,7 @@ async function savePrediction(color, nextNumber, power){
     collection(db, "predictions"),
     {
       color: color,
+      bigSmall: bigSmall,
       nextNumber: nextNumber,
       power: power,
       time: new Date().toISOString()
