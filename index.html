@@ -1071,15 +1071,6 @@ async function loadPredictions(){
 
   const snapshot =
   await getDocs(collection(db,"predictions"));
-
-  alert("Prediction Count = " + snapshot.size);
-
-  alert("First Doc ID = " + snapshot.docs[0].id);
-
-alert(
-  "Last Doc ID = " +
-  snapshot.docs[snapshot.size - 1].id
-);
   
 document.getElementById("totalPredictions").innerText =
 snapshot.size;
