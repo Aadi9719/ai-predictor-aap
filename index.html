@@ -1190,6 +1190,60 @@ mostNumber;
 }
 
 loadPredictions();
+
+  function analyzeBigSmallPattern(){
+
+  if(!window.patternData ||
+     window.patternData.length < 10){
+    return "NO DATA";
+  }
+
+  let data = window.patternData;
+
+  let last4 =
+  data.slice(-4).map(x => x.bigSmall);
+
+  let bigCount = 0;
+  let smallCount = 0;
+
+  for(let i=0; i<data.length-4; i++){
+
+    let pattern = [
+      data[i].bigSmall,
+      data[i+1].bigSmall,
+      data[i+2].bigSmall,
+      data[i+3].bigSmall
+    ];
+
+    if(
+      JSON.stringify(pattern) ===
+      JSON.stringify(last4)
+    ){
+
+      let next =
+      data[i+4]?.bigSmall;
+
+      if(next === "BIG"){
+        bigCount++;
+      }
+
+      if(next === "SMALL"){
+        smallCount++;
+      }
+
+    }
+
+  }
+
+  return bigCount >= smallCount ?
+  "BIG" : "SMALL";
+
+  }
+
+  alert(
+"Pattern Prediction = " +
+analyzeBigSmallPattern()
+);
   
   onAuthStateChanged(auth, (user) => {
 
