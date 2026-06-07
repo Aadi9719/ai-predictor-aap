@@ -1193,11 +1193,18 @@ loadPredictions();
 
   function analyzeBigSmallPattern(){
 
+    alert("Function Start");
+    
   if(!window.patternData ||
      window.patternData.length < 10){
     return "NO DATA";
   }
 
+    alert(
+"Pattern Prediction = " +
+analyzeBigSmallPattern()
+);
+    
   let data = window.patternData;
 
   let last4 =
