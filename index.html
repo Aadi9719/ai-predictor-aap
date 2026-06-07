@@ -1185,19 +1185,11 @@ mostNumber;
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
+  alert("Pattern Records = " + window.patternData.length);
+  
 }
 
 loadPredictions();
-
-  setTimeout(() => {
-
-  alert(
-    "Pattern Records = " +
-    (window.patternData ?
-      window.patternData.length : 0)
-  );
-
-},3000);
   
   onAuthStateChanged(auth, (user) => {
 
