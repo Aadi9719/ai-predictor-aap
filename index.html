@@ -1086,6 +1086,20 @@ async function loadPredictions(){
 
   const snapshot =
   await getDocs(collection(db,"predictions"));
+
+  window.patternData = [];
+
+  snapshot.forEach((doc) => {
+
+    const p = doc.data();
+
+    window.patternData.push({
+      color: p.color,
+      bigSmall: p.bigSmall,
+      nextNumber: p.nextNumber
+    });
+
+  });
   
 document.getElementById("totalPredictions").innerText =
 snapshot.size;
@@ -1175,6 +1189,16 @@ mostNumber;
 
 loadPredictions();
 
+  setTimeout(() => {
+
+  alert(
+    "Pattern Records = " +
+    (window.patternData ?
+      window.patternData.length : 0)
+  );
+
+},3000);
+  
   onAuthStateChanged(auth, (user) => {
 
   if(user){
