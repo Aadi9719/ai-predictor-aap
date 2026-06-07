@@ -1185,6 +1185,11 @@ mostNumber;
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
+  alert(
+"Pattern Prediction = " +
+analyzeBigSmallPattern()
+);
+  
   alert("Pattern Records = " + window.patternData.length);
   
 }
@@ -1194,16 +1199,16 @@ loadPredictions();
   function analyzeBigSmallPattern(){
 
     alert("Function Start");
+
+    alert(
+"Data Length = " +
+window.patternData.length
+);
     
   if(!window.patternData ||
      window.patternData.length < 10){
     return "NO DATA";
   }
-
-    alert(
-"Pattern Prediction = " +
-analyzeBigSmallPattern()
-);
     
   let data = window.patternData;
 
@@ -1251,11 +1256,6 @@ JSON.stringify(last4)
   "BIG" : "SMALL";
 
   }
-
-  alert(
-"Pattern Prediction = " +
-analyzeBigSmallPattern()
-);
   
   onAuthStateChanged(auth, (user) => {
 
