@@ -1084,9 +1084,13 @@ async function savePrediction(color, bigSmall, nextNumber, power){
   
 async function loadPredictions(){
 
+  alert("loadPredictions Start");
+  
   const snapshot =
   await getDocs(collection(db,"predictions"));
 
+  alert("Records = " + snapshot.size);
+  
   window.patternData = [];
 
   snapshot.forEach((doc) => {
