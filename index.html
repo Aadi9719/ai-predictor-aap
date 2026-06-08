@@ -1191,11 +1191,17 @@ mostNumber;
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
-    console.log(
+console.log(
 window.patternData[
 window.patternData.length - 1
 ]
-)
+);
+
+console.log(
+  "Pattern Result:",
+  analyzeBigSmallPattern()
+);
+
 }
 
 loadPredictions();
