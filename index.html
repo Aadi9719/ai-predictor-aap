@@ -1195,6 +1195,11 @@ mostNumber;
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
+  alert(
+"Pattern = " +
+analyzeBigSmallPattern()
+);
+  
 console.log(
 window.patternData[
 window.patternData.length - 1
@@ -1216,6 +1221,8 @@ analyzeBigSmallPattern()
 );
   
   function analyzeBigSmallPattern(){
+
+    alert("Pattern Function Start");
     
   if(!window.patternData ||
      window.patternData.length < 10){
