@@ -1106,7 +1106,12 @@ async function loadPredictions(){
       nextNumber: p.nextNumber
     });
 
-  });
+    console.log(
+"Loaded:",
+p.color,
+p.bigSmall,
+p.nextNumber
+);
   
 document.getElementById("totalPredictions").innerText =
 snapshot.size;
@@ -1192,6 +1197,14 @@ mostNumber;
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
+    alert(
+JSON.stringify(
+window.patternData[
+window.patternData.length - 1
+]
+)
+);
+    
   alert(
 "Pattern Prediction = " +
 analyzeBigSmallPattern()
