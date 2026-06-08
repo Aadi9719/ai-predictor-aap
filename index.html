@@ -1094,10 +1094,10 @@ async function loadPredictions(){
     const p = doc.data();
 
     window.patternData.push({
-      color: p.color,
-      bigSmall: p.bigSmall,
-      nextNumber: p.nextNumber
-    });
+  color: p.color,
+  bigSmall: p.bigSmall || (p.nextNumber >= 5 ? "BIG" : "SMALL"),
+  nextNumber: p.nextNumber
+});
 
     console.log(
 "Loaded:",
@@ -1105,6 +1105,7 @@ p.color,
 p.bigSmall,
 p.nextNumber
 );
+});
   
 document.getElementById("totalPredictions").innerText =
 snapshot.size;
