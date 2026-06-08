@@ -1058,15 +1058,6 @@ loadUsers();
 
 async function savePrediction(color, bigSmall, nextNumber, power){
 
-  alert("Saving BigSmall = " + bigSmall);
-  
-  alert(
-"Save Test:\n" +
-"Color=" + color + "\n" +
-"BigSmall=" + bigSmall + "\n" +
-"Next=" + nextNumber
-);
-  
   try{
     
   await addDoc(
@@ -1203,27 +1194,12 @@ mostNumber;
 window.patternData[
 window.patternData.length - 1
 ]
-);
-    
-  alert(
-"Pattern Prediction = " +
-analyzeBigSmallPattern()
-);
-  
-  alert("Pattern Records = " + window.patternData.length);
-  
+)
 }
 
 loadPredictions();
 
   function analyzeBigSmallPattern(){
-
-    alert("Function Start");
-
-    alert(
-"Data Length = " +
-window.patternData.length
-);
     
   if(!window.patternData ||
      window.patternData.length < 10){
@@ -1234,11 +1210,6 @@ window.patternData.length
 
   let last4 =
   data.slice(-4).map(x => x.bigSmall);
-
-    alert(
-"Last4 = " +
-JSON.stringify(last4)
-);
     
   let bigCount = 0;
   let smallCount = 0;
