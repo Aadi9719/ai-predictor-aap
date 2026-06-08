@@ -1058,6 +1058,8 @@ loadUsers();
 
 async function savePrediction(color, bigSmall, nextNumber, power){
 
+  alert("Saving BigSmall = " + bigSmall);
+  
   alert(
 "Save Test:\n" +
 "Color=" + color + "\n" +
@@ -1197,12 +1199,10 @@ mostNumber;
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
 
-    alert(
-JSON.stringify(
+    console.log(
 window.patternData[
 window.patternData.length - 1
 ]
-)
 );
     
   alert(
