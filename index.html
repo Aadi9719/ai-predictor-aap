@@ -361,40 +361,6 @@ JSON.parse(
 localStorage.getItem("chartData")
 ) || [];
 
-function updateChart(power){
-
-chartData.push(power);
-
-if(chartData.length > 20){
-chartData = chartData.slice(-20);
-}
-
-localStorage.setItem(
-"chartData",
-JSON.stringify(chartData)
-);
-
-if(window.myChart){
-window.myChart.destroy();
-}
-
-let ctx =
-document.getElementById("resultChart");
-
-window.myChart =
-new Chart(ctx,{
-type:"line",
-data:{
-labels:chartData.map((_,i)=>i+1),
-datasets:[{
-label:"Power Index",
-data:chartData
-}]
-}
-});
-
-}
-
 // TIMER
 
 let timeLeft = 60;
