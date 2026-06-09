@@ -1151,6 +1151,38 @@ mostNumber;
 }
 
 loadPredictions();
+
+  function getMostFrequentNumber(){
+
+  if(!window.patternData || window.patternData.length === 0){
+    return 0;
+  }
+
+  let counts = {};
+
+  window.patternData.forEach(item => {
+
+    counts[item.nextNumber] =
+    (counts[item.nextNumber] || 0) + 1;
+
+  });
+
+  let max = 0;
+  let result = 0;
+
+  for(let num in counts){
+
+    if(counts[num] > max){
+
+      max = counts[num];
+      result = Number(num);
+
+    }
+
+  }
+
+  return result;
+  }
   
   function analyzeBigSmallPattern(){
     
