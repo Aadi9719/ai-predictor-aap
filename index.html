@@ -1085,15 +1085,9 @@ async function savePrediction(color, bigSmall, nextNumber, power){
   window.savePrediction = savePrediction;
   
 async function loadPredictions(){
-
-  alert("loadPredictions Start");
   
   const snapshot =
   await getDocs(collection(db,"predictions"));
-
-  alert("Records = " + snapshot.size);
-
-  alert("Step 1");
   
   window.patternData = [];
 
@@ -1105,14 +1099,6 @@ async function loadPredictions(){
   color: p.color,
   bigSmall: p.bigSmall || (p.nextNumber >= 5 ? "BIG" : "SMALL"),
   nextNumber: p.nextNumber
-});
-
-    console.log(
-"Loaded:",
-p.color,
-p.bigSmall,
-p.nextNumber
-);
 });
   
 document.getElementById("totalPredictions").innerText =
@@ -1198,35 +1184,11 @@ mostNumber;
   
   document.getElementById("predictionHistory").innerHTML =
   html || "No Predictions Yet";
-
-  alert(
-"Pattern = " +
-analyzeBigSmallPattern()
-);
-  
-console.log(
-window.patternData[
-window.patternData.length - 1
-]
-);
-
-console.log(
-  "Pattern Result:",
-  analyzeBigSmallPattern()
-);
-
 }
 
 loadPredictions();
-
-  console.log(
-"Pattern Result:",
-analyzeBigSmallPattern()
-);
   
   function analyzeBigSmallPattern(){
-
-    alert("Pattern Function Start");
     
   if(!window.patternData ||
      window.patternData.length < 10){
