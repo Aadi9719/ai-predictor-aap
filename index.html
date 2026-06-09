@@ -1090,6 +1090,8 @@ async function loadPredictions(){
   await getDocs(collection(db,"predictions"));
 
   alert("Records = " + snapshot.size);
+
+  alert("Step 1");
   
   window.patternData = [];
 
