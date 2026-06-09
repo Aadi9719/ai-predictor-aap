@@ -1100,13 +1100,14 @@ async function loadPredictions(){
   bigSmall: p.bigSmall || (p.nextNumber >= 5 ? "BIG" : "SMALL"),
   nextNumber: p.nextNumber
 });
+
+    });
   
 document.getElementById("totalPredictions").innerText =
 snapshot.size;
   
   let html = "";
-  
-let latest = "None";
+  let latest = "None";
 
   let greenCount = 0;
 let redCount = 0;
