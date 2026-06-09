@@ -565,7 +565,9 @@ green >= red ? "GREEN" : "RED";
 // BIG SMALL
 
 let bigSmallPrediction =
-analyzeBigSmallPattern();
+window.analyzeBigSmallPattern ?
+window.analyzeBigSmallPattern() :
+(big >= small ? "BIG" : "SMALL");
 
 // CONFIDENCE
 
@@ -1272,6 +1274,9 @@ analyzeBigSmallPattern()
   "BIG" : "SMALL";
 
   }
+
+  window.analyzeBigSmallPattern =
+analyzeBigSmallPattern;
   
   onAuthStateChanged(auth, (user) => {
 
