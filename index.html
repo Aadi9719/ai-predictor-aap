@@ -356,11 +356,6 @@ updateLiveResults();
 updateHistory();
 updateLiveResults();
 
-let chartData =
-JSON.parse(
-localStorage.getItem("chartData")
-) || [];
-
 // TIMER
 
 let timeLeft = 60;
@@ -684,6 +679,8 @@ if(window.savePrediction){
       powerIndex
     );
 
+    loadPredictions();
+    
   }catch(error){
 
     alert(error.message);
@@ -1098,7 +1095,7 @@ if(p.color === "RED"){
   redCount++;
 }
 
-    if(p.nextNumber >= 5){
+    if(p.bigSmall === "BIG"){
   bigCount++;
 }else{
   smallCount++;
