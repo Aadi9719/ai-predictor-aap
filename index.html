@@ -666,7 +666,7 @@ if(window.savePrediction){
 
   try{
 
-    console.log("BEFORE SAVE");
+    alert("BEFORE SAVE");
     
     await window.savePrediction(
       colorPrediction,
@@ -675,7 +675,7 @@ if(window.savePrediction){
       powerIndex
     );
 
-    console.log("AFTER SAVE");
+    alert("AFTER SAVE");
     
     loadPredictions();
     
