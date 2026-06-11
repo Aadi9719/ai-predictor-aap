@@ -666,12 +666,16 @@ if(window.savePrediction){
 
   try{
 
+    console.log("BEFORE SAVE");
+    
     await window.savePrediction(
       colorPrediction,
       bigSmallPrediction,
       nextNumber,
       powerIndex
     );
+
+    console.log("AFTER SAVE");
     
     loadPredictions();
     
