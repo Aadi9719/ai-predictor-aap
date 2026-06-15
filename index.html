@@ -454,10 +454,6 @@ color:"white"
 
 document.getElementById("btn").onclick =
 async function(){
-
-  alert("BUTTON WORKING");
-  
-  alert("INPUTS START");
   
 document.getElementById("result").innerHTML =
 "AI Analyzing... 🔥";
@@ -480,14 +476,8 @@ let n5 =
 parseInt(document.getElementById("n5").value) || 0;
 
 let numbers = [n1,n2,n3,n4,n5];
-
-  alert("NUMBERS CREATED");
-  
-  alert("INPUTS END");
   
 // SAVE RESULTS
-  
-alert("SAVE RESULTS START");
   
 allResults.push(n1,n2,n3,n4,n5);
 
@@ -502,10 +492,6 @@ localStorage.setItem(
 "allResults",
 JSON.stringify(allResults)
 );
-
-  alert("ANALYSIS START");
-  
-alert("SAVE RESULTS END");
   
 // ANALYSIS
 
@@ -532,37 +518,23 @@ red++;
 }
 
 });
-
-  alert("ANALYSIS END");
-
-  alert("BEFORE COLOR");
   
 // COLOR
 
 let colorPrediction =
 green >= red ? "GREEN" : "RED";
-
-  alert("AFTER COLOR");
   
 // BIG SMALL
-
-  alert("BEFORE BIGSMALL");
   
 let bigSmallPrediction =
 window.analyzeBigSmallPattern ?
 window.analyzeBigSmallPattern() :
 (big >= small ? "BIG" : "SMALL");
-
-  alert("AFTER BIGSMALL");
   
 // CONFIDENCE
-
-  alert("BEFORE CONFIDENCE");
   
 let confidence =
 75 + Math.floor(Math.random()*15);
-
-  alert("AFTER CONFIDENCE");
   
 if(confidence > 95){
 confidence = 95;
@@ -690,14 +662,10 @@ numbers[Math.floor(Math.random()*5)];
 
 let coldNumber =
 Math.floor(Math.random()*10);
-
-  alert("BEFORE SAVE PREDICTION");
   
 if(window.savePrediction){
 
   try{
-
-    alert("BEFORE SAVE");
     
     await window.savePrediction(
       colorPrediction,
@@ -705,10 +673,6 @@ if(window.savePrediction){
       nextNumber,
       powerIndex
     );
-
-    alert("AFTER SAVE PREDICTION");
-    
-    alert("AFTER SAVE");
     
    // loadPredictions();
     
