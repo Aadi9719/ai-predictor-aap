@@ -545,11 +545,15 @@ green >= red ? "GREEN" : "RED";
   
 // BIG SMALL
 
+  alert("BEFORE BIGSMALL");
+  
 let bigSmallPrediction =
 window.analyzeBigSmallPattern ?
 window.analyzeBigSmallPattern() :
 (big >= small ? "BIG" : "SMALL");
 
+  alert("AFTER BIGSMALL");
+  
 // CONFIDENCE
 
 let confidence =
