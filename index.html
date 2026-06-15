@@ -556,9 +556,13 @@ window.analyzeBigSmallPattern() :
   
 // CONFIDENCE
 
+  alert("BEFORE CONFIDENCE");
+  
 let confidence =
 75 + Math.floor(Math.random()*15);
 
+  alert("AFTER CONFIDENCE");
+  
 if(confidence > 95){
 confidence = 95;
 }
@@ -686,6 +690,8 @@ numbers[Math.floor(Math.random()*5)];
 let coldNumber =
 Math.floor(Math.random()*10);
 
+  alert("BEFORE SAVE PREDICTION");
+  
 if(window.savePrediction){
 
   try{
@@ -699,6 +705,8 @@ if(window.savePrediction){
       powerIndex
     );
 
+    alert("AFTER SAVE PREDICTION");
+    
     alert("AFTER SAVE");
     
     loadPredictions();
