@@ -483,7 +483,9 @@ let numbers = [n1,n2,n3,n4,n5];
   alert("INPUTS END");
   
 // SAVE RESULTS
-
+  
+alert("SAVE RESULTS START");
+  
 allResults.push(n1,n2,n3,n4,n5);
 
 if(allResults.length > 100){
@@ -497,7 +499,9 @@ localStorage.setItem(
 "allResults",
 JSON.stringify(allResults)
 );
-
+  
+alert("SAVE RESULTS END");
+  
 // ANALYSIS
 
 let green = 0;
