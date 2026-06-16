@@ -538,13 +538,6 @@ window.analyzeBigSmallPattern() :
   
 let confidence =
 75 + Math.floor(Math.random()*15);
-
-  alert("CONFIDENCE OK");
-
-  nextNumber = 0;
-alert("NEXTNUMBER OK");
-
-  alert("BEFORE SIGNAL");
   
 if(confidence > 95){
 confidence = 95;
@@ -565,22 +558,20 @@ else if(n5 % 2 === 0){
 
 patternDetected = "RED TREND";
 
-nextNumber = getMostFrequentNumber();
+nextNumber = 0;
 
 }
 else{
 
 patternDetected = "GREEN TREND";
 
-nextNumber = getMostFrequentNumber();
+nextNumber = 0;
 
 }
 
 // SIGNAL
 
 let signalStrength = 50;
-
-  alert("AFTER SIGNAL");
   
 if(confidence >= 80){
 signalStrength += 20;
