@@ -523,16 +523,12 @@ red++;
 let colorPrediction =
 green >= red ? "GREEN" : "RED";
   
-  alert("COLOR OK");
-  
 // BIG SMALL
   
 let bigSmallPrediction =
 window.analyzeBigSmallPattern ?
 window.analyzeBigSmallPattern() :
 (big >= small ? "BIG" : "SMALL");
-
-  alert("BIGSMALL OK");
   
 // CONFIDENCE
   
@@ -558,14 +554,18 @@ else if(n5 % 2 === 0){
 
 patternDetected = "RED TREND";
 
-nextNumber = 0;
+nextNumber = window.patternData
+? getMostFrequentNumber()
+: 0;
 
 }
 else{
 
 patternDetected = "GREEN TREND";
 
-nextNumber = 0;
+nextNumber = window.patternData
+? getMostFrequentNumber()
+: 0;
 
 }
 
