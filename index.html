@@ -543,6 +543,8 @@ let confidence =
 
   nextNumber = 0;
 alert("NEXTNUMBER OK");
+
+  alert("BEFORE SIGNAL");
   
 if(confidence > 95){
 confidence = 95;
@@ -578,6 +580,8 @@ nextNumber = getMostFrequentNumber();
 
 let signalStrength = 50;
 
+  alert("AFTER SIGNAL");
+  
 if(confidence >= 80){
 signalStrength += 20;
 }
