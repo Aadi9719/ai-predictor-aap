@@ -274,6 +274,10 @@ AI Power Chart 📈
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
 <script>
+
+  window.onerror = function(msg, url, line) {
+  alert("ERROR: " + msg + " | Line: " + line);
+};
   
 // STORAGE
 
