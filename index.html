@@ -586,14 +586,14 @@ else if(n5 % 2 === 0){
 
 patternDetected = "RED TREND";
 
-nextNumber = 1;
+nextNumber = getMostFrequentNumber();
 
 }
 else{
 
 patternDetected = "GREEN TREND";
 
-nextNumber = 1;
+nextNumber = getMostFrequentNumber();
 
 }
   
@@ -1102,6 +1102,8 @@ async function loadPredictions(){
   nextNumber: p.nextNumber
 });
 
+    console.log(window.patternData);
+    
     });
   
 document.getElementById("totalPredictions").innerText =
