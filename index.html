@@ -457,8 +457,6 @@ color:"white"
 
 document.getElementById("btn").onclick =
 async function(){
-
-  alert("BUTTON START");
   
 document.getElementById("result").innerHTML =
 "AI Analyzing... 🔥";
@@ -483,12 +481,8 @@ let n5 =
 parseInt(document.getElementById("n5").value) || 0;
 
 let numbers = [n1,n2,n3,n4,n5];
-
-  alert("INPUTS DONE");
   
 // SAVE RESULTS
-
-  alert("BEFORE SAVE");
   
 allResults.push(n1,n2,n3,n4,n5);
 
@@ -503,10 +497,6 @@ localStorage.setItem(
 "allResults",
 JSON.stringify(allResults)
 );
-
-  alert("AFTER SAVE");
-  
-  alert("SAVE DONE");
   
 // ANALYSIS
 
@@ -515,8 +505,6 @@ let red = 0;
 
 let big = 0;
 let small = 0;
-
-  alert("BEFORE FOREACH");
   
 numbers.forEach(num => {
   
@@ -535,17 +523,11 @@ red++;
 }
 
 });
-
-  alert("AFTER FOREACH");
-
-  alert("ANALYSIS DONE");
   
 // COLOR
 
 let colorPrediction =
 green >= red ? "GREEN" : "RED";
-
-  alert("COLOR DONE");
   
 // BIG SMALL
   
@@ -553,8 +535,6 @@ let bigSmallPrediction =
 window.analyzeBigSmallPattern ?
 window.analyzeBigSmallPattern() :
 (big >= small ? "BIG" : "SMALL");
-
-  alert("BIGSMALL DONE");
   
 // CONFIDENCE
   
@@ -564,24 +544,10 @@ let confidence =
 if(confidence > 95){
 confidence = 95;
 }
-
-  alert("CONFIDENCE DONE");
-
-  alert("GOING TO PATTERN");
-  
-  alert("BEFORE PATTERN");
   
 // PATTERN ENGINE
 
 let patternDetected = "NORMAL";
-
-  alert("TEST PATTERN LINE");
-  
-  alert("PATTERN START");
-  
-  alert("PATTERN VARIABLE CREATED");
-
-  alert("VALUES: " + n4 + " , " + n5);
   
 if(n4 === n5){
 
@@ -635,8 +601,6 @@ accuracyRate = Math.floor(
 );
 
 }
-
-  alert("ACCURACY OK");
   
 // AI SCORE
 
@@ -653,8 +617,6 @@ signalStrength +
 accuracyRate
 ) / 3
 );
-
-  alert("POWER OK");
   
 if(powerIndex > 100){
 powerIndex = 100;
@@ -705,8 +667,6 @@ numbers[Math.floor(Math.random()*5)];
 
 let coldNumber =
 Math.floor(Math.random()*10);
-
-  alert("COLD OK");
   
   /*
 if(window.savePrediction){
@@ -729,8 +689,6 @@ if(window.savePrediction){
 
 }
   */
-
-  alert("REACHED HISTORY");
   
 // HISTORY
 
@@ -762,8 +720,6 @@ JSON.stringify(historyData)
 updateHistory();
 
 // RESULT
-
-  alert("BEFORE RESULT");
   
 document.getElementById("result").innerHTML =
 
@@ -865,12 +821,8 @@ document.getElementById("smallRate").innerHTML =
 "Small: " + Math.floor((small/5)*100) + "%";
 
 // UPDATE CHART
-
-  alert("BEFORE CHART");
   
 updateChart(powerIndex);
-
-  alert("AFTER CHART");
   
 };
 
@@ -1202,10 +1154,6 @@ mostNumber;
 }
 
 loadPredictions();
-
-  alert("AFTER LOAD PREDICTIONS");
-
-  alert("FUNCTION OUTSIDE CHECK");
   
   function getMostFrequentNumber(){
 
@@ -1240,8 +1188,6 @@ loadPredictions();
     }
 
   }
-
-  alert("FUNCTION END");
 
   return result;
   }
