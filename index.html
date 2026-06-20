@@ -460,8 +460,6 @@ async function(){
   
 document.getElementById("result").innerHTML =
 "AI Analyzing... 🔥";
-
-  alert("AFTER AI ANALYZING");
   
 // INPUTS
 
@@ -1022,8 +1020,6 @@ async function loadUsers(){
 loadUsers();
 
 async function savePrediction(color, bigSmall, nextNumber, power){
-
-  alert("SAVE FUNCTION START");
   
   try{
     
@@ -1037,8 +1033,6 @@ async function savePrediction(color, bigSmall, nextNumber, power){
       time: new Date().toISOString()
     }
   );
-
-    alert("SAVED SUCCESS");
     
   }catch(error){
 
@@ -1070,7 +1064,6 @@ async function loadPredictions(){
 
     });
 
-  alert("LOAD END");
     console.log(window.patternData);
   
 document.getElementById("totalPredictions").innerText =
