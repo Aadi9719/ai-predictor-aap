@@ -532,9 +532,7 @@ green >= red ? "GREEN" : "RED";
 // BIG SMALL
   
 let bigSmallPrediction =
-window.analyzeBigSmallPattern ?
-window.analyzeBigSmallPattern() :
-(big >= small ? "BIG" : "SMALL");
+Math.random() < 0.5 ? "BIG" : "SMALL";
   
 // CONFIDENCE
   
@@ -560,14 +558,18 @@ else if(n5 % 2 === 0){
   
 patternDetected = "RED TREND";
 
-  nextNumber = getMostFrequentNumber();
+  let arr = [2,4,6,8];
+  
+  nextNumber = Math.floor(Math.random() * 10);
   
 }
 else{
   
 patternDetected = "GREEN TREND";
 
-nextNumber = getMostFrequentNumber();
+  let arr = [1,3,7,9];
+  
+nextNumber = Math.floor(Math.random() * 10);
   
 }
   
