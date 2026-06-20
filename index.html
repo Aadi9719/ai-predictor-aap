@@ -530,7 +530,7 @@ green >= red ? "GREEN" : "RED";
 // BIG SMALL
   
 let bigSmallPrediction =
-Math.random() < 0.5 ? "BIG" : "SMALL";
+analyzeBigSmallSequence();
   
 // CONFIDENCE
   
@@ -1192,51 +1192,82 @@ loadPredictions();
   window.getMostFrequentNumber = getMostFrequentNumber;
   
   function analyzeBigSmallPattern(){
-    
-  if(!window.patternData ||
-     window.patternData.length < 10){
-    return "NO DATA";
-  }
-    
-  let data = window.patternData;
 
-  let last4 =
-  data.slice(-4).map(x => x.bigSmall);
-    
-  let bigCount = 0;
-  let smallCount = 0;
+if(!window.patternData ||
+   window.patternData.length < 7){
 
-  for(let i=0; i<data.length-4; i++){
+return "NO DATA";
 
-    let pattern = [
-      data[i].bigSmall,
-      data[i+1].bigSmall,
-      data[i+2].bigSmall,
-      data[i+3].bigSmall
-    ];
+}
 
-    if(
-      JSON.stringify(pattern) ===
-      JSON.stringify(last4)
-    ){
 
-      let next =
-      data[i+4]?.bigSmall;
+let data = window.patternData;
 
-      if(next === "BIG"){
-        bigCount++;
-      }
 
-      if(next === "SMALL"){
-        smallCount++;
-      }
+// LAST 6 PATTERN
 
-    }
+let last6 =
+data.slice(-6).map(x => x.bigSmall);
 
-  }
 
-  return bigCount >= smallCount ?
-  "BIG" : "SMALL";
+let bigCount = 0;
+let smallCount = 0;
+
+
+// OLD PATTERN SEARCH
+
+for(let i=0; i<data.length-6; i++){
+
+
+let pattern =
+data.slice(i,i+6)
+.map(x => x.bigSmall);
+
+
+if(
+JSON.stringify(pattern) ===
+JSON.stringify(last6)
+){
+
+
+let next =
+data[i+6]?.bigSmall;
+
+
+if(next === "BIG"){
+bigCount++;
+}
+
+
+if(next === "SMALL"){
+smallCount++;
+}
+
+
+}
+
+}
+
+
+// RESULT
+
+if(bigCount > smallCount){
+
+return "BIG";
+
+}
+
+else if(smallCount > bigCount){
+
+return "SMALL";
+
+}
+
+
+// agar pattern nahi mila
+
+return "NO DATA";
+
 
   }
 
