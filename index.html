@@ -1021,6 +1021,8 @@ loadUsers();
 
 async function savePrediction(color, bigSmall, nextNumber, power){
 
+  alert("SAVE FUNCTION START");
+  
   try{
     
   await addDoc(
@@ -1033,6 +1035,8 @@ async function savePrediction(color, bigSmall, nextNumber, power){
       time: new Date().toISOString()
     }
   );
+
+    alert("SAVED SUCCESS");
     
   }catch(error){
 
