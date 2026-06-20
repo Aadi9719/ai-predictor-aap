@@ -591,33 +591,19 @@ nextNumber = n5;
 
 }
 else if(n5 % 2 === 0){
-
-  alert("RED BLOCK");
   
 patternDetected = "RED TREND";
 
-  alert("CALLING FUNCTION");
-
   nextNumber = getMostFrequentNumber();
-  
-alert("AFTER CALL");
-
-  alert("NEXT DONE");
   
 }
 else{
-
-  alert("GREEN BLOCK");
   
 patternDetected = "GREEN TREND";
 
 nextNumber = getMostFrequentNumber();
-
-  alert("NEXT DONE");
   
 }
-  
-alert("PATTERN DONE");
   
 // SIGNAL
 
@@ -1223,12 +1209,6 @@ loadPredictions();
   
   function getMostFrequentNumber(){
 
-    alert("INSIDE FUNCTION");
-    
-  alert("FUNCTION START");
-
-    alert("DATA: " + JSON.stringify(window.patternData));
-    
   if(!window.patternData){
     return 0;
   }
