@@ -296,6 +296,9 @@ Number(localStorage.getItem("aiLosses")) || 0;
 let allResults =
 JSON.parse(localStorage.getItem("allResults")) || [];
 
+  let patternMemory =
+JSON.parse(localStorage.getItem("patternMemory")) || {};
+  
 let nextNumber = 0;
 
 let chart;
