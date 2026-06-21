@@ -525,7 +525,14 @@ red++;
 // COLOR
 
 let colorPrediction =
+analyzeColorPattern();
+
+if(colorPrediction === "NO DATA"){
+
+colorPrediction =
 green >= red ? "GREEN" : "RED";
+
+}
   
 // BIG SMALL
   
@@ -1273,6 +1280,84 @@ return "NO DATA";
 
   window.analyzeBigSmallPattern =
 analyzeBigSmallPattern;
+  
+  function analyzeColorPattern(){
+
+if(!window.patternData ||
+   window.patternData.length < 7){
+
+return "NO DATA";
+
+}
+
+
+let data = window.patternData;
+
+
+// LAST 6 COLOR PATTERN
+
+let last6 =
+data.slice(-6).map(x => x.color);
+
+
+let greenCount = 0;
+let redCount = 0;
+
+
+// SEARCH OLD PATTERN
+
+for(let i=0; i<data.length-6; i++){
+
+let pattern =
+data.slice(i,i+6)
+.map(x => x.color);
+
+
+if(
+JSON.stringify(pattern) ===
+JSON.stringify(last6)
+){
+
+let next =
+data[i+6]?.color;
+
+
+if(next === "GREEN"){
+greenCount++;
+}
+
+
+if(next === "RED"){
+redCount++;
+}
+
+
+}
+
+}
+
+
+// RESULT
+
+if(greenCount > redCount){
+
+return "GREEN";
+
+}
+
+else if(redCount > greenCount){
+
+return "RED";
+
+}
+
+
+return "NO DATA";
+
+  }
+
+  window.analyzeColorPattern =
+analyzeColorPattern;
   
   onAuthStateChanged(auth, (user) => {
 
