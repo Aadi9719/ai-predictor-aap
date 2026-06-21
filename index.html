@@ -303,6 +303,42 @@ let nextNumber = 0;
 
 let chart;
 
+  function savePatternMemory(){
+
+if(historyData.length < 6){
+return;
+}
+
+
+let pattern =
+historyData
+.slice(0,6)
+.join("|");
+
+
+let next =
+historyData[0];
+
+
+if(!patternMemory[pattern]){
+
+patternMemory[pattern] = {};
+
+}
+
+
+patternMemory[pattern][next] =
+(patternMemory[pattern][next] || 0) + 1;
+
+
+localStorage.setItem(
+"patternMemory",
+JSON.stringify(patternMemory)
+);
+
+
+  }
+  
 // UPDATE HISTORY
 
 function updateHistory(){
@@ -727,6 +763,8 @@ JSON.stringify(historyData)
 
 updateHistory();
 
+  savePatternMemory();
+  
 // RESULT
   
 document.getElementById("result").innerHTML =
