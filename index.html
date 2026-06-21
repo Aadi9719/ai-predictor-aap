@@ -566,6 +566,10 @@ red++;
 let colorPrediction =
 analyzeColorPattern();
 
+  let testColor = analyzeColorPattern();
+
+alert("COLOR PATTERN: " + testColor);
+  
 if(colorPrediction === "NO DATA"){
 
 colorPrediction =
@@ -577,6 +581,10 @@ green >= red ? "GREEN" : "RED";
   
 let bigSmallPrediction =
 analyzeBigSmallPattern();
+
+  let testPattern = analyzeBigSmallSequence();
+
+alert("PATTERN RESULT: " + testPattern);
   
 // CONFIDENCE
   
