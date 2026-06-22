@@ -565,12 +565,8 @@ red++;
 
 let colorPrediction =
 analyzeColorPattern();
-
-  alert("FINAL COLOR: " + colorPrediction);
   
   let testColor = analyzeColorPattern();
-
-alert("COLOR PATTERN: " + testColor);
   
 if(colorPrediction === "NO DATA"){
 
@@ -580,19 +576,11 @@ green >= red ? "GREEN" : "RED";
 }
   
 // BIG SMALL
-
-  alert("BEFORE BIG SMALL");
   
 let bigSmallPrediction =
 analyzeSmartBigSmall();
-
-  alert("AFTER BIG SMALL: " + bigSmallPrediction);
   
-  alert("FINAL BIG SMALL: " + bigSmallPrediction);
-  
-  let testPattern = analyzeBigSmallSequence();
-
-alert("PATTERN RESULT: " + testPattern);
+  let testPattern = analyzeSmartBigSmall();
   
 // CONFIDENCE
   
