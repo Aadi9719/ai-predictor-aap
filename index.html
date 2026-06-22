@@ -580,10 +580,14 @@ green >= red ? "GREEN" : "RED";
 }
   
 // BIG SMALL
+
+  alert("BEFORE BIG SMALL");
   
 let bigSmallPrediction =
 analyzeBigSmallPattern();
 
+  alert("AFTER BIG SMALL: " + bigSmallPrediction);
+  
   alert("FINAL BIG SMALL: " + bigSmallPrediction);
   
   let testPattern = analyzeBigSmallSequence();
