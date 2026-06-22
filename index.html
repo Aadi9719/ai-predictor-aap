@@ -584,7 +584,7 @@ green >= red ? "GREEN" : "RED";
   alert("BEFORE BIG SMALL");
   
 let bigSmallPrediction =
-analyzeBigSmallPattern();
+analyzeSmartBigSmall();
 
   alert("AFTER BIG SMALL: " + bigSmallPrediction);
   
@@ -1336,11 +1336,81 @@ return "SMALL";
 
 return "NO DATA";
 
-
   }
 
+  function analyzeSmartBigSmall(){
+
+let patternResult =
+analyzeBigSmallPattern();
+
+let big = 0;
+let small = 0;
+
+
+// Recent 10 Results
+
+if(window.patternData){
+
+let recent =
+window.patternData.slice(-10);
+
+
+recent.forEach(x=>{
+
+if(x.bigSmall === "BIG"){
+big++;
+}
+
+if(x.bigSmall === "SMALL"){
+small++;
+}
+
+});
+
+}
+
+
+// Pattern Weight
+
+if(patternResult === "BIG"){
+
+big += 2;
+
+}
+
+
+if(patternResult === "SMALL"){
+
+small += 2;
+
+}
+
+
+// Final Decision
+
+if(big > small){
+
+return "BIG";
+
+}
+
+else if(small > big){
+
+return "SMALL";
+
+}
+
+
+return Math.random() < 0.5 ?
+"BIG" : "SMALL";
+
+  }
+  
   window.analyzeBigSmallPattern =
 analyzeBigSmallPattern;
+
+  window.analyzeSmartBigSmall =
+analyzeSmartBigSmall;
   
   function analyzeColorPattern(){
 
