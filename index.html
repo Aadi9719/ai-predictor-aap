@@ -338,6 +338,30 @@ JSON.stringify(patternMemory)
 
 
   }
+
+  function updateLearningMemory(actualResult){
+
+let pattern =
+allResults
+.slice(-6)
+.join(",");
+
+
+if(!patternMemory[pattern]){
+
+patternMemory[pattern] = {};
+
+}
+
+patternMemory[pattern][actualResult] =
+(patternMemory[pattern][actualResult] || 0) + 1;
+
+localStorage.setItem(
+"patternMemory",
+JSON.stringify(patternMemory)
+);
+
+  }
   
 // UPDATE HISTORY
 
