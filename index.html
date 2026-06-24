@@ -1438,11 +1438,17 @@ allResults
 .slice(-6)
 .join(",");
 
+    alert(
+"CHECKING MEMORY: " + lastPattern
+);
+    
 if(patternMemory[lastPattern]){
 
 let data =
 patternMemory[lastPattern];
 
+  alert("MEMORY FOUND");
+  
 let best =
 Object.keys(data)
 .reduce((a,b)=>
@@ -1452,7 +1458,7 @@ data[a] > data[b] ? a : b
 if(best.includes("BIG")){
 
 return "BIG";
-
+  
 }
 
 if(best.includes("SMALL")){
