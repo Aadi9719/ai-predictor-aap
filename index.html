@@ -1284,54 +1284,43 @@ return "NO DATA";
 
 }
 
-
 let data = window.patternData;
-
 
 // LAST 6 PATTERN
 
 let last6 =
 data.slice(-6).map(x => x.bigSmall);
 
-
 let bigCount = 0;
 let smallCount = 0;
-
 
 // OLD PATTERN SEARCH
 
 for(let i=0; i<data.length-6; i++){
 
-
 let pattern =
 data.slice(i,i+6)
 .map(x => x.bigSmall);
-
 
 if(
 JSON.stringify(pattern) ===
 JSON.stringify(last6)
 ){
 
-
 let next =
 data[i+6]?.bigSmall;
-
 
 if(next === "BIG"){
 bigCount++;
 }
 
-
 if(next === "SMALL"){
 smallCount++;
 }
 
-
 }
 
 }
-
 
 // RESULT
 
@@ -1360,12 +1349,19 @@ return "NO DATA";
 
   function analyzeSmartBigSmall(){
 
+    let memoryPrediction = getMemoryPrediction();
+
+if(memoryPrediction !== "NO DATA"){
+
+return memoryPrediction;
+
+}
+    
 let patternResult =
 analyzeBigSmallPattern();
 
 let big = 0;
 let small = 0;
-
 
 // Recent 10 Results
 
@@ -1373,7 +1369,6 @@ if(window.patternData){
 
 let recent =
 window.patternData.slice(-10);
-
 
 recent.forEach(x=>{
 
@@ -1389,7 +1384,6 @@ small++;
 
 }
 
-
 // Pattern Weight
 
 if(patternResult === "BIG"){
@@ -1398,13 +1392,11 @@ big += 2;
 
 }
 
-
 if(patternResult === "SMALL"){
 
 small += 2;
 
 }
-
 
 // Final Decision
     
@@ -1420,7 +1412,6 @@ return "SMALL";
 
 }
 
-
 return Math.random() < 0.5 ?
 "BIG" : "SMALL";
 
@@ -1431,6 +1422,50 @@ analyzeBigSmallPattern;
 
   window.analyzeSmartBigSmall =
 analyzeSmartBigSmall;
+
+  function getMemoryPrediction(){
+
+let keys = Object.keys(patternMemory);
+
+if(keys.length === 0){
+
+return "NO DATA";
+
+}
+
+let lastPattern =
+allResults
+.slice(-6)
+.join(",");
+
+if(patternMemory[lastPattern]){
+
+let data =
+patternMemory[lastPattern];
+
+let best =
+Object.keys(data)
+.reduce((a,b)=>
+data[a] > data[b] ? a : b
+);
+
+if(best.includes("BIG")){
+
+return "BIG";
+
+}
+
+if(best.includes("SMALL")){
+
+return "SMALL";
+
+}
+
+}
+
+return "NO DATA";
+
+  }
   
   function analyzeColorPattern(){
 
@@ -1441,19 +1476,15 @@ return "NO DATA";
 
 }
 
-
 let data = window.patternData;
-
 
 // LAST 6 COLOR PATTERN
 
 let last6 =
 data.slice(-6).map(x => x.color);
 
-
 let greenCount = 0;
 let redCount = 0;
-
 
 // SEARCH OLD PATTERN
 
@@ -1463,7 +1494,6 @@ let pattern =
 data.slice(i,i+6)
 .map(x => x.color);
 
-
 if(
 JSON.stringify(pattern) ===
 JSON.stringify(last6)
@@ -1472,21 +1502,17 @@ JSON.stringify(last6)
 let next =
 data[i+6]?.color;
 
-
 if(next === "GREEN"){
 greenCount++;
 }
-
 
 if(next === "RED"){
 redCount++;
 }
 
-
 }
 
 }
-
 
 // RESULT
 
@@ -1501,7 +1527,6 @@ else if(redCount > greenCount){
 return "RED";
 
 }
-
 
 return "NO DATA";
 
