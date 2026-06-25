@@ -929,6 +929,13 @@ return;
 
 addLiveResult(actualResult);
 
+  allResults.push(actualResult);
+
+localStorage.setItem(
+"allResults",
+JSON.stringify(allResults)
+);
+  
   updateLearningMemory(actualResult);
 
   console.log(patternMemory);
