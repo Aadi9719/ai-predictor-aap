@@ -543,6 +543,8 @@ color:"white"
 
 document.getElementById("btn").onclick =
 async function(){
+
+  alert("ANALYZE START");
   
 document.getElementById("result").innerHTML =
 "AI Analyzing... 🔥";
@@ -630,9 +632,13 @@ green >= red ? "GREEN" : "RED";
 }
   
 // BIG SMALL
+
+  alert("CALLING SMART AI");
   
 let bigSmallPrediction =
 analyzeSmartBigSmall();
+
+  alert("RESULT: " + bigSmallPrediction);
   
   let testPattern = analyzeSmartBigSmall();
   
