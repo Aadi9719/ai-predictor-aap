@@ -543,8 +543,6 @@ color:"white"
 
 document.getElementById("btn").onclick =
 async function(){
-
-  alert("ANALYZE START");
   
 document.getElementById("result").innerHTML =
 "AI Analyzing... 🔥";
@@ -635,8 +633,6 @@ green >= red ? "GREEN" : "RED";
   
 let bigSmallPrediction =
 analyzeSmartBigSmall();
-
-  alert("RESULT: " + bigSmallPrediction);
   
 // CONFIDENCE
   
@@ -1358,11 +1354,6 @@ smallCount++;
 }
 
 // RESULT
-
-    alert(
-"BIG COUNT: " + bigCount +
-" SMALL COUNT: " + smallCount
-);
     
 if(bigCount > smallCount){
 
@@ -1383,14 +1374,8 @@ return "NO DATA";
   }
 
   function analyzeSmartBigSmall(){
-
-    alert("SMART START");
     
     let memoryPrediction = getMemoryPrediction();
-
-    alert("MEMORY RESULT: " + memoryPrediction);
-    
-    
     
 if(memoryPrediction !== "NO DATA"){
 
@@ -1478,17 +1463,11 @@ let lastPattern =
 allResults
 .slice(-6)
 .join(",");
-
-    alert(
-"CHECKING MEMORY: " + lastPattern
-);
     
 if(patternMemory[lastPattern]){
 
 let data =
 patternMemory[lastPattern];
-
-  alert("MEMORY FOUND");
 
   let total = 0;
 
