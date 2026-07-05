@@ -272,16 +272,7 @@ AI Power Chart 📈
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-window.onerror = function(message, source, line, col, error) {
-    alert(
-        "ERROR:\n" +
-        message +
-        "\nLine: " + line +
-        "\nColumn: " + col
-    );
-};
+    
   </script>
 
   window.onerror = function(msg, url, line) {
@@ -312,6 +303,9 @@ let nextNumber = 0;
 
 let chart;
 
+  alert("SCRIPT STARTED");
+console.log("SCRIPT STARTED");
+  
   function savePatternMemory(){
 
 if(historyData.length < 6){
@@ -641,8 +635,6 @@ green >= red ? "GREEN" : "RED";
 }
   
 // BIG SMALL
-
-  alert("CALLING SMART AI");
   
 let bigSmallPrediction =
 analyzeSmartBigSmall();
@@ -1021,7 +1013,17 @@ actualResult;
 };
 
 </script>
-
+  
+<script>
+window.onerror = function(message, source, line, col, error) {
+    alert(
+        "ERROR:\n" +
+        message +
+        "\nLine: " + line +
+        "\nColumn: " + col
+    );
+};
+  
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
