@@ -1455,105 +1455,39 @@ analyzeSmartBigSmall;
 
   function getMemoryPrediction(){
 
-let keys = Object.keys(patternMemory);
+let pattern = allResults.slice(-6).join(",");
 
-if(keys.length === 0){
+let data = patternMemory[pattern];
 
+if(!data){
 return "NO DATA";
-
 }
 
-let lastPattern =
-allResults
-.slice(-6)
-.join(",");
-    
-if(patternMemory[lastPattern]){
-
-let data =
-patternMemory[lastPattern];
-
-  let total = 0;
-
-Object.values(data).forEach(v=>{
-total += v;
-});
-
-
-if(total < 2){
-
+if(data.total < 3){
 return "NO DATA";
-
-}
-  
-let best =
-Object.keys(data)
-.reduce((a,b)=>
-data[a] > data[b] ? a : b
-);
-
-if(best.includes("BIG")){
-
-return "BIG";
-  
 }
 
-if(best.includes("SMALL")){
-
-return "SMALL";
+return data.BIG >= data.SMALL ? "BIG" : "SMALL";
 
 }
-
-}
-
-return "NO DATA";
-
-  }
 
   function getColorMemoryPrediction(){
 
-let lastPattern =
-allResults
-.filter(x => x !== "" && x !== null)
-.slice(-6)
-.join(",");
+let pattern = allResults.slice(-6).join(",");
 
+let data = patternMemory[pattern];
 
-if(!patternMemory[lastPattern]){
-
+if(!data){
 return "NO DATA";
-
 }
 
-
-let data =
-patternMemory[lastPattern];
-
-
-let best =
-Object.keys(data)
-.reduce((a,b)=>
-data[a] > data[b] ? a : b
-);
-
-
-if(best.includes("GREEN")){
-
-return "GREEN";
-
-}
-
-
-if(best.includes("RED")){
-
-return "RED";
-
-}
-
-
+if(data.total < 3){
 return "NO DATA";
+}
 
-  }
+return data.GREEN >= data.RED ? "GREEN" : "RED";
+
+}
   
   function analyzeColorPattern(){
 
