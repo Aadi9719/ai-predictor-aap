@@ -19,7 +19,7 @@ let numbers = [n1,n2,n3,n4,n5];
 "allResults",
 JSON.stringify(allResults)
 );
-    
+
 console.log(allResults);
     
     document.getElementById("result").innerHTML =
@@ -28,5 +28,22 @@ numbers.join(" | ");
     "Number 1 : " + n1 +
     "<br><br>" +
     "Number 2 : " + n2;
+
+};
+
+document.getElementById("checkBtn").onclick = function(){
+
+    let actualResult = Number(
+        prompt("Enter Actual Result")
+    );
+
+    if(isNaN(actualResult)){
+        alert("Please Enter Valid Number");
+        return;
+    }
+
+    updateLearningMemory(actualResult);
+
+    alert("AI Learned Successfully ✅");
 
 };
