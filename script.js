@@ -1,6 +1,7 @@
 alert("script.js Connected Successfully ✅");
 
-let allResults = [];
+let allResults =
+JSON.parse(localStorage.getItem("allResults")) || [];
 
 document.getElementById("analyzeBtn").onclick = function(){
 
@@ -14,6 +15,11 @@ let numbers = [n1,n2,n3,n4,n5];
 
     allResults.push(...numbers);
 
+    localStorage.setItem(
+"allResults",
+JSON.stringify(allResults)
+);
+    
 console.log(allResults);
     
     document.getElementById("result").innerHTML =
