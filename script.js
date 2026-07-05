@@ -1,5 +1,7 @@
 alert("script.js Connected Successfully ✅");
 
+let allResults = [];
+
 document.getElementById("analyzeBtn").onclick = function(){
 
     let n1 = Number(document.getElementById("n1").value);
@@ -10,6 +12,10 @@ let n5 = Number(document.getElementById("n5").value);
 
 let numbers = [n1,n2,n3,n4,n5];
 
+    allResults.push(...numbers);
+
+console.log(allResults);
+    
     document.getElementById("result").innerHTML =
 numbers.join(" | ");
 
