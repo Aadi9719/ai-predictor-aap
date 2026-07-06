@@ -127,6 +127,39 @@ function updateLearningMemory(actualResult){
 
 }
 
+function getMemoryPrediction(){
+
+    let pattern =
+    allResults.slice(-6).join(",");
+
+    if(!patternMemory[pattern]){
+        return null;
+    }
+
+    let data = patternMemory[pattern];
+
+    let bestType = "";
+    let bestCount = -1;
+
+    for(let key in data){
+
+        if(key === "total"){
+            continue;
+        }
+
+        if(data[key] > bestCount){
+
+            bestCount = data[key];
+            bestType = key;
+
+        }
+
+    }
+
+    return bestType;
+
+}
+
 // =========================
 // AI DATA
 // =========================
