@@ -38,9 +38,12 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let memoryPrediction = getMemoryPrediction();
 
-    let confidence = getPredictionConfidence();
-    
-if(memoryPrediction){
+    let confidence =
+memoryPrediction !== null
+? getPredictionConfidence()
+: 0;
+
+    if(memoryPrediction !== null)
 
     document.getElementById("result").innerHTML = `
     <h2>AI Prediction 🔥</h2>
