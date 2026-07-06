@@ -47,3 +47,5 @@ document.getElementById("checkBtn").onclick = function(){
     alert("AI Learned Successfully ✅");
 
 };
+
+alert("END OF SCRIPT");
