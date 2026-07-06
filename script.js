@@ -164,27 +164,28 @@ function getMemoryPrediction(){
         return null;
     }
 
-    let data = patternMemory[pattern];
+    let numbers =
+    patternMemory[pattern].numbers;
 
-    let bestType = "";
-    let bestCount = -1;
+    if(!numbers){
+        return null;
+    }
 
-    for(let key in data){
+    let bestNumber = null;
+    let maxCount = -1;
 
-        if(key === "total"){
-            continue;
-        }
+    for(let num in numbers){
 
-        if(data[key] > bestCount){
+        if(numbers[num] > maxCount){
 
-            bestCount = data[key];
-            bestType = key;
+            maxCount = numbers[num];
+            bestNumber = Number(num);
 
         }
 
     }
 
-    return bestType;
+    return bestNumber;
 
 }
 
