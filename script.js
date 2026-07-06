@@ -20,6 +20,8 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let memoryPrediction = getMemoryPrediction();
 
+    let confidence = getPredictionConfidence();
+    
 if(memoryPrediction){
 
     document.getElementById("result").innerHTML = `
@@ -28,7 +30,10 @@ if(memoryPrediction){
     Memory Prediction :
     <b>${memoryPrediction}</b>
 
-    <br><br>
+<br><br>
+
+Confidence :
+<b>${confidence}%</b>
 
     Total Saved Numbers :
     ${allResults.length}
@@ -186,6 +191,39 @@ function getMemoryPrediction(){
     }
 
     return bestNumber;
+
+}
+
+function getPredictionConfidence(){
+
+    let pattern =
+    allResults.slice(-6).join(",");
+
+    if(!patternMemory[pattern]){
+
+        return 0;
+
+    }
+
+    let total =
+    patternMemory[pattern].total;
+
+    let numbers =
+    patternMemory[pattern].numbers;
+
+    let best = 0;
+
+    for(let num in numbers){
+
+        if(numbers[num] > best){
+
+            best = numbers[num];
+
+        }
+
+    }
+
+    return Math.round((best / total) * 100);
 
 }
 
