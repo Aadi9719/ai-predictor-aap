@@ -117,6 +117,9 @@ document.getElementById("checkBtn").onclick = function(){
         localStorage.setItem("aiWins", aiWins);
 
         alert("AI WON ✅");
+
+        addHistory("✅ Prediction : " + nextPrediction + " | Result : " + actualResult);
+        
 updateStats();
         
     }else{
@@ -126,6 +129,9 @@ updateStats();
         localStorage.setItem("aiLosses", aiLosses);
 
         alert("AI LOST ❌");
+
+        addHistory("❌ Prediction : " + nextPrediction + " | Result : " + actualResult);
+        
 updateStats();
         
     }
@@ -310,6 +316,20 @@ function updateStats(){
 
     document.getElementById("accuracy").innerText =
     accuracy + "%";
+
+}
+
+function addHistory(text){
+
+    let historyList =
+    document.getElementById("historyList");
+
+    let item =
+    document.createElement("p");
+
+    item.innerHTML = text;
+
+    historyList.prepend(item);
 
 }
 
