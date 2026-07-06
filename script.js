@@ -43,7 +43,7 @@ memoryPrediction !== null
 ? getPredictionConfidence()
 : 0;
 
-    if(memoryPrediction !== null)
+    if(memoryPrediction !== null){
 
     document.getElementById("result").innerHTML = `
     <h2>AI Prediction 🔥</h2>
@@ -66,6 +66,8 @@ Big/Small :
 Confidence :
 <b>${confidence}%</b>
 
+  <br><br>
+  
     Total Saved Numbers :
     ${allResults.length}
     `;
