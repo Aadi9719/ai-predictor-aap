@@ -1,3 +1,7 @@
+window.onerror = function(msg, url, line){
+    alert("ERROR: " + msg + " | Line: " + line);
+};
+
 alert("Script Loaded");
 
 document.getElementById("analyzeBtn").onclick = function () {
