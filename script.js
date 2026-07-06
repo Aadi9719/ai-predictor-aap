@@ -18,11 +18,27 @@ document.getElementById("analyzeBtn").onclick = function () {
         JSON.stringify(allResults)
     );
 
-    // Temporary prediction
+    let memoryPrediction = getMemoryPrediction();
+
+if(memoryPrediction){
+
+    document.getElementById("result").innerHTML = `
+    <h2>AI Prediction 🔥</h2>
+
+    Memory Prediction :
+    <b>${memoryPrediction}</b>
+
+    <br><br>
+
+    Total Saved Numbers :
+    ${allResults.length}
+    `;
+
+}else{
+
     nextPrediction = Math.floor(Math.random() * 10);
 
-    document.getElementById("result").innerHTML =
-    `
+    document.getElementById("result").innerHTML = `
     <h2>AI Prediction 🔥</h2>
 
     Next Number :
@@ -33,6 +49,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     Total Saved Numbers :
     ${allResults.length}
     `;
+
+}
 
     console.log(allResults);
 
@@ -96,6 +114,8 @@ function updateLearningMemory(actualResult){
             RED_BIG:0,
             RED_SMALL:0
 
+            numbers:{}
+        
         };
 
     }
@@ -117,6 +137,14 @@ function updateLearningMemory(actualResult){
     patternMemory[pattern][bigSmall]++;
 
     patternMemory[pattern][color + "_" + bigSmall]++;
+
+if(!patternMemory[pattern].numbers[actualResult]){
+
+    patternMemory[pattern].numbers[actualResult]=0;
+
+}
+
+patternMemory[pattern].numbers[actualResult]++;
 
     localStorage.setItem(
         "patternMemory",
