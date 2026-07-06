@@ -89,7 +89,8 @@ Confidence :
     `;
 
 }
-
+    
+   updateStats();
     console.log(allResults);
 
 };
@@ -116,7 +117,8 @@ document.getElementById("checkBtn").onclick = function(){
         localStorage.setItem("aiWins", aiWins);
 
         alert("AI WON ✅");
-
+updateStats();
+        
     }else{
 
         aiLosses++;
@@ -124,7 +126,8 @@ document.getElementById("checkBtn").onclick = function(){
         localStorage.setItem("aiLosses", aiLosses);
 
         alert("AI LOST ❌");
-
+updateStats();
+        
     }
 
 };
