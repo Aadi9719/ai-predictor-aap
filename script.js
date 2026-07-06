@@ -284,7 +284,34 @@ function getBigSmallPrediction(number){
 
 }
 
+function updateStats(){
+
+    document.getElementById("totalPatterns").innerText =
+    Object.keys(patternMemory).length;
+
+    document.getElementById("wins").innerText =
+    aiWins;
+
+    document.getElementById("losses").innerText =
+    aiLosses;
+
+    let total = aiWins + aiLosses;
+
+    let accuracy = 0;
+
+    if(total > 0){
+
+        accuracy = Math.round((aiWins / total) * 100);
+
+    }
+
+    document.getElementById("accuracy").innerText =
+    accuracy + "%";
+
+}
+
 // =========================
 // AI DATA
 // =========================
 
+updateStats();
