@@ -53,6 +53,16 @@ memoryPrediction !== null
 
 <br><br>
 
+Color :
+<b>${getColorPrediction(memoryPrediction)}</b>
+
+<br><br>
+
+Big/Small :
+<b>${getBigSmallPrediction(memoryPrediction)}</b>
+
+<br><br>
+
 Confidence :
 <b>${confidence}%</b>
 
@@ -245,6 +255,30 @@ function getPredictionConfidence(){
     }
 
     return Math.round((best / total) * 100);
+
+}
+
+function getColorPrediction(number){
+
+    if([1,3,7,9].includes(number)){
+        return "🟢 GREEN";
+    }
+
+    if([2,4,6,8].includes(number)){
+        return "🔴 RED";
+    }
+
+    return "🟣 VIOLET";
+
+}
+
+function getBigSmallPrediction(number){
+
+    if(number >= 5){
+        return "🔵 BIG";
+    }
+
+    return "🟡 SMALL";
 
 }
 
