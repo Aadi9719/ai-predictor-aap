@@ -4,6 +4,20 @@ window.onerror = function(msg, url, line){
 
 alert("Script Loaded");
 
+let allResults =
+JSON.parse(localStorage.getItem("allResults")) || [];
+
+let patternMemory =
+JSON.parse(localStorage.getItem("patternMemory")) || {};
+
+let aiWins =
+Number(localStorage.getItem("aiWins")) || 0;
+
+let aiLosses =
+Number(localStorage.getItem("aiLosses")) || 0;
+
+let nextPrediction = null;
+
 document.getElementById("analyzeBtn").onclick = function () {
 
     let n1 = Number(document.getElementById("n1").value);
@@ -121,7 +135,7 @@ function updateLearningMemory(actualResult){
             GREEN_SMALL:0,
 
             RED_BIG:0,
-            RED_SMALL:0
+            RED_SMALL:0,
 
             numbers:{}
         
@@ -235,16 +249,3 @@ function getPredictionConfidence(){
 // AI DATA
 // =========================
 
-let allResults =
-JSON.parse(localStorage.getItem("allResults")) || [];
-
-let patternMemory =
-JSON.parse(localStorage.getItem("patternMemory")) || {};
-
-let aiWins =
-Number(localStorage.getItem("aiWins")) || 0;
-
-let aiLosses =
-Number(localStorage.getItem("aiLosses")) || 0;
-
-let nextPrediction = null;
