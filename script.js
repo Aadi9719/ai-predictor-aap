@@ -38,9 +38,95 @@ document.getElementById("analyzeBtn").onclick = function () {
 
 };
 
-document.getElementById("checkBtn").onclick = function () {
-    alert("Check Button Working ✅");
+document.getElementById("checkBtn").onclick = function(){
+
+    let actualResult = Number(
+        prompt("Enter Actual Result")
+    );
+
+    if(isNaN(actualResult)){
+
+        alert("Please Enter Valid Number");
+        return;
+
+    }
+
+    updateLearningMemory(actualResult);
+
+    if(actualResult === nextPrediction){
+
+        aiWins++;
+
+        localStorage.setItem("aiWins", aiWins);
+
+        alert("AI WON ✅");
+
+    }else{
+
+        aiLosses++;
+
+        localStorage.setItem("aiLosses", aiLosses);
+
+        alert("AI LOST ❌");
+
+    }
+
 };
+
+function updateLearningMemory(actualResult){
+
+    let pattern =
+    allResults.slice(-6).join(",");
+
+    if(!patternMemory[pattern]){
+
+        patternMemory[pattern] = {
+
+            total:0,
+
+            GREEN:0,
+            RED:0,
+
+            BIG:0,
+            SMALL:0,
+
+            GREEN_BIG:0,
+            GREEN_SMALL:0,
+
+            RED_BIG:0,
+            RED_SMALL:0
+
+        };
+
+    }
+
+    let color =
+    [1,3,7,9].includes(actualResult)
+    ? "GREEN"
+    : "RED";
+
+    let bigSmall =
+    actualResult >= 5
+    ? "BIG"
+    : "SMALL";
+
+    patternMemory[pattern].total++;
+
+    patternMemory[pattern][color]++;
+
+    patternMemory[pattern][bigSmall]++;
+
+    patternMemory[pattern][color + "_" + bigSmall]++;
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+    console.log(patternMemory);
+
+}
+
 // =========================
 // AI DATA
 // =========================
