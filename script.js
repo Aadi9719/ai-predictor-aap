@@ -82,6 +82,16 @@ Confidence :
     Next Number :
     <b>${nextPrediction}</b>
 
+<br><br>
+
+Color :
+<b>${getColorPrediction(nextPrediction)}</b>
+
+<br><br>
+
+Big/Small :
+<b>${getBigSmallPrediction(nextPrediction)}</b>
+
     <br><br>
 
     Total Saved Numbers :
