@@ -120,6 +120,23 @@ document.getElementById("checkBtn").onclick = function(){
 
     updateLearningMemory(actualResult);
 
+    // Auto Shift Inputs
+
+document.getElementById("n5").value =
+document.getElementById("n4").value;
+
+document.getElementById("n4").value =
+document.getElementById("n3").value;
+
+document.getElementById("n3").value =
+document.getElementById("n2").value;
+
+document.getElementById("n2").value =
+document.getElementById("n1").value;
+
+document.getElementById("n1").value =
+actualResult;
+    
     if(actualResult === nextPrediction){
 
         aiWins++;
@@ -149,7 +166,7 @@ updateStats();
 };
 
 function updateLearningMemory(actualResult){
-
+    
     let pattern =
     allResults.slice(-6).join(",");
 
