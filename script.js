@@ -80,11 +80,6 @@ Confidence :
 Pattern :
 <b>${pattern}</b>
 
-<br><br>
-
-Pattern Matches :
-<b>${patternMatches}</b>
-
   <br><br>
   
     Total Saved Numbers :
