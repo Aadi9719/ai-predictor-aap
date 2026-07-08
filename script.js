@@ -80,6 +80,11 @@ Confidence :
 Pattern :
 <b>${pattern}</b>
 
+<br><br>
+
+Pattern Matches :
+<b>${patternMatches}</b>
+
   <br><br>
   
     Total Saved Numbers :
@@ -312,6 +317,8 @@ function getPatternPrediction(){
     let bestNumber = null;
     let maxCount = -1;
 
+    let patternMatches = 0;
+    
     for(let num in nextNumbers){
 
         if(nextNumbers[num] > maxCount){
@@ -319,6 +326,8 @@ function getPatternPrediction(){
             maxCount = nextNumbers[num];
             bestNumber = Number(num);
 
+            patternMatches = nextNumbers[num];
+            
         }
 
     }
