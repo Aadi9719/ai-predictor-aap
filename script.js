@@ -36,7 +36,13 @@ document.getElementById("analyzeBtn").onclick = function () {
         JSON.stringify(allResults)
     );
 
-    let memoryPrediction = getMemoryPrediction();
+    let memoryPrediction = getPatternPrediction();
+
+if(memoryPrediction === null){
+
+    memoryPrediction = getMemoryPrediction();
+
+}
 
     let confidence =
 memoryPrediction !== null
@@ -220,6 +226,22 @@ if(!patternMemory[pattern].numbers[actualResult]){
 
 patternMemory[pattern].numbers[actualResult]++;
 
+    // Next Number Pattern Counter
+
+if(!patternMemory[pattern].nextNumbers){
+
+    patternMemory[pattern].nextNumbers = {};
+
+}
+
+if(!patternMemory[pattern].nextNumbers[actualResult]){
+
+    patternMemory[pattern].nextNumbers[actualResult] = 0;
+
+}
+
+patternMemory[pattern].nextNumbers[actualResult]++;
+    
     localStorage.setItem(
         "patternMemory",
         JSON.stringify(patternMemory)
@@ -253,6 +275,40 @@ function getMemoryPrediction(){
         if(numbers[num] > maxCount){
 
             maxCount = numbers[num];
+            bestNumber = Number(num);
+
+        }
+
+    }
+
+    return bestNumber;
+
+}
+
+function getPatternPrediction(){
+
+    let pattern =
+    allResults.slice(-6).join(",");
+
+    if(!patternMemory[pattern]){
+        return null;
+    }
+
+    let nextNumbers =
+    patternMemory[pattern].nextNumbers;
+
+    if(!nextNumbers){
+        return null;
+    }
+
+    let bestNumber = null;
+    let maxCount = -1;
+
+    for(let num in nextNumbers){
+
+        if(nextNumbers[num] > maxCount){
+
+            maxCount = nextNumbers[num];
             bestNumber = Number(num);
 
         }
