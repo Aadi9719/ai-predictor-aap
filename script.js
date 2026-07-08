@@ -38,6 +38,9 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let memoryPrediction = getPatternPrediction();
 
+    let pattern =
+allResults.slice(-6).join(",");
+    
 if(memoryPrediction === null){
 
     memoryPrediction = getMemoryPrediction();
@@ -71,6 +74,11 @@ Big/Small :
 
 Confidence :
 <b>${confidence}%</b>
+
+<br><br>
+
+Pattern :
+<b>${pattern}</b>
 
   <br><br>
   
@@ -315,6 +323,13 @@ function getPatternPrediction(){
 
     }
 
+    console.log(
+"Pattern Prediction = ",
+bestNumber,
+" Count = ",
+maxCount
+);
+    
     return bestNumber;
 
 }
