@@ -125,6 +125,30 @@ Big/Small :
     `;
 
 }
+
+    document.getElementById("debugPattern").innerText =
+pattern;
+
+document.getElementById("debugPrediction").innerText =
+nextPrediction;
+
+if(memoryPrediction !== null){
+
+    document.getElementById("debugSource").innerText =
+    "🧠 MEMORY";
+
+    document.getElementById("debugMemory").innerText =
+    "FOUND";
+
+}else{
+
+    document.getElementById("debugSource").innerText =
+    "🎲 RANDOM";
+
+    document.getElementById("debugMemory").innerText =
+    "NOT FOUND";
+
+}
     
    updateStats();
     console.log(allResults);
