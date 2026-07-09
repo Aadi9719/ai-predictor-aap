@@ -375,6 +375,8 @@ pattern = foundPattern;
     let nextNumbers =
     patternMemory[pattern].nextNumbers;
 
+    alert(JSON.stringify(patternMemory[pattern]));
+    
     if(!nextNumbers){
         return null;
     }
