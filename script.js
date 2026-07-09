@@ -334,9 +334,39 @@ function getPatternPrediction(){
     let pattern =
     allResults.slice(-6).join(",");
 
-    if(!patternMemory[pattern]){
-        return null;
+    let searchPatterns = [
+
+allResults.slice(-6).join(","),
+
+allResults.slice(-5).join(","),
+
+allResults.slice(-4).join(","),
+
+allResults.slice(-3).join(",")
+
+];
+    
+    let foundPattern = null;
+
+for(let p of searchPatterns){
+
+    if(patternMemory[p]){
+
+        foundPattern = p;
+
+        break;
+
     }
+
+}
+
+if(foundPattern === null){
+
+    return null;
+
+}
+
+pattern = foundPattern;
 
     let nextNumbers =
     patternMemory[pattern].nextNumbers;
