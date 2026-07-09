@@ -38,12 +38,24 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let memoryPrediction = getPatternPrediction();
 
+    if(memoryPrediction !== null){
+
+    nextPrediction = memoryPrediction;
+
+    }
+    
     let pattern =
 allResults.slice(-6).join(",");
     
 if(memoryPrediction === null){
 
     memoryPrediction = getMemoryPrediction();
+
+    if(memoryPrediction !== null){
+
+        nextPrediction = memoryPrediction;
+
+    }
 
 }
 
