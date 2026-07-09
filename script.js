@@ -220,7 +220,7 @@ function updateLearningMemory(actualResult){
     let pattern =
     allResults.slice(-6).join(",");
 
-    console.log("SAVE PATTERN =", pattern);
+    alert("SAVE = " + pattern);
     
     if(!patternMemory[pattern]){
 
@@ -336,7 +336,7 @@ function getPatternPrediction(){
     let pattern =
     allResults.slice(-6).join(",");
 
-    console.log("SEARCH PATTERN =", pattern);
+    alert("SEARCH = " + pattern);
     
     let searchPatterns = [
 
