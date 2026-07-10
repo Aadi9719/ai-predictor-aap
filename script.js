@@ -41,6 +41,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     let finalPrediction = getFinalPrediction();
 
     let trendScore = getTrendScore();
+
+    let finalAIScore = getFinalAIScore();
     
     let trendPrediction = getTrendPrediction();
     
@@ -99,6 +101,16 @@ Confidence :
 
 Pattern Score :
 <b>${getPatternScore()}%</b>
+
+<br><br>
+
+Trend Score :
+<b>${trendScore}%</b>
+
+<br><br>
+
+AI Score :
+<b>${finalAIScore}%</b>
 
 <br><br>
 
