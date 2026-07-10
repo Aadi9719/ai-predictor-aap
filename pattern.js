@@ -49,10 +49,16 @@ function getPatternPrediction(){
 
     for(let num in nextNumbers){
 
-        if(nextNumbers[num] > maxCount){
+        if(
+    nextNumbers[num] > maxCount ||
+    (
+        nextNumbers[num] === maxCount &&
+        Number(num) !== 0
+    )
+){
 
-            maxCount = nextNumbers[num];
-            bestNumber = Number(num);
+    maxCount = nextNumbers[num];
+    bestNumber = Number(num);
 
         }
 
