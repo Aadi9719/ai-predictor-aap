@@ -96,98 +96,195 @@ memoryPrediction !== null
 
     }
         
-    document.getElementById("analyzeBtn").onclick = function(){
+    document.getElementById("result").innerHTML = `
+    <h2>AI Prediction 🔥</h2>
 
-    let memoryPrediction = getPatternPrediction();
-    let trendPrediction = getTrendPrediction();
-    let finalPrediction = getFinalPrediction();
+    Final Prediction :
+<b>${finalPrediction}</b>
 
-    currentPattern = allResults.slice(0,6).join(",");
+<br><br>
 
-    if(finalPrediction !== null){
+Color :
+<b>${getColorPrediction(finalPrediction)}</b>
 
-        nextPrediction = finalPrediction;
+<br><br>
 
-    }else if(memoryPrediction !== null){
+Big/Small :
+<b>${getBigSmallPrediction(finalPrediction)}</b>
 
-        nextPrediction = memoryPrediction;
+<br><br>
 
-    }else if(trendPrediction !== null){
+Confidence :
+<b>${confidence}%</b>
 
-        nextPrediction = trendPrediction;
+<br><br>
 
-    }else{
+Pattern Score :
+<b>${getPatternScore()}%</b>
 
-        nextPrediction = Math.floor(Math.random()*10);
+<br><br>
 
-    }
+Trend Score :
+<b>${trendScore}%</b>
+
+<br><br>
+
+Hot Number :
+<b>${hotCold.hot}</b>
+
+<br><br>
+
+Cold Number :
+<b>${hotCold.cold}</b>
+
+<br><br>
+
+AI Score :
+<b>${finalAIScore}%</b>
+
+<br><br>
+
+Pattern :
+<b>${pattern}</b>
+
+  <br><br>
+
+  Trend Prediction :
+<b>${trendPrediction !== null ? trendPrediction : "-"}</b>
+
+<br><br>
+
+    Total Saved Numbers :
+    ${allResults.length}
+    `;
+
+}else{
+
+    nextPrediction = Math.floor(Math.random() * 10);
 
     document.getElementById("result").innerHTML = `
     <h2>AI Prediction 🔥</h2>
 
-    Prediction :
+    Next Number :
     <b>${nextPrediction}</b>
 
+<br><br>
+
+Color :
+<b>${getColorPrediction(nextPrediction)}</b>
+
+<br><br>
+
+Big/Small :
+<b>${getBigSmallPrediction(nextPrediction)}</b>
+
     <br><br>
 
-    Color :
-    <b>${getColorPrediction(nextPrediction)}</b>
-
-    <br><br>
-
-    Big/Small :
-    <b>${getBigSmallPrediction(nextPrediction)}</b>
+    Total Saved Numbers :
+    ${allResults.length}
     `;
 
-    updateStats();
+}
 
+    document.getElementById("debugPattern").innerText =
+pattern;
+
+document.getElementById("debugPrediction").innerText =
+nextPrediction;
+
+if(memoryPrediction !== null){
+
+    document.getElementById("debugSource").innerText =
+    "🧠 MEMORY";
+
+    document.getElementById("debugMemory").innerText =
+    "FOUND";
+
+}else{
+
+    document.getElementById("debugSource").innerText =
+    "🎲 RANDOM";
+
+    document.getElementById("debugMemory").innerText =
+    "NOT FOUND";
+
+}
+    
+   updateStats();
+    console.log(allResults);
+
+    alert("Analyze End");
+    
 };
 
-document.getElementById("checkBtn").onclick=function(){
+document.getElementById("checkBtn").onclick = function(){
 
-    let actualResult = Number(prompt("Enter Actual Result"));
+    let actualResult = Number(
+        prompt("Enter Actual Result")
+    );
 
-    if(isNaN(actualResult)) return;
+    if(isNaN(actualResult)){
 
-    updateLearningMemory(actualResult);
-
-    allResults.unshift(actualResult);
-
-    if(allResults.length>1000){
-
-        allResults.pop();
+        alert("Please Enter Valid Number");
+        return;
 
     }
 
-    localStorage.setItem(
-        "allResults",
-        JSON.stringify(allResults)
-    );
+    allResults.unshift(actualResult);
 
-    if(actualResult===nextPrediction){
+if(allResults.length > 1000){
+    allResults.pop();
+}
+
+localStorage.setItem(
+    "allResults",
+    JSON.stringify(allResults)
+);
+    
+    updateLearningMemory(actualResult);
+
+    // Auto Shift Inputs
+
+document.getElementById("n5").value =
+document.getElementById("n4").value;
+
+document.getElementById("n4").value =
+document.getElementById("n3").value;
+
+document.getElementById("n3").value =
+document.getElementById("n2").value;
+
+document.getElementById("n2").value =
+document.getElementById("n1").value;
+
+document.getElementById("n1").value =
+actualResult;
+    
+    if(actualResult === nextPrediction){
 
         aiWins++;
 
-        addHistory(
-        "✅ Prediction : "+nextPrediction+
-        " | Result : "+actualResult
-        );
+        localStorage.setItem("aiWins", aiWins);
 
+        alert("AI WON ✅");
+
+        addHistory("✅ Prediction : " + nextPrediction + " | Result : " + actualResult);
+        
+updateStats();
+        
     }else{
 
         aiLosses++;
 
-        addHistory(
-        "❌ Prediction : "+nextPrediction+
-        " | Result : "+actualResult
-        );
+        localStorage.setItem("aiLosses", aiLosses);
 
+        alert("AI LOST ❌");
+
+        addHistory("❌ Prediction : " + nextPrediction + " | Result : " + actualResult);
+        
+updateStats();
+        
     }
-
-    localStorage.setItem("aiWins",aiWins);
-    localStorage.setItem("aiLosses",aiLosses);
-
-    updateStats();
 
 };
 
