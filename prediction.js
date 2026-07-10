@@ -91,3 +91,37 @@ function getFinalPrediction(){
     return Math.floor(Math.random() * 10);
 
 }
+
+function getTrendScore(){
+
+    if(allResults.length < 20){
+        return 0;
+    }
+
+    let recent = allResults.slice(-20);
+
+    let count = {};
+
+    recent.forEach(n => {
+
+        if(!count[n]){
+            count[n] = 0;
+        }
+
+        count[n]++;
+
+    });
+
+    let max = 0;
+
+    for(let num in count){
+
+        if(count[num] > max){
+            max = count[num];
+        }
+
+    }
+
+    return Math.round((max / 20) * 100);
+
+}
