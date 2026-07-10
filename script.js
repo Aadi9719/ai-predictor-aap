@@ -158,16 +158,6 @@ Pattern :
     ${allResults.length}
     `;
 
-}else{
-
-    nextPrediction = Math.floor(Math.random() * 10);
-
-    document.getElementById("result").innerHTML = `
-    <h2>AI Prediction 🔥</h2>
-
-    Next Number :
-    <b>${nextPrediction}</b>
-
 <br><br>
 
 Color :
