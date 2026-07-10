@@ -1,75 +1,37 @@
 function getPatternPrediction(){
 
-    let pattern = allResults.slice(-6).join(",");
-
-    let searchPatterns = [
-
-        allResults.slice(-6).join(","),
-
-        allResults.slice(-5).join(","),
-
-        allResults.slice(-4).join(","),
-
-        allResults.slice(-3).join(",")
-
-    ];
-
-    let foundPattern = null;
-
-    for(let p of searchPatterns){
-
-        if(patternMemory[p]){
-
-            foundPattern = p;
-
-            break;
-
-        }
-
-    }
-
-    if(foundPattern === null){
-
-        return null;
-
-    }
-
-    pattern = foundPattern;
-
-    let nextNumbers = patternMemory[pattern].nextNumbers;
-
-    if(!nextNumbers){
-
-        return null;
-
-    }
-
     let bestNumber = null;
-    let maxCount = -1;
+    let bestScore = -1;
 
-    for(let num in nextNumbers){
+    for(let len = 6; len >= 3; len--){
 
-        if(
-    nextNumbers[num] > maxCount ||
-    (
-        nextNumbers[num] === maxCount &&
-        Number(num) !== 0
-    )
-){
+        let pattern = allResults.slice(-len).join(",");
 
-    maxCount = nextNumbers[num];
-    bestNumber = Number(num);
+        if(!patternMemory[pattern]) continue;
+
+        let nextNumbers = patternMemory[pattern].nextNumbers;
+
+        for(let num in nextNumbers){
+
+            let score = nextNumbers[num] * len;
+
+            if(score > bestScore){
+
+                bestScore = score;
+                bestNumber = Number(num);
+
+            }
 
         }
 
     }
 
-    alert(
-"Best = " + bestNumber +
-"\nCount = " + maxCount +
-"\nData = " + JSON.stringify(nextNumbers)
-);
-    
+    if(bestNumber === null){
+
+        return null;
+
+    }
+
     return bestNumber;
 
 }
