@@ -1,7 +1,6 @@
 function updateLearningMemory(actualResult){
     
-    let pattern =
-    allResults.slice(-6).join(",");
+    let pattern = allResults.slice(1,7).join(",");
 
     alert("SAVE = " + pattern);
     
