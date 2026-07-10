@@ -59,3 +59,35 @@ function getTrendPrediction(){
     return best;
 
 }
+
+function getFinalPrediction(){
+
+    let memory = getPatternPrediction();
+
+    let trend = getTrendPrediction();
+
+    if(memory !== null && trend !== null){
+
+        if(memory === trend){
+
+            return memory;
+
+        }
+
+    }
+
+    if(memory !== null){
+
+        return memory;
+
+    }
+
+    if(trend !== null){
+
+        return trend;
+
+    }
+
+    return Math.floor(Math.random() * 10);
+
+}
