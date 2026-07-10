@@ -89,6 +89,11 @@ Confidence :
 
 <br><br>
 
+Pattern Score :
+<b>${getPatternScore()}%</b>
+
+<br><br>
+
 Pattern :
 <b>${pattern}</b>
 
