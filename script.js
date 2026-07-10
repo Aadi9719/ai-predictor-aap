@@ -53,6 +53,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     if(memoryPrediction !== null){
 
     nextPrediction = memoryPrediction;
+
+        memoryPrediction = nextPrediction;
         
     }
     
@@ -76,9 +78,23 @@ memoryPrediction !== null
 ? getPredictionConfidence()
 : 0;
 
-    if(memoryPrediction !== null){
+    if(finalPrediction !== null){
 
-        nextPrediction = finalPrediction;
+    nextPrediction = finalPrediction;
+
+}else if(memoryPrediction !== null){
+
+    nextPrediction = memoryPrediction;
+
+}else{
+
+    nextPrediction = getTrendPrediction();
+
+    if(nextPrediction === null){
+        nextPrediction = Math.floor(Math.random()*10);
+    }
+
+    }
         
     document.getElementById("result").innerHTML = `
     <h2>AI Prediction 🔥</h2>
