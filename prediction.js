@@ -125,3 +125,23 @@ function getTrendScore(){
     return Math.round((max / 20) * 100);
 
 }
+
+function getFinalAIScore(){
+
+    let memory = getPredictionConfidence();
+
+    let pattern = getPatternScore();
+
+    let trend = getTrendScore();
+
+    return Math.round(
+
+        (memory * 0.4) +
+
+        (pattern * 0.3) +
+
+        (trend * 0.3)
+
+    );
+
+}
