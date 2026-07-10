@@ -145,3 +145,59 @@ function getFinalAIScore(){
     );
 
 }
+
+function getHotColdNumbers(){
+
+    if(allResults.length < 20){
+
+        return {
+            hot:null,
+            cold:null
+        };
+
+    }
+
+    let recent = allResults.slice(-20);
+
+    let count = {};
+
+    for(let i=0;i<=9;i++){
+
+        count[i]=0;
+
+    }
+
+    recent.forEach(n=>{
+
+        count[n]++;
+
+    });
+
+    let hot = 0;
+    let cold = 0;
+
+    for(let i=0;i<=9;i++){
+
+        if(count[i] > count[hot]){
+
+            hot = i;
+
+        }
+
+        if(count[i] < count[cold]){
+
+            cold = i;
+
+        }
+
+    }
+
+    return {
+
+        hot,
+
+        cold
+
+    };
+
+}
