@@ -43,6 +43,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     let trendScore = getTrendScore();
 
     let finalAIScore = getFinalAIScore();
+
+    let hotCold = getHotColdNumbers();
     
     let trendPrediction = getTrendPrediction();
     
@@ -106,6 +108,16 @@ Pattern Score :
 
 Trend Score :
 <b>${trendScore}%</b>
+
+<br><br>
+
+Hot Number :
+<b>${hotCold.hot}</b>
+
+<br><br>
+
+Cold Number :
+<b>${hotCold.cold}</b>
 
 <br><br>
 
