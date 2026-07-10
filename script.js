@@ -38,6 +38,8 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let memoryPrediction = getPatternPrediction();
 
+    let trendPrediction = getTrendPrediction();
+    
     if(memoryPrediction !== null){
 
     nextPrediction = memoryPrediction;
@@ -98,7 +100,12 @@ Pattern :
 <b>${pattern}</b>
 
   <br><br>
-  
+
+  Trend Prediction :
+<b>${trendPrediction !== null ? trendPrediction : "-"}</b>
+
+<br><br>
+
     Total Saved Numbers :
     ${allResults.length}
     `;
