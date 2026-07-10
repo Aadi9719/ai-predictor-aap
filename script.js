@@ -275,7 +275,7 @@ updateStats();
 function getMemoryPrediction(){
 
     let pattern =
-    allResults.slice(-6).join(",");
+allResults.slice(0,6).join(",");
 
     if(!patternMemory[pattern]){
         return null;
