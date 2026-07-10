@@ -58,6 +58,12 @@ function getPatternPrediction(){
 
     }
 
+    alert(
+"Best = " + bestNumber +
+"\nCount = " + maxCount +
+"\nData = " + JSON.stringify(nextNumbers)
+);
+    
     return bestNumber;
 
 }
