@@ -19,16 +19,18 @@ patternMemory[pattern].confidence || 1;
 let score =
 (nextNumbers[num] * len) + confidence;
 
-            if(score > bestScore){
+            if(
+score > bestScore ||
+(
+score === bestScore &&
+Number(num) !== 0
+)
+){
 
-                bestScore = score;
-                bestNumber = Number(num);
+    bestScore = score;
+    bestNumber = Number(num);
 
             }
-
-        }
-
-    }
 
     if(bestNumber === null){
 
