@@ -29,7 +29,7 @@ document.getElementById("analyzeBtn").onclick = function () {
     let numbers = [n1, n2, n3, n4, n5];
 
     // Save history
-    allResults.push(...numbers);
+    //allResults.push(...numbers);
 
     localStorage.setItem(
         "allResults",
@@ -168,6 +168,17 @@ document.getElementById("checkBtn").onclick = function(){
 
     }
 
+    allResults.unshift(actualResult);
+
+if(allResults.length > 1000){
+    allResults.pop();
+}
+
+localStorage.setItem(
+    "allResults",
+    JSON.stringify(allResults)
+);
+    
     updateLearningMemory(actualResult);
 
     // Auto Shift Inputs
