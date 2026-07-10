@@ -40,6 +40,11 @@ function updateLearningMemory(actualResult){
 
     patternMemory[pattern].total++;
 
+    patternMemory[pattern].confidence =
+Math.round(
+(patternMemory[pattern].total / allResults.length) * 100
+);
+    
     patternMemory[pattern][color]++;
 
     patternMemory[pattern][bigSmall]++;
@@ -69,6 +74,8 @@ if(!patternMemory[pattern].nextNumbers[actualResult]){
 }
 
 patternMemory[pattern].nextNumbers[actualResult]++;
+
+    patternMemory[pattern].lastSeen = Date.now();
     
     localStorage.setItem(
         "patternMemory",
