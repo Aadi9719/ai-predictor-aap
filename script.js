@@ -38,6 +38,8 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let memoryPrediction = getPatternPrediction();
 
+    let finalPrediction = getFinalPrediction();
+    
     let trendPrediction = getTrendPrediction();
     
     if(memoryPrediction !== null){
@@ -68,21 +70,23 @@ memoryPrediction !== null
 
     if(memoryPrediction !== null){
 
+        nextPrediction = finalPrediction;
+        
     document.getElementById("result").innerHTML = `
     <h2>AI Prediction 🔥</h2>
 
-    Memory Prediction :
-    <b>${memoryPrediction}</b>
+    Final Prediction :
+<b>${finalPrediction}</b>
 
 <br><br>
 
 Color :
-<b>${getColorPrediction(memoryPrediction)}</b>
+<b>${getColorPrediction(finalPrediction)}</b>
 
 <br><br>
 
 Big/Small :
-<b>${getBigSmallPrediction(memoryPrediction)}</b>
+<b>${getBigSmallPrediction(finalPrediction)}</b>
 
 <br><br>
 
