@@ -66,6 +66,11 @@ function getFinalPrediction(){
 
     let trend = getTrendPrediction();
 
+    let hotCold = getHotColdNumbers();
+
+    let hot = hotCold.hot;
+
+    // Sab agree hain
     if(memory !== null && trend !== null){
 
         if(memory === trend){
@@ -76,19 +81,44 @@ function getFinalPrediction(){
 
     }
 
+    // Memory aur Hot same
+    if(memory !== null){
+
+        if(memory === hot){
+
+            return memory;
+
+        }
+
+    }
+
+    // Trend aur Hot same
+    if(trend !== null){
+
+        if(trend === hot){
+
+            return trend;
+
+        }
+
+    }
+
+    // Strong Memory
     if(memory !== null){
 
         return memory;
 
     }
 
+    // Strong Trend
     if(trend !== null){
 
         return trend;
 
     }
 
-    return Math.floor(Math.random() * 10);
+    // Last option
+    return hot;
 
 }
 
