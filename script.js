@@ -20,6 +20,8 @@ let nextPrediction = null;
 
 document.getElementById("analyzeBtn").onclick = function () {
 
+    alert("Analyze Start");
+    
     let n1 = Number(document.getElementById("n1").value);
     let n2 = Number(document.getElementById("n2").value);
     let n3 = Number(document.getElementById("n3").value);
@@ -51,7 +53,7 @@ document.getElementById("analyzeBtn").onclick = function () {
     if(memoryPrediction !== null){
 
     nextPrediction = memoryPrediction;
-
+        
     }
     
     let pattern =
@@ -195,6 +197,8 @@ if(memoryPrediction !== null){
    updateStats();
     console.log(allResults);
 
+    alert("Analyze End");
+    
 };
 
 document.getElementById("checkBtn").onclick = function(){
