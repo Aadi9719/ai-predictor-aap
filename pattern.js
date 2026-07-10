@@ -5,7 +5,7 @@ function getPatternPrediction(){
 
     for(let len = 6; len >= 3; len--){
 
-        let pattern = allResults.slice(-len).join(",");
+        let pattern = allResults.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
 
