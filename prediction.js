@@ -187,7 +187,7 @@ function getHotColdNumbers(){
 
     }
 
-    let recent = allResults.slice(-20);
+    let recent = allResults.slice(0,20);
 
     let count = {};
 
@@ -203,8 +203,8 @@ function getHotColdNumbers(){
 
     });
 
-    let hot = 0;
-    let cold = 0;
+    let hot = recent[0];
+let cold = recent[0];
 
     for(let i=0;i<=9;i++){
 
