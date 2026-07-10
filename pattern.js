@@ -13,7 +13,11 @@ function getPatternPrediction(){
 
         for(let num in nextNumbers){
 
-            let score = nextNumbers[num] * len;
+            let confidence =
+patternMemory[pattern].confidence || 1;
+
+let score =
+(nextNumbers[num] * len) + confidence;
 
             if(score > bestScore){
 
