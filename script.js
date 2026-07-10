@@ -39,6 +39,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     let memoryPrediction = getPatternPrediction();
 
     let finalPrediction = getFinalPrediction();
+
+    let trendScore = getTrendScore();
     
     let trendPrediction = getTrendPrediction();
     
