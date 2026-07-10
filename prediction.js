@@ -32,25 +32,25 @@ function getTrendPrediction(){
 
     let count = {};
 
-    recent.forEach(n => {
+    for(let i=0;i<=9;i++){
+        count[i]=0;
+    }
 
-        if(!count[n]){
-            count[n] = 0;
-        }
-
+    recent.forEach(n=>{
         count[n]++;
-
     });
 
     let best = null;
     let max = -1;
 
-    for(let num in count){
+    for(let i=0;i<=9;i++){
 
-        if(count[num] > max){
+        if(i===0) continue;   // 0 ko ignore karega
 
-            max = count[num];
-            best = Number(num);
+        if(count[i] > max){
+
+            max = count[i];
+            best = i;
 
         }
 
