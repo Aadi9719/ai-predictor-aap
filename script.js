@@ -158,8 +158,6 @@ Pattern :
     ${allResults.length}
     `;
 
-}else{
-
     nextPrediction = Math.floor(Math.random() * 10);
 
     document.getElementById("result").innerHTML = `
@@ -179,10 +177,6 @@ Big/Small :
 <b>${getBigSmallPrediction(nextPrediction)}</b>
 
     <br><br>
-
-    Total Saved Numbers :
-    ${allResults.length}
-    `;
 
 }
 
