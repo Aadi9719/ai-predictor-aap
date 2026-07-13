@@ -158,9 +158,13 @@ Pattern :
     ${allResults.length}
     `;
 
+    alert("Pattern Value = " + pattern);
+    
     document.getElementById("debugPattern").innerText =
 pattern;
 
+    alert("Debug Pattern OK");
+    
 document.getElementById("debugPrediction").innerText =
 nextPrediction;
 
