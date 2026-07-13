@@ -34,12 +34,6 @@ function getPatternPrediction(){
     if(bestNumber === null){
         return null;
     }
-
-    alert(
-"Pattern = " + pattern +
-"\nBest = " + bestNumber +
-"\nNextNumbers = " + JSON.stringify(nextNumbers)
-);
     
     return bestNumber;
 
