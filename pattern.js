@@ -35,6 +35,12 @@ function getPatternPrediction(){
         return null;
     }
 
+    alert(
+"Pattern = " + pattern +
+"\nBest = " + bestNumber +
+"\nNextNumbers = " + JSON.stringify(nextNumbers)
+);
+    
     return bestNumber;
 
 }
