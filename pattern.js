@@ -1,6 +1,3 @@
-        
-alert("Pattern.js Loaded");
-
 function getPatternPrediction(){
 
     let bestNumber = null;
@@ -60,5 +57,3 @@ function getPatternScore(){
     return 50;
 
 }
-
-alert("Pattern.js End");
