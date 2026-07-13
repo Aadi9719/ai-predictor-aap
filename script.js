@@ -38,14 +38,12 @@ document.getElementById("analyzeBtn").onclick = function () {
         JSON.stringify(allResults)
     );
 
-    let memoryPrediction = null;
-let finalPrediction = null;
-let trendScore = 0;
-let finalAIScore = 0;
-let hotCold = {hot:null, cold:null};
-let trendPrediction = null;
-
-alert("Functions Skip OK");
+    let memoryPrediction = getPatternPrediction();
+let finalPrediction = getFinalPrediction();
+let trendScore = getTrendScore();
+let finalAIScore = getFinalAIScore();
+let hotCold = getHotColdNumbers();
+let trendPrediction = getTrendPrediction();
     
     if(memoryPrediction !== null){
 
