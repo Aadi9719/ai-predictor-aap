@@ -1,3 +1,4 @@
+        
 alert("Pattern.js Loaded");
 
 function getPatternPrediction(){
@@ -13,31 +14,28 @@ function getPatternPrediction(){
 
         let nextNumbers = patternMemory[pattern].nextNumbers;
 
+        if(!nextNumbers) continue;
+
+        let confidence = patternMemory[pattern].confidence || 1;
+
         for(let num in nextNumbers){
 
-            let confidence =
-patternMemory[pattern].confidence || 1;
-
-let score =
-(nextNumbers[num] * len) + confidence;
+            let score = (nextNumbers[num] * len) + confidence;
 
             if(
-score > bestScore ||
-(
-score === bestScore &&
-Number(num) !== 0
-)
-){
-
-    bestScore = score;
-    bestNumber = Number(num);
-
+                score > bestScore ||
+                (score === bestScore && Number(num) !== 0)
+            ){
+                bestScore = score;
+                bestNumber = Number(num);
             }
 
+        } // num loop end
+
+    } // len loop end
+
     if(bestNumber === null){
-
         return null;
-
     }
 
     return bestNumber;
@@ -46,7 +44,7 @@ Number(num) !== 0
 
 function getPatternScore(){
 
-    let pattern = allResults.slice(-6).join(",");
+    let pattern = allResults.slice(0,6).join(",");
 
     if(!patternMemory[pattern]){
         return 0;
@@ -63,5 +61,4 @@ function getPatternScore(){
 
 }
 
-    alert("Pattern.js End");
-        
+alert("Pattern.js End");
