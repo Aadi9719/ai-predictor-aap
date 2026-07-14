@@ -17,7 +17,21 @@ function getPatternPrediction(){
 
         for(let num in nextNumbers){
 
-            let score = (nextNumbers[num] * len) + confidence;
+            let trendBonus = 0;
+
+if(Number(num) === getTrendPrediction()){
+    trendBonus += 15;
+}
+
+if(Number(num) === getHotColdNumbers().hot){
+    trendBonus += 10;
+}
+
+let score =
+(nextNumbers[num] * len) +
+confidence +
+trendBonus;
+            
 
             if(
                 score > bestScore ||
