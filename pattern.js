@@ -27,12 +27,20 @@ if(Number(num) === getHotColdNumbers().hot){
     trendBonus += 10;
 }
 
-let score =
-(nextNumbers[num] * len) +
-confidence +
-trendBonus;
-            
+let frequency = nextNumbers[num];
 
+let trendBonus =
+(Number(num) === getTrendPrediction()) ? 15 : 0;
+
+let hotBonus =
+(Number(num) === getHotColdNumbers().hot) ? 10 : 0;
+
+let score =
+(frequency * len) +
+(confidence * 2) +
+trendBonus +
+hotBonus;
+            
             if(
                 score > bestScore ||
                 (score === bestScore && Number(num) !== 0)
