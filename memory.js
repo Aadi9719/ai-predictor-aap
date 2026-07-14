@@ -57,7 +57,7 @@ if(!patternMemory[pattern].numbers[actualResult]){
 
 }
 
-patternMemory[pattern].numbers[actualResult]++;
+patternMemory[pattern].nextNumbers[actualResult] += 2;
 
     // Next Number Pattern Counter
 
