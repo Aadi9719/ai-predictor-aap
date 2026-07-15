@@ -93,3 +93,5 @@ patternMemory[pattern].nextNumbers[actualResult]++;
     console.log(patternMemory);
 
 }
+
+}
