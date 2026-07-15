@@ -17,17 +17,7 @@ function getPatternPrediction(){
 
         for(let num in nextNumbers){
 
-            let trendBonus = 0;
-
-if(Number(num) === getTrendPrediction()){
-    trendBonus += 15;
-}
-
-if(Number(num) === getHotColdNumbers().hot){
-    trendBonus += 10;
-}
-
-let frequency = nextNumbers[num];
+            let frequency = nextNumbers[num];
 
 let trendBonus =
 (Number(num) === getTrendPrediction()) ? 15 : 0;
