@@ -57,21 +57,17 @@ if(!patternMemory[pattern].numbers[actualResult]){
 
 }
 
-patternMemory[pattern].nextNumbers[actualResult] += 2;
-
-    // Next Number Pattern Counter
+// Next Number Pattern Counter
 
 if(!patternMemory[pattern].nextNumbers){
-
     patternMemory[pattern].nextNumbers = {};
-
 }
 
-if(!patternMemory[pattern].nextNumbers[actualResult]){
-
+if(patternMemory[pattern].nextNumbers[actualResult] === undefined){
     patternMemory[pattern].nextNumbers[actualResult] = 0;
-
 }
+
+patternMemory[pattern].nextNumbers[actualResult] += 2;
 
 patternMemory[pattern].nextNumbers[actualResult]++;
 
