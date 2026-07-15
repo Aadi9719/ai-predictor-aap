@@ -1,29 +1,41 @@
 function updateLearningMemory(actualResult){
     
-    let pattern = allResults.slice(1,7).join(",");
+    for (let len = 2; len <= 8; len++) {
 
-    alert("SAVE = " + pattern);
-    
-    if(!patternMemory[pattern]){
+    let pattern = allResults.slice(1, len + 1).join(",");
+
+    if (pattern.split(",").length < len) continue;
+
+    if (!patternMemory[pattern]) {
 
         patternMemory[pattern] = {
 
-            total:0,
+            total: 0,
 
-            GREEN:0,
-            RED:0,
+            GREEN: 0,
+            RED: 0,
 
-            BIG:0,
-            SMALL:0,
+            BIG: 0,
+            SMALL: 0,
 
-            GREEN_BIG:0,
-            GREEN_SMALL:0,
+            GREEN_BIG: 0,
+            GREEN_SMALL: 0,
 
-            RED_BIG:0,
-            RED_SMALL:0,
+            RED_BIG: 0,
+            RED_SMALL: 0,
 
-            numbers:{}
-        
+            numbers: {},
+
+            nextNumbers: {},
+
+            win: 0,
+
+            loss: 0,
+
+            confidence: 0,
+
+            lastSeen: 0
+
         };
 
     }
