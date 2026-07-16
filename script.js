@@ -218,6 +218,8 @@ localStorage.setItem(
     updateLearningMemory(actualResult);
 
     updateBigSmallMemory(actualResult);
+
+    updateColorMemory(actualResult);
     
     // Auto Shift Inputs
 
