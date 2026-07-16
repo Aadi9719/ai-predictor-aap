@@ -157,3 +157,49 @@ function getBigSmallPredictionMemory(){
     return null;
 
 }
+
+let colorMemory =
+JSON.parse(localStorage.getItem("colorMemory")) || {};
+
+function updateColorMemory(actualResult){
+
+    let colorHistory = allResults
+        .slice(1,9)
+        .map(n => [1,3,7,9].includes(n) ? "G" : "R");
+
+    for(let len = 2; len <= 8; len++){
+
+        let pattern = colorHistory.slice(0,len).join(",");
+
+        if(pattern.split(",").length < len) continue;
+
+        if(!colorMemory[pattern]){
+
+            colorMemory[pattern] = {
+
+                total:0,
+
+                next:{
+                    G:0,
+                    R:0
+                }
+
+            };
+
+        }
+
+        let nextColor =
+        [1,3,7,9].includes(actualResult) ? "G" : "R";
+
+        colorMemory[pattern].total++;
+
+        colorMemory[pattern].next[nextColor]++;
+
+    }
+
+    localStorage.setItem(
+        "colorMemory",
+        JSON.stringify(colorMemory)
+    );
+
+}
