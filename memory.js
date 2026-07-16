@@ -90,6 +90,8 @@ patternMemory[pattern].nextNumbers[actualResult]++;
         JSON.stringify(patternMemory)
     );
 
+        alert("Total Patterns = " + Object.keys(patternMemory).length);
+        
     console.log(patternMemory);
 
 }
