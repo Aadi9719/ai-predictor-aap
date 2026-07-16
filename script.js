@@ -214,6 +214,8 @@ localStorage.setItem(
     
     updateLearningMemory(actualResult);
 
+    updateBigSmallMemory(actualResult);
+    
     // Auto Shift Inputs
 
 document.getElementById("n5").value =
