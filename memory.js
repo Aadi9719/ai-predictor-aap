@@ -97,3 +97,65 @@ patternMemory[pattern].nextNumbers[actualResult]++;
 }
 
 }
+
+let bigSmallMemory = JSON.parse(localStorage.getItem("bigSmallMemory")) || {};
+
+function updateBigSmallMemory(actualResult){
+
+    let bsHistory = allResults
+        .slice(1,9)
+        .map(n => n >= 5 ? "B" : "S");
+
+    for(let len = 2; len <= 8; len++){
+
+        let pattern = bsHistory.slice(0,len).join(",");
+
+        if(pattern.split(",").length < len) continue;
+
+        if(!bigSmallMemory[pattern]){
+
+            bigSmallMemory[pattern] = {
+                total:0,
+                next:{
+                    B:0,
+                    S:0
+                }
+            };
+
+        }
+
+        let nextType = actualResult >= 5 ? "B" : "S";
+
+        bigSmallMemory[pattern].total++;
+        bigSmallMemory[pattern].next[nextType]++;
+
+    }
+
+    localStorage.setItem(
+        "bigSmallMemory",
+        JSON.stringify(bigSmallMemory)
+    );
+
+}
+
+function getBigSmallPredictionMemory(){
+
+    let bsHistory = allResults
+        .slice(0,8)
+        .map(n => n >= 5 ? "B" : "S");
+
+    for(let len=8; len>=2; len--){
+
+        let pattern = bsHistory.slice(0,len).join(",");
+
+        if(!bigSmallMemory[pattern]) continue;
+
+        let next = bigSmallMemory[pattern].next;
+
+        return next.B >= next.S ? "BIG" : "SMALL";
+
+    }
+
+    return null;
+
+}
