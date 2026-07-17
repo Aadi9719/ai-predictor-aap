@@ -266,28 +266,35 @@ updateStats();
 };
 
 function getMemoryPrediction(){
-    
-     let pattern = numbers.join(",");
+
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    let pattern = currentInput.join(",");
 
     if(!patternMemory[pattern]){
         return null;
     }
 
-    let numbers =
-    patternMemory[pattern].numbers;
+    let memoryNumbers = patternMemory[pattern].numbers;
 
-    if(!numbers){
+    if(!memoryNumbers){
         return null;
     }
 
     let bestNumber = null;
     let maxCount = -1;
 
-    for(let num in numbers){
+    for(let num in memoryNumbers){
 
-        if(numbers[num] > maxCount){
+        if(memoryNumbers[num] > maxCount){
 
-            maxCount = numbers[num];
+            maxCount = memoryNumbers[num];
             bestNumber = Number(num);
 
         }
@@ -300,28 +307,30 @@ function getMemoryPrediction(){
 
 function getPredictionConfidence(){
 
-    let pattern = numbers.join(",");
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    let pattern = currentInput.join(",");
 
     if(!patternMemory[pattern]){
-
         return 0;
-
     }
 
-    let total =
-    patternMemory[pattern].total;
+    let total = patternMemory[pattern].total;
 
-    let numbers =
-    patternMemory[pattern].numbers;
+    let memoryNumbers = patternMemory[pattern].numbers;
 
     let best = 0;
 
-    for(let num in numbers){
+    for(let num in memoryNumbers){
 
-        if(numbers[num] > best){
-
-            best = numbers[num];
-
+        if(memoryNumbers[num] > best){
+            best = memoryNumbers[num];
         }
 
     }
