@@ -219,6 +219,8 @@ localStorage.setItem(
     updateBigSmallMemory(actualResult);
 
     updateColorMemory(actualResult);
+
+    let currentPattern = allResults.slice(1,7).join(",");
     
     // Auto Shift Inputs
 
@@ -241,6 +243,17 @@ actualResult;
 
         aiWins++;
 
+        if(patternMemory[currentPattern]){
+
+    patternMemory[currentPattern].win++;
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+        }
+        
         localStorage.setItem("aiWins", aiWins);
 
         alert("AI WON ✅");
@@ -253,6 +266,17 @@ updateStats();
 
         aiLosses++;
 
+        if(patternMemory[currentPattern]){
+
+    patternMemory[currentPattern].loss++;
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+        }
+        
         localStorage.setItem("aiLosses", aiLosses);
 
         alert("AI LOST ❌");
