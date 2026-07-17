@@ -36,9 +36,12 @@ let trendBonus =
 let hotBonus =
 (Number(num) === getHotColdNumbers().hot) ? 10 : 0;
 
+            let winRate = getPatternWinRate(pattern);
+            
 let score =
 (frequency * len) +
 (confidence * 2) +
+(winRate * 3) +
 trendBonus +
 hotBonus;
             
