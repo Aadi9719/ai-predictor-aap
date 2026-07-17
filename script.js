@@ -267,8 +267,7 @@ updateStats();
 
 function getMemoryPrediction(){
     
-     let pattern =
-    allResults.slice(-6).join(",")
+     let pattern = numbers.join(",");
 
     if(!patternMemory[pattern]){
         return null;
@@ -301,8 +300,7 @@ function getMemoryPrediction(){
 
 function getPredictionConfidence(){
 
-    let pattern =
-    allResults.slice(-6).join(",");
+    let pattern = numbers.join(",");
 
     if(!patternMemory[pattern]){
 
