@@ -3,7 +3,7 @@ function getPatternPrediction(){
     let bestNumber = null;
     let bestScore = -1;
 
-    for(let len = 6; len >= 3; len--){
+    for(let len = 5; len >= 2; len--)
 
         let currentInput = [
     Number(document.getElementById("n1").value),
