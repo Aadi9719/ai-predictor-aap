@@ -53,8 +53,7 @@ let trendPrediction = getTrendPrediction();
         
     }
     
-    let pattern =
-allResults.slice(-6).join(",");
+    let pattern = numbers.join(",");
     
 if(memoryPrediction === null){
 
