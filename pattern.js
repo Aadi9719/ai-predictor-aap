@@ -5,6 +5,8 @@ function getPatternPrediction(){
 
     for(let len = 5; len >= 2; len--)
 
+    {
+        
         let currentInput = [
     Number(document.getElementById("n1").value),
     Number(document.getElementById("n2").value),
@@ -48,9 +50,9 @@ hotBonus;
                 bestNumber = Number(num);
             }
 
-        } // num loop end
+        } 
 
-    } // len loop end
+    } 
 
     if(bestNumber === null){
         return null;
