@@ -5,7 +5,16 @@ function getPatternPrediction(){
 
     for(let len = 6; len >= 3; len--){
 
-        let pattern = allResults.slice(-len).join(",");
+        let currentInput = [
+    Number(document.getElementById("n1").value),
+    Number(document.getElementById("n2").value),
+    Number(document.getElementById("n3").value),
+    Number(document.getElementById("n4").value),
+    Number(document.getElementById("n5").value)
+];
+
+let pattern =
+currentInput.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
 
