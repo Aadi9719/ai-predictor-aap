@@ -80,3 +80,22 @@ function getPatternScore(){
     return 50;
 
 }
+
+function getPatternWinRate(pattern){
+
+    if(!patternMemory[pattern]){
+        return 0;
+    }
+
+    let win = patternMemory[pattern].win || 0;
+    let loss = patternMemory[pattern].loss || 0;
+
+    let total = win + loss;
+
+    if(total === 0){
+        return 50;   // Default score
+    }
+
+    return Math.round((win / total) * 100);
+
+}
