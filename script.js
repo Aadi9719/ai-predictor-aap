@@ -247,6 +247,8 @@ actualResult;
 
     patternMemory[currentPattern].win++;
 
+            selfLearning(currentPattern, true);
+            
     localStorage.setItem(
         "patternMemory",
         JSON.stringify(patternMemory)
@@ -270,6 +272,8 @@ updateStats();
 
     patternMemory[currentPattern].loss++;
 
+            selfLearning(currentPattern, false);
+            
     localStorage.setItem(
         "patternMemory",
         JSON.stringify(patternMemory)
