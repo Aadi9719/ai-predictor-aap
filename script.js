@@ -367,6 +367,38 @@ function getPredictionConfidence(){
 
 }
 
+function selfLearning(pattern, isWin){
+
+    if(!patternMemory[pattern]) return;
+
+    if(patternMemory[pattern].learning === undefined){
+        patternMemory[pattern].learning = 50;
+    }
+
+    if(isWin){
+
+        patternMemory[pattern].learning += 2;
+
+    }else{
+
+        patternMemory[pattern].learning -= 2;
+
+    }
+
+    if(patternMemory[pattern].learning > 100){
+        patternMemory[pattern].learning = 100;
+    }
+
+    if(patternMemory[pattern].learning < 0){
+        patternMemory[pattern].learning = 0;
+    }
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+}
 // =========================
 // AI DATA
 // =========================
