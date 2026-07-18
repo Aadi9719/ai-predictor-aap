@@ -37,11 +37,14 @@ let hotBonus =
 (Number(num) === getHotColdNumbers().hot) ? 10 : 0;
 
             let winRate = getPatternWinRate(pattern);
+
+            let strength = getPatternStrength(pattern);
             
 let score =
 (frequency * len) +
 (confidence * 2) +
 (winRate * 3) +
+(strength * 2) +
 trendBonus +
 hotBonus;
             
@@ -100,5 +103,29 @@ function getPatternWinRate(pattern){
     }
 
     return Math.round((win / total) * 100);
+
+}
+
+function getPatternStrength(pattern){
+
+    if(!patternMemory[pattern]){
+        return 0;
+    }
+
+    let data = patternMemory[pattern];
+
+    let seen = data.total || 0;
+
+    let winRate = getPatternWinRate(pattern);
+
+    let strength =
+    (seen * 2) +
+    (winRate * 3);
+
+    if(strength > 100){
+        strength = 100;
+    }
+
+    return Math.round(strength);
 
 }
