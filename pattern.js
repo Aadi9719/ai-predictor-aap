@@ -70,7 +70,7 @@ hotBonus;
         return null;
     }
 
-    console.log(allResults.slice(0,10));
+    alert(allResults.slice(0,10).join(","));
     
     return bestNumber;
 
