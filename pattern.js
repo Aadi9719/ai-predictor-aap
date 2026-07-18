@@ -69,6 +69,8 @@ hotBonus;
     if(bestNumber === null){
         return null;
     }
+
+    console.log(allResults.slice(0,10));
     
     return bestNumber;
 
