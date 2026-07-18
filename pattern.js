@@ -39,12 +39,18 @@ let hotBonus =
             let winRate = getPatternWinRate(pattern);
 
             let strength = getPatternStrength(pattern);
+
+            let recentAccuracy = getRecentAccuracy(pattern);
+
+            let priority = getPriorityLevel(pattern);
             
 let score =
 (frequency * len) +
 (confidence * 2) +
 (winRate * 3) +
 (strength * 2) +
+(recentAccuracy * 3) +
+(priority * 4) +
 trendBonus +
 hotBonus;
             
@@ -127,5 +133,41 @@ function getPatternStrength(pattern){
     }
 
     return Math.round(strength);
+
+}
+
+function getRecentAccuracy(pattern){
+
+    if(!patternMemory[pattern]){
+        return 50;
+    }
+
+    let data = patternMemory[pattern];
+
+    let win = data.win || 0;
+    let loss = data.loss || 0;
+
+    let total = win + loss;
+
+    if(total < 5){
+        return 50;
+    }
+
+    return Math.round((win / total) * 100);
+
+}
+
+function getPriorityLevel(pattern){
+
+    let winRate = getPatternWinRate(pattern);
+    let strength = getPatternStrength(pattern);
+    let recent = getRecentAccuracy(pattern);
+
+    let priority =
+    (winRate * 0.4) +
+    (strength * 0.3) +
+    (recent * 0.3);
+
+    return Math.round(priority);
 
 }
