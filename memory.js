@@ -2,7 +2,7 @@ function updateLearningMemory(actualResult){
     
     for (let len = 2; len <= 8; len++) {
 
-    let pattern = allResults.slice(1, len + 1).join(",");
+    let pattern = allResults.slice(0, len).join(",");
 
     if (pattern.split(",").length < len) continue;
 
