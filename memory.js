@@ -69,6 +69,8 @@ if(!patternMemory[pattern].numbers[actualResult]){
 
 }
 
+        patternMemory[pattern].numbers[actualResult]++;
+        
 // Next Number Pattern Counter
 
 if(!patternMemory[pattern].nextNumbers){
