@@ -76,22 +76,32 @@ hotBonus;
 
 }
 
-function getPatternScore(){
-
-    let pattern = allResults.slice(0,6).join(",");
+function getPatternScore(pattern){
 
     if(!patternMemory[pattern]){
         return 0;
     }
 
-    let total = patternMemory[pattern].total;
+    let total = patternMemory[pattern].total || 0;
 
-    if(total >= 20) return 100;
-    if(total >= 15) return 90;
-    if(total >= 10) return 80;
-    if(total >= 5) return 70;
+    let winRate = getPatternWinRate(pattern);
 
-    return 50;
+    let strength = getPatternStrength(pattern);
+
+    let recent = getRecentAccuracy(pattern);
+
+    let priority = getPriorityLevel(pattern);
+
+    let score =
+        (total * 2) +
+        (winRate * 0.4) +
+        (strength * 0.2) +
+        (recent * 0.3) +
+        (priority * 5);
+
+    if(score > 100) score = 100;
+
+    return Math.round(score);
 
 }
 
