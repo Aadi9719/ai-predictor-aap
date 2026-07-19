@@ -231,3 +231,28 @@ let cold = recent[0];
     };
 
 }
+
+function calculateAIScore(){
+
+    let patternScore = getPatternScore(pattern);
+
+    let confidence = getPredictionConfidence();
+
+    let trendScore = getTrendScore();
+
+    let hotBonus =
+    (nextPrediction === getHotColdNumbers().hot) ? 10 : 0;
+
+    let score =
+        (patternScore * 0.35) +
+        (confidence * 0.30) +
+        (trendScore * 0.20) +
+        hotBonus;
+
+    if(score > 100){
+        score = 100;
+    }
+
+    return Math.round(score);
+
+            }
