@@ -343,27 +343,31 @@ function getPredictionConfidence(){
         Number(document.getElementById("n5").value)
     ];
 
-    let pattern = currentInput.join(",");
+    for(let len = 5; len >= 2; len--){
 
-    if(!patternMemory[pattern]){
-        return 0;
-    }
+        let pattern = currentInput.slice(0,len).join(",");
 
-    let total = patternMemory[pattern].total;
+        if(!patternMemory[pattern]) continue;
 
-    let memoryNumbers = patternMemory[pattern].numbers;
+        let total = patternMemory[pattern].total;
 
-    let best = 0;
+        let memoryNumbers = patternMemory[pattern].numbers;
 
-    for(let num in memoryNumbers){
+        let best = 0;
 
-        if(memoryNumbers[num] > best){
-            best = memoryNumbers[num];
+        for(let num in memoryNumbers){
+
+            if(memoryNumbers[num] > best){
+                best = memoryNumbers[num];
+            }
+
         }
 
+        return Math.round((best / total) * 100);
+
     }
 
-    return Math.round((best / total) * 100);
+    return 0;
 
 }
 
