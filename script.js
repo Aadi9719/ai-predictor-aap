@@ -363,6 +363,13 @@ function getPredictionConfidence(){
 
         }
 
+        alert(
+"Pattern = " + pattern +
+"\nTotal = " + total +
+"\nBest = " + best +
+"\nNumbers = " + JSON.stringify(memoryNumbers)
+);
+        
         return Math.round((best / total) * 100);
 
     }
