@@ -160,7 +160,7 @@ function getFinalAIScore(){
 
     let memory = getPredictionConfidence();
 
-    let pattern = getPatternScore(pattern);
+    let pattern = getPatternScore();
 
     let trend = getTrendScore();
 
