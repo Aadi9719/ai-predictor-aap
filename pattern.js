@@ -1,4 +1,4 @@
-function getPatternPrediction(){
+0function getPatternPrediction(){
 
     let bestNumber = null;
     let bestScore = -1;
@@ -76,30 +76,45 @@ hotBonus;
 
 }
 
-function getPatternScore(pattern){
+function getPatternScore(){
+
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    let pattern = currentInput.join(",");
 
     if(!patternMemory[pattern]){
         return 0;
     }
 
     let total = patternMemory[pattern].total || 0;
+    let confidence = patternMemory[pattern].confidence || 0;
 
-    let winRate = getPatternWinRate(pattern);
+    let score = 0;
 
-    let strength = getPatternStrength(pattern);
+    // Pattern Frequency
+    score += Math.min(total * 3, 30);
 
-    let recent = getRecentAccuracy(pattern);
+    // Confidence
+    score += Math.min(confidence * 0.30, 30);
 
-    let priority = getPriorityLevel(pattern);
+    // Win Rate
+    score += Math.min(getPatternWinRate(pattern) * 0.20, 20);
 
-    let score =
-        (total * 2) +
-        (winRate * 0.4) +
-        (strength * 0.2) +
-        (recent * 0.3) +
-        (priority * 5);
+    // Pattern Strength
+    score += Math.min(getPatternStrength(pattern) * 0.10, 10);
 
-    if(score > 100) score = 100;
+    // Recent Accuracy
+    score += Math.min(getRecentAccuracy(pattern) * 0.10, 10);
+
+    if(score > 100){
+        score = 100;
+    }
 
     return Math.round(score);
 
