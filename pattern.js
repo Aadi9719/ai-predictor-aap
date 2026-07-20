@@ -1,4 +1,4 @@
-0function getPatternPrediction(){
+function getPatternPrediction(){
 
     let bestNumber = null;
     let bestScore = -1;
