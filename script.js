@@ -1,7 +1,3 @@
-window.onerror = function(msg, url, line){
-    alert("ERROR: " + msg + " | Line: " + line);
-};
-
 alert("Script Loaded");
 
 let allResults =
@@ -104,10 +100,8 @@ Color :
 <br><br>
 
 Big/Small :
-<b>${
-    getBigSmallPredictionMemory()
-    || getBigSmallPrediction(finalPrediction)
-}</b>
+<b>$
+    {getBigSmallPrediction(finalPrediction)}</b>
 
 <br><br>
 
