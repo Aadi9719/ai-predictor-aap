@@ -222,7 +222,7 @@ localStorage.setItem(
 
     updateColorMemory(actualResult);
 
-    savePredictionHistory(finalPrediction, actualResult);
+    savePredictionHistory(nextPrediction, actualResult);
     
     let currentPattern = allResults.slice(1,7).join(",");
     
