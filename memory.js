@@ -100,6 +100,9 @@ patternMemory[pattern].nextNumbers[actualResult]++;
 
 let bigSmallMemory = JSON.parse(localStorage.getItem("bigSmallMemory")) || {};
 
+let predictionHistory =
+JSON.parse(localStorage.getItem("predictionHistory")) || [];
+
 function updateBigSmallMemory(actualResult){
 
     let bsHistory = allResults
@@ -202,6 +205,33 @@ function updateColorMemory(actualResult){
     localStorage.setItem(
         "colorMemory",
         JSON.stringify(colorMemory)
+    );
+
+}
+
+function savePredictionHistory(prediction, actualResult){
+
+    let status = (prediction == actualResult) ? "WIN" : "LOSS";
+
+    predictionHistory.unshift({
+
+        time: new Date().toLocaleTimeString(),
+
+        prediction: prediction,
+
+        result: actualResult,
+
+        status: status
+
+    });
+
+    if(predictionHistory.length > 100){
+        predictionHistory.pop();
+    }
+
+    localStorage.setItem(
+        "predictionHistory",
+        JSON.stringify(predictionHistory)
     );
 
 }
