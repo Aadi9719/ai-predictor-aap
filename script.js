@@ -160,13 +160,9 @@ Big/Small AI Score :
     Total Saved Numbers :
     ${allResults.length}
     `;
-
-    alert("Pattern Value = " + pattern);
     
     document.getElementById("debugPattern").innerText =
 pattern;
-
-    alert("Debug Pattern OK");
     
 document.getElementById("debugPrediction").innerText =
 nextPrediction;
@@ -226,6 +222,8 @@ localStorage.setItem(
 
     updateColorMemory(actualResult);
 
+    savePredictionHistory(finalPrediction, actualResult);
+    
     let currentPattern = allResults.slice(1,7).join(",");
     
     // Auto Shift Inputs
