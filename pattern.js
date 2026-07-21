@@ -230,3 +230,78 @@ function getBigSmallPatternPrediction(){
     return null;
 
 }
+
+function getBigSmallConfidence(){
+
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    for(let len = 5; len >= 2; len--){
+
+        let pattern = currentInput.slice(0, len).join(",");
+
+        if(!patternMemory[pattern]){
+            continue;
+        }
+
+        let big = patternMemory[pattern].BIG || 0;
+        let small = patternMemory[pattern].SMALL || 0;
+
+        let total = big + small;
+
+        if(total === 0){
+            continue;
+        }
+
+        let best = Math.max(big, small);
+
+        return Math.round((best / total) * 100);
+    }
+
+    return 0;
+
+}
+
+function getBigSmallAIScore(){
+
+    let confidence = getBigSmallConfidence();
+
+    let trend = getTrendScore();
+
+    let score =
+        (confidence * 0.70) +
+        (trend * 0.30);
+
+    if(score > 100){
+        score = 100;
+    }
+
+    return Math.round(score);
+
+}
+
+function getFinalBigSmallPrediction(){
+
+    let pattern = getBigSmallPatternPrediction();
+
+    let confidence = getBigSmallConfidence();
+
+    // Strong Pattern
+    if(pattern !== null && confidence >= 60){
+        return pattern;
+    }
+
+    // Weak Pattern
+    if(pattern !== null){
+        return pattern;
+    }
+
+    // Fallback
+    return "UNKNOWN";
+
+}
