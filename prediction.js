@@ -131,28 +131,50 @@ function getTrendScore(){
     let recent = allResults.slice(-20);
 
     let count = {};
+    let streak = 1;
+    let maxStreak = 1;
 
-    recent.forEach(n => {
+    for(let i = 0; i < recent.length; i++){
 
-        if(!count[n]){
-            count[n] = 0;
-        }
+        let n = recent[i];
 
-        count[n]++;
+        count[n] = (count[n] || 0) + 1;
 
-    });
+        if(i > 0){
 
-    let max = 0;
+            if(recent[i] === recent[i-1]){
+                streak++;
+                if(streak > maxStreak){
+                    maxStreak = streak;
+                }
+            }else{
+                streak = 1;
+            }
 
-    for(let num in count){
-
-        if(count[num] > max){
-            max = count[num];
         }
 
     }
 
-    return Math.round((max / 20) * 100);
+    let maxFrequency = 0;
+
+    for(let num in count){
+
+        if(count[num] > maxFrequency){
+            maxFrequency = count[num];
+        }
+
+    }
+
+    let frequencyScore = (maxFrequency / 20) * 70;
+    let streakScore = (maxStreak / 5) * 30;
+
+    let finalScore = frequencyScore + streakScore;
+
+    if(finalScore > 100){
+        finalScore = 100;
+    }
+
+    return Math.round(finalScore);
 
 }
 
