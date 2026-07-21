@@ -414,6 +414,44 @@ function selfLearning(pattern, isWin){
     );
 
 }
+
+function updatePredictionHistoryTable(){
+
+    let html = "";
+
+    predictionHistory.forEach(item=>{
+
+        html += `
+        <div style="
+        border-bottom:1px solid #444;
+        padding:8px;
+        ">
+
+        ${item.time}
+
+        |
+
+        🎯 ${item.prediction}
+
+        →
+
+        ${item.result}
+
+        |
+
+        ${item.status}
+
+        </div>
+        `;
+
+    });
+
+    document.getElementById(
+        "predictionHistoryTable"
+    ).innerHTML = html;
+
+}
+
 // =========================
 // AI DATA
 // =========================
