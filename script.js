@@ -100,8 +100,7 @@ Color :
 <br><br>
 
 Big/Small :
-<b>$
-    {getBigSmallPrediction(finalPrediction)}</b>
+<b>${getBigSmallPrediction(finalPrediction)}</b>
 
 <br><br>
 
