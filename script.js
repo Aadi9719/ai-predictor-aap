@@ -144,6 +144,19 @@ Pattern :
 
 <br><br>
 
+Big/Small AI :
+<b>${getFinalBigSmallPrediction()}</b>
+
+<br><br>
+
+Big/Small Confidence :
+<b>${getBigSmallConfidence()}%</b>
+
+<br><br>
+
+Big/Small AI Score :
+<b>${getBigSmallAIScore()}%</b>
+
     Total Saved Numbers :
     ${allResults.length}
     `;
