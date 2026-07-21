@@ -198,3 +198,35 @@ function getPriorityLevel(pattern){
     return Math.round(priority);
 
 }
+
+function getBigSmallPatternPrediction(){
+
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    for(let len = 5; len >= 2; len--){
+
+        let pattern = currentInput.slice(0, len).join(",");
+
+        if(!patternMemory[pattern]){
+            continue;
+        }
+
+        let big = patternMemory[pattern].BIG || 0;
+        let small = patternMemory[pattern].SMALL || 0;
+
+        if(big === 0 && small === 0){
+            continue;
+        }
+
+        return big >= small ? "BIG" : "SMALL";
+    }
+
+    return null;
+
+}
