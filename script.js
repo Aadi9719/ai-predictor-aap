@@ -253,6 +253,12 @@ actualResult;
 
             selfLearning(currentPattern, true);
             
+            selfLearnBigSmall(
+    currentPattern,
+    getFinalBigSmallPrediction(),
+    actualResult
+);
+            
     localStorage.setItem(
         "patternMemory",
         JSON.stringify(patternMemory)
@@ -278,6 +284,12 @@ updateStats();
     patternMemory[currentPattern].loss++;
 
             selfLearning(currentPattern, false);
+
+            selfLearnBigSmall(
+    currentPattern,
+    getFinalBigSmallPrediction(),
+    actualResult
+);
             
     localStorage.setItem(
         "patternMemory",
