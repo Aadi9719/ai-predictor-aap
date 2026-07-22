@@ -235,3 +235,32 @@ function savePredictionHistory(prediction, actualResult){
     );
 
 }
+
+function selfLearnBigSmall(pattern, predictedBS, actualResult){
+
+    if(!patternMemory[pattern]){
+        return;
+    }
+
+    let actualBS = actualResult >= 5 ? "BIG" : "SMALL";
+
+    if(predictedBS === actualBS){
+
+        patternMemory[pattern][predictedBS] += 2;
+
+    }else{
+
+        if(patternMemory[pattern][predictedBS] > 0){
+            patternMemory[pattern][predictedBS]--;
+        }
+
+        patternMemory[pattern][actualBS] += 2;
+
+    }
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+}
