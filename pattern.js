@@ -42,6 +42,15 @@ let trendBonus =
 let hotBonus =
 (Number(num) === getHotColdNumbers().hot) ? 10 : 0;
 
+            let candidateBonus = 0;
+
+if(getCandidateNumbers().includes(Number(num))){
+    candidateBonus = 20;
+}
+
+            let priorityBonus =
+getCandidatePriority(Number(num));
+            
             let winRate = getPatternWinRate(pattern);
 
             let strength = getPatternStrength(pattern);
@@ -49,6 +58,9 @@ let hotBonus =
             let recentAccuracy = getRecentAccuracy(pattern);
 
             let priority = getPriorityLevel(pattern);
+
+            let masterScore =
+getMasterNumberScore(Number(num), pattern);
             
 let score =
 (frequency * len) +
@@ -58,7 +70,10 @@ let score =
 (recentAccuracy * 3) +
 (priority * 4) +
 trendBonus +
-hotBonus;
+hotBonus +
+candidateBonus +
+priorityBonus +    
+masterScore;
             
             if(
                 score > bestScore ||
@@ -447,5 +462,49 @@ function getCandidateNumbers(){
     }
 
     return [1,2,3,4,5,6,7,8,9];
+
+}
+
+function getMasterNumberScore(number, pattern){
+
+    let patternScore = getPatternScore(pattern);
+
+    let bigSmallConfidence = getBigSmallConfidence();
+
+    let colorConfidence = getColorConfidence();
+
+    let trendScore = getTrendScore();
+
+    let score =
+        (patternScore * 0.40) +
+        (bigSmallConfidence * 0.25) +
+        (colorConfidence * 0.20) +
+        (trendScore * 0.15);
+
+    return Math.round(score);
+
+}
+
+function getCandidatePriority(number){
+
+    let priority = 0;
+
+    let hot = getHotColdNumbers().hot;
+
+    if(number === hot){
+        priority += 15;
+    }
+
+    let candidates = getCandidateNumbers();
+
+    if(candidates.includes(number)){
+        priority += 20;
+    }
+
+    if(number === getTrendPrediction()){
+        priority += 10;
+    }
+
+    return priority;
 
 }
