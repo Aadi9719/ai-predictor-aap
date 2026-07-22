@@ -299,3 +299,16 @@ function selfLearnColor(pattern, predictedColor, actualResult){
     );
 
 }
+
+let aiEngineWeight =
+JSON.parse(localStorage.getItem("aiEngineWeight")) || {
+
+    pattern : 40,
+
+    bigSmall : 25,
+
+    color : 20,
+
+    trend : 15
+
+};
