@@ -264,3 +264,38 @@ function selfLearnBigSmall(pattern, predictedBS, actualResult){
     );
 
 }
+
+function selfLearnColor(pattern, predictedColor, actualResult){
+
+    if(!patternMemory[pattern]){
+        return;
+    }
+
+    let actualColor =
+    [1,3,7,9].includes(actualResult)
+    ? "GREEN"
+    : "RED";
+
+    if(predictedColor.includes(actualColor)){
+
+        patternMemory[pattern][actualColor] += 2;
+
+    }else{
+
+        let wrong =
+        actualColor === "GREEN" ? "RED" : "GREEN";
+
+        if(patternMemory[pattern][wrong] > 0){
+            patternMemory[pattern][wrong]--;
+        }
+
+        patternMemory[pattern][actualColor] += 2;
+
+    }
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+}
