@@ -308,6 +308,7 @@ actualResult;
         
 updateStats();
   updatePredictionHistoryTable();
+   updateEngineWeight(true);
         
     }else{
 
@@ -346,6 +347,7 @@ updateStats();
         
 updateStats();
    updatePredictionHistoryTable();
+    updateEngineWeight(false);
         
     }
 
