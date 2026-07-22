@@ -344,3 +344,16 @@ function updateEngineWeight(isWin){
     );
 
 }
+
+let aiEngineStats =
+JSON.parse(localStorage.getItem("aiEngineStats")) || {
+
+    pattern : { win:0, loss:0 },
+
+    bigSmall : { win:0, loss:0 },
+
+    color : { win:0, loss:0 },
+
+    trend : { win:0, loss:0 }
+
+};
