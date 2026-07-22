@@ -267,6 +267,7 @@ actualResult;
         addHistory("✅ Prediction : " + nextPrediction + " | Result : " + actualResult);
         
 updateStats();
+  updatePredictionHistoryTable();
         
     }else{
 
@@ -292,6 +293,7 @@ updateStats();
         addHistory("❌ Prediction : " + nextPrediction + " | Result : " + actualResult);
         
 updateStats();
+   updatePredictionHistoryTable();
         
     }
 
