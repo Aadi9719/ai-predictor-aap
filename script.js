@@ -273,6 +273,12 @@ actualResult;
     getFinalBigSmallPrediction(),
     actualResult
 );
+
+            selfLearnColor(
+    currentPattern,
+    getFinalColorPrediction(),
+    actualResult
+);
             
     localStorage.setItem(
         "patternMemory",
@@ -303,6 +309,12 @@ updateStats();
             selfLearnBigSmall(
     currentPattern,
     getFinalBigSmallPrediction(),
+    actualResult
+);
+
+            selfLearnColor(
+    currentPattern,
+    getFinalColorPrediction(),
     actualResult
 );
             
