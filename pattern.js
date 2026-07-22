@@ -305,3 +305,103 @@ function getFinalBigSmallPrediction(){
     return "UNKNOWN";
 
 }
+
+function getColorPatternPrediction(){
+
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    for(let len = 5; len >= 2; len--){
+
+        let pattern = currentInput.slice(0,len).join(",");
+
+        if(!patternMemory[pattern]){
+            continue;
+        }
+
+        let green = patternMemory[pattern].GREEN || 0;
+        let red = patternMemory[pattern].RED || 0;
+
+        if(green === 0 && red === 0){
+            continue;
+        }
+
+        return green >= red ? "GREEN" : "RED";
+    }
+
+    return null;
+
+}
+
+function getColorConfidence(){
+
+    let currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
+
+    let pattern = currentInput.join(",");
+
+    if(!patternMemory[pattern]){
+        return 0;
+    }
+
+    let green = patternMemory[pattern].GREEN || 0;
+    let red = patternMemory[pattern].RED || 0;
+
+    let total = green + red;
+
+    if(total === 0){
+        return 0;
+    }
+
+    return Math.round(
+        (Math.max(green, red) / total) * 100
+    );
+
+}
+
+function getColorAIScore(){
+
+    let confidence = getColorConfidence();
+
+    let trend = getTrendScore();
+
+    let score =
+        (confidence * 0.70) +
+        (trend * 0.30);
+
+    if(score > 100){
+        score = 100;
+    }
+
+    return Math.round(score);
+
+}
+
+function getFinalColorPrediction(){
+
+    let pattern = getColorPatternPrediction();
+
+    let confidence = getColorConfidence();
+
+    if(pattern !== null && confidence >= 60){
+        return pattern;
+    }
+
+    if(pattern !== null){
+        return pattern;
+    }
+
+    return "UNKNOWN";
+
+}
+
