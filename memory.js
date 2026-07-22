@@ -312,3 +312,35 @@ JSON.parse(localStorage.getItem("aiEngineWeight")) || {
     trend : 15
 
 };
+
+function updateEngineWeight(isWin){
+
+    if(isWin){
+
+        aiEngineWeight.pattern += 1;
+        aiEngineWeight.bigSmall += 1;
+        aiEngineWeight.color += 1;
+        aiEngineWeight.trend += 1;
+
+    }else{
+
+        aiEngineWeight.pattern =
+        Math.max(10, aiEngineWeight.pattern - 1);
+
+        aiEngineWeight.bigSmall =
+        Math.max(10, aiEngineWeight.bigSmall - 1);
+
+        aiEngineWeight.color =
+        Math.max(10, aiEngineWeight.color - 1);
+
+        aiEngineWeight.trend =
+        Math.max(10, aiEngineWeight.trend - 1);
+
+    }
+
+    localStorage.setItem(
+        "aiEngineWeight",
+        JSON.stringify(aiEngineWeight)
+    );
+
+}
