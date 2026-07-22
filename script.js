@@ -99,6 +99,21 @@ Color :
 
 <br><br>
 
+Color AI :
+<b>${getFinalColorPrediction()}</b>
+
+<br><br>
+
+Color Confidence :
+<b>${getColorConfidence()}%</b>
+
+<br><br>
+
+Color AI Score :
+<b>${getColorAIScore()}%</b>
+
+<br><br>
+
 Big/Small :
 <b>${getBigSmallPrediction(finalPrediction)}</b>
 
