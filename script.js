@@ -209,16 +209,29 @@ if(memoryPrediction !== null){
 
 document.getElementById("checkBtn").onclick = function(){
 
-    let actualResult = Number(
-        prompt("Enter Actual Result")
-    );
+ let input = prompt("Enter Actual Result");
 
-    if(isNaN(actualResult)){
+if(input === null){
+    return;
+}
 
-        alert("Please Enter Valid Number");
-        return;
+input = input.trim();
 
-    }
+if(input === ""){
+    alert("Please Enter Result");
+    return;
+}
+
+let actualResult = Number(input);
+
+if(
+    isNaN(actualResult) ||
+    actualResult < 0 ||
+    actualResult > 9
+){
+    alert("Please Enter Number Between 0 and 9");
+    return;
+}
 
     allResults.unshift(actualResult);
 
