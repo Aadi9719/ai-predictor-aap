@@ -476,10 +476,10 @@ function getMasterNumberScore(number, pattern){
     let trendScore = getTrendScore();
 
     let score =
-        (patternScore * 0.40) +
-        (bigSmallConfidence * 0.25) +
-        (colorConfidence * 0.20) +
-        (trendScore * 0.15);
+(patternScore * (aiEngineWeight.pattern / 100)) +
+(bigSmallConfidence * (aiEngineWeight.bigSmall / 100)) +
+(colorConfidence * (aiEngineWeight.color / 100)) +
+(trendScore * (aiEngineWeight.trend / 100));
 
     return Math.round(score);
 
