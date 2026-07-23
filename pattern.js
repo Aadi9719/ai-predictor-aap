@@ -604,37 +604,19 @@ function getFinalColorPrediction(){
 
 function getCandidateNumbers(){
 
+    alert("A");
+
     let bs = getFinalBigSmallPrediction();
+
+    alert("B");
+
     let color = getFinalColorPrediction();
+
+    alert("C");
 
     // BIG + GREEN
     if(bs === "BIG" && color.includes("GREEN")){
         return [7,9];
-    }
-
-    // BIG + RED
-    if(bs === "BIG" && color.includes("RED")){
-        return [6,8];
-    }
-
-    // BIG + VIOLET
-    if(bs === "BIG" && color.includes("VIOLET")){
-        return [5];
-    }
-
-    // SMALL + GREEN
-    if(bs === "SMALL" && color.includes("GREEN")){
-        return [1,3];
-    }
-
-    // SMALL + RED
-    if(bs === "SMALL" && color.includes("RED")){
-        return [2,4];
-    }
-
-    // SMALL + VIOLET
-    if(bs === "SMALL" && color.includes("VIOLET")){
-        return [0];
     }
 
     return [1,2,3,4,5,6,7,8,9];
