@@ -1,3 +1,5 @@
+alert("Pattern Start");
+
 function getPatternPrediction(){
 
     let bestNumber = null;
