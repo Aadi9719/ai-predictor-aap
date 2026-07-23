@@ -1,6 +1,8 @@
 alert("Pattern Start");
 
 function getPatternPrediction(){
+
+    alert("Pattern Function Start");
     
     let bestNumber = null;
     let bestScore = -1;
@@ -99,6 +101,8 @@ masterScore;
     }
 
     alert(allResults.slice(0,10).join(","));
+
+    alert("Returning Prediction");
     
     return bestNumber;
     
