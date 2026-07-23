@@ -7,9 +7,13 @@ function getPatternPrediction(){
     let bestNumber = null;
     let bestScore = -1;
 
+    alert("1");
+    
     for(let len = 5; len >= 2; len--)
 
     {
+
+        alert("2");
         
         let currentInput = [
     Number(document.getElementById("n1").value),
@@ -24,16 +28,24 @@ currentInput.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
 
+        alert("3");
+        
         let nextNumbers = patternMemory[pattern].nextNumbers;
-
+        
         if(!nextNumbers) continue;
 
         let confidence = patternMemory[pattern].confidence || 1;
 
+        alert("4");
+        
         let candidates = getCandidateNumbers();
+
+        alert("5");
         
         for(let num in nextNumbers){
 
+            alert("6");
+            
             if(!candidates.includes(Number(num))){
     continue;
             }
@@ -65,9 +77,13 @@ if(typeof info === "number"){
 let trendBonus =
 (Number(num) === getTrendPrediction()) ? 15 : 0;
 
+            alert("7");
+            
 let hotBonus =
 (Number(num) === getHotColdNumbers().hot) ? 10 : 0;
 
+            alert("8");
+            
             let candidateBonus = 0;
 
 if(getCandidateNumbers().includes(Number(num))){
@@ -76,6 +92,8 @@ if(getCandidateNumbers().includes(Number(num))){
 
             let priorityBonus =
 getCandidatePriority(Number(num));
+
+            alert("9");
             
             let winRate = getPatternWinRate(pattern);
 
@@ -121,6 +139,7 @@ masterScore;
     alert(allResults.slice(0,10).join(","));
 
     alert("Returning Prediction");
+    alert("10");
     
     return bestNumber;
     
