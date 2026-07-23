@@ -306,23 +306,59 @@ function getBigSmallAIScore(){
 
 }
 
+function getRecentBigSmallPrediction(){
+
+    let r20 = getBigSmallRatio(last20);
+
+    let r100 = getBigSmallRatio(last100);
+
+    let r1000 = getBigSmallRatio(history1000);
+
+    let bigScore =
+        (r20.big * 0.50) +
+        (r100.big * 0.30) +
+        (r1000.big * 0.20);
+
+    let smallScore =
+        (r20.small * 0.50) +
+        (r100.small * 0.30) +
+        (r1000.small * 0.20);
+
+    return bigScore >= smallScore ? "BIG" : "SMALL";
+
+}
+
 function getFinalBigSmallPrediction(){
 
     let pattern = getBigSmallPatternPrediction();
 
+    let recent = getRecentBigSmallPrediction();
+
     let confidence = getBigSmallConfidence();
 
-    // Strong Pattern
-    if(pattern !== null && confidence >= 60){
+    // Pattern aur Recent dono same hain
+    if(pattern !== null &&
+       pattern === recent &&
+       confidence >= 60){
+
         return pattern;
+
     }
 
-    // Weak Pattern
+    // Agar Recent aur Pattern alag hain
+    if(pattern !== recent){
+
+        return recent;
+
+    }
+
+    // Normal Pattern
     if(pattern !== null){
+
         return pattern;
+
     }
 
-    // Fallback
     return "UNKNOWN";
 
 }
