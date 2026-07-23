@@ -41,16 +41,24 @@ currentInput.slice(0, len).join(",");
             let info = nextNumbers[num];
 
 let frequency = 0;
-let accuracy = 0;
+let accuracy = 50; // Default
+
+if(info == null){
+
+    continue;
+
+}
 
 if(typeof info === "number"){
 
+    // Old Memory Format
     frequency = info;
 
-}else{
+}else if(typeof info === "object"){
 
+    // New Memory Format
     frequency = info.total || 0;
-    accuracy = info.accuracy || 0;
+    accuracy = info.accuracy || 50;
 
 }
 
