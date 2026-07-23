@@ -356,6 +356,12 @@ function getBigSmallAIScore(){
 
 function getRecentBigSmallPrediction(){
 
+    let last20 = allResults.slice(-20);
+
+let last100 = allResults.slice(-100);
+
+let history1000 = allResults.slice(-1000);
+    
     let r20 = getBigSmallRatio(last20);
 
     let r100 = getBigSmallRatio(last100);
@@ -416,6 +422,12 @@ function getColorRatio(data){
 
 function getRecentColorPrediction(){
 
+    let last20 = allResults.slice(-20);
+
+let last100 = allResults.slice(-100);
+
+let history1000 = allResults.slice(-1000);
+    
     let r20 = getColorRatio(last20);
 
     let r100 = getColorRatio(last100);
