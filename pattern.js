@@ -1,8 +1,6 @@
 alert("Pattern Start");
 
 function getPatternPrediction(){
-
-    alert("Before Pattern");
     
     let bestNumber = null;
     let bestScore = -1;
@@ -103,8 +101,6 @@ masterScore;
     alert(allResults.slice(0,10).join(","));
     
     return bestNumber;
-
-    alert("After Pattern");
     
 }
 
