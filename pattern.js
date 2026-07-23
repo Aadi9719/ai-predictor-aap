@@ -40,9 +40,19 @@ currentInput.slice(0, len).join(",");
             
             let info = nextNumbers[num];
 
-let frequency = info.total || 0;
+let frequency = 0;
+let accuracy = 0;
 
-let accuracy = info.accuracy || 0;
+if(typeof info === "number"){
+
+    frequency = info;
+
+}else{
+
+    frequency = info.total || 0;
+    accuracy = info.accuracy || 0;
+
+}
 
 let trendBonus =
 (Number(num) === getTrendPrediction()) ? 15 : 0;
