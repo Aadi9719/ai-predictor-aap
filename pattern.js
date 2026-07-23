@@ -34,7 +34,11 @@ currentInput.slice(0, len).join(",");
     continue;
             }
             
-            let frequency = nextNumbers[num];
+            let info = nextNumbers[num];
+
+let frequency = info.total || 0;
+
+let accuracy = info.accuracy || 0;
 
 let trendBonus =
 (Number(num) === getTrendPrediction()) ? 15 : 0;
@@ -64,6 +68,7 @@ getMasterNumberScore(Number(num), pattern);
             
 let score =
 (frequency * len) +
+(accuracy * 2)
 (confidence * 2) +
 (winRate * 3) +
 (strength * 2) +
