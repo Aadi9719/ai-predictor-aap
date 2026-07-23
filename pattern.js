@@ -328,6 +328,85 @@ function getRecentBigSmallPrediction(){
 
 }
 
+function getColorRatio(data){
+
+    let green = 0;
+
+    let red = 0;
+
+    let violet = 0;
+
+    data.forEach(n=>{
+
+        if([1,3,7,9].includes(n)){
+
+            green++;
+
+        }else if([2,4,6,8].includes(n)){
+
+            red++;
+
+        }else{
+
+            violet++;
+
+        }
+
+    });
+
+    return{
+
+        green,
+
+        red,
+
+        violet
+
+    };
+
+}
+
+function getRecentColorPrediction(){
+
+    let r20 = getColorRatio(last20);
+
+    let r100 = getColorRatio(last100);
+
+    let r1000 = getColorRatio(history1000);
+
+    let greenScore =
+        (r20.green * 0.50) +
+        (r100.green * 0.30) +
+        (r1000.green * 0.20);
+
+    let redScore =
+        (r20.red * 0.50) +
+        (r100.red * 0.30) +
+        (r1000.red * 0.20);
+
+    let violetScore =
+        (r20.violet * 0.50) +
+        (r100.violet * 0.30) +
+        (r1000.violet * 0.20);
+
+    if(
+        greenScore >= redScore &&
+        greenScore >= violetScore
+    ){
+        return "GREEN";
+    }
+
+    if(
+        redScore >= greenScore &&
+        redScore >= violetScore
+    ){
+        return "RED";
+    }
+
+    return "VIOLET";
+
+}
+
 function getFinalBigSmallPrediction(){
 
     let pattern = getBigSmallPatternPrediction();
@@ -448,12 +527,25 @@ function getFinalColorPrediction(){
 
     let pattern = getColorPatternPrediction();
 
+    let recent = getRecentColorPrediction();
+
     let confidence = getColorConfidence();
 
-    if(pattern !== null && confidence >= 60){
+    // Pattern aur Recent dono same
+    if(
+        pattern !== null &&
+        pattern === recent &&
+        confidence >= 60
+    ){
         return pattern;
     }
 
+    // Recent aur Pattern alag
+    if(pattern !== recent){
+        return recent;
+    }
+
+    // Normal Pattern
     if(pattern !== null){
         return pattern;
     }
