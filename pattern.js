@@ -270,6 +270,8 @@ function getPriorityLevel(pattern){
 
 function getBigSmallPatternPrediction(){
 
+    alert("BS-2");
+    
     let currentInput = [
         Number(document.getElementById("n1").value),
         Number(document.getElementById("n2").value),
@@ -302,6 +304,8 @@ function getBigSmallPatternPrediction(){
 
 function getBigSmallConfidence(){
 
+    alert("BS-4");
+    
     let currentInput = [
         Number(document.getElementById("n1").value),
         Number(document.getElementById("n2").value),
@@ -356,6 +360,8 @@ function getBigSmallAIScore(){
 
 function getRecentBigSmallPrediction(){
 
+    alert("BS-3");
+    
     let last20 = allResults.slice(-20);
 
 let last100 = allResults.slice(-100);
@@ -469,6 +475,8 @@ let history1000 = allResults.slice(-1000);
 
 function getFinalBigSmallPrediction(){
 
+    alert("BS-1");
+    
     let pattern = getBigSmallPatternPrediction();
 
     let recent = getRecentBigSmallPrediction();
