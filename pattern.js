@@ -37,7 +37,7 @@ currentInput.slice(0, len).join(",");
         let confidence = patternMemory[pattern].confidence || 1;
 
         alert("4");
-        
+
         let candidates = getCandidateNumbers();
 
         alert("5");
@@ -86,7 +86,7 @@ let hotBonus =
             
             let candidateBonus = 0;
 
-if(getCandidateNumbers().includes(Number(num))){
+if(candidates.includes(Number(num))){
     candidateBonus = 20;
 }
 
@@ -108,7 +108,7 @@ getMasterNumberScore(Number(num), pattern);
             
 let score =
 (frequency * len) +
-(accuracy * 2)
+(accuracy * 2) +
 (confidence * 2) +
 (winRate * 3) +
 (strength * 2) +
