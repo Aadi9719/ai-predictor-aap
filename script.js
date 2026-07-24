@@ -1,5 +1,3 @@
-alert("Script Loaded");
-
 let allResults =
 JSON.parse(localStorage.getItem("allResults")) || [];
 
@@ -15,8 +13,6 @@ Number(localStorage.getItem("aiLosses")) || 0;
 let nextPrediction = null;
 
 document.getElementById("analyzeBtn").onclick = function () {
-
-    alert("Analyze Start");
     
     let n1 = Number(document.getElementById("n1").value);
     let n2 = Number(document.getElementById("n2").value);
@@ -33,12 +29,8 @@ document.getElementById("analyzeBtn").onclick = function () {
         "allResults",
         JSON.stringify(allResults)
     );
-
-    alert("Before Pattern");
     
     let memoryPrediction = getPatternPrediction();
-
-    alert("After Pattern");
 
 let finalPrediction = getFinalPrediction();
 let trendScore = getTrendScore();
@@ -207,8 +199,6 @@ if(memoryPrediction !== null){
     
    updateStats();
     console.log(allResults);
-
-    alert("Analyze End");
     
 };
 
