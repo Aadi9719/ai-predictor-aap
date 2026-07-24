@@ -56,6 +56,24 @@ function updateLearningMemory(actualResult){
 
     patternMemory[pattern].total++;
 
+        patternMemory[pattern].repeatCount++;
+
+let total =
+patternMemory[pattern].BIG +
+patternMemory[pattern].SMALL;
+
+if(total > 0){
+
+    let best = Math.max(
+        patternMemory[pattern].BIG,
+        patternMemory[pattern].SMALL
+    );
+
+    patternMemory[pattern].stability =
+    Math.round((best / total) * 100);
+
+}
+        
     patternMemory[pattern].confidence =
 Math.round(
 (patternMemory[pattern].total / allResults.length) * 100
