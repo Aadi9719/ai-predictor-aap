@@ -58,6 +58,8 @@ function updateLearningMemory(actualResult){
 
         patternMemory[pattern].repeatCount++;
 
+        patternMemory[pattern][bigSmall]++;
+        
 let total =
 patternMemory[pattern].BIG +
 patternMemory[pattern].SMALL;
