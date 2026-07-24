@@ -34,6 +34,10 @@ function updateLearningMemory(actualResult){
 
             confidence: 0,
 
+            stability: 0,
+
+            repeatCount: 0,
+            
             lastSeen: 0
 
         };
