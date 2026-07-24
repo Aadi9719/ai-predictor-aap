@@ -36,6 +36,8 @@ function updateLearningMemory(actualResult){
 
             stability: 0,
 
+            colorStability:0,
+            
             repeatCount: 0,
             
             lastSeen: 0
@@ -83,8 +85,22 @@ Math.round(
     
     patternMemory[pattern][color]++;
 
-    patternMemory[pattern][bigSmall]++;
+        let colorTotal =
+patternMemory[pattern].GREEN +
+patternMemory[pattern].RED;
 
+if(colorTotal > 0){
+
+    let bestColor = Math.max(
+        patternMemory[pattern].GREEN,
+        patternMemory[pattern].RED
+    );
+
+    patternMemory[pattern].colorStability =
+    Math.round((bestColor / colorTotal) * 100);
+
+}
+        
     patternMemory[pattern][color + "_" + bigSmall]++;
 
 if(!patternMemory[pattern].numbers[actualResult]){
