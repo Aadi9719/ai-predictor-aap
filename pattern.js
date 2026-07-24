@@ -364,6 +364,34 @@ function getBigSmallAIScore(){
 
 }
 
+function getBigSmallRatio(data){
+
+    let big = 0;
+    let small = 0;
+
+    data.forEach(n => {
+
+        if(n >= 5){
+
+            big++;
+
+        }else{
+
+            small++;
+
+        }
+
+    });
+
+    return{
+
+        big,
+        small
+
+    };
+
+}
+
 function getRecentBigSmallPrediction(){
 
     alert("BS-3");
