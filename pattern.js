@@ -133,12 +133,16 @@ masterScore;
     } 
 
     if(bestNumber === null){
+        
+        alert("Best Number NULL");
+        
         return null;
     }
 
     alert(allResults.slice(0,10).join(","));
 
-    alert("Returning Prediction");
+    alert("Returning Prediction = " + bestNumber);
+    
     alert("10");
     
     return bestNumber;
