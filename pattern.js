@@ -305,6 +305,8 @@ function getBigSmallPatternPrediction(){
 function getBigSmallConfidence(){
 
     alert("BS-4");
+
+    alert("CONF-1");
     
     let currentInput = [
         Number(document.getElementById("n1").value),
@@ -333,9 +335,13 @@ function getBigSmallConfidence(){
 
         let best = Math.max(big, small);
 
+        alert("CONF-2");
+        
         return Math.round((best / total) * 100);
     }
 
+    alert("CONF-RETURN-0");
+    
     return 0;
 
 }
