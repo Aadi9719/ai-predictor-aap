@@ -37,6 +37,12 @@ function updateLearningMemory(actualResult){
             stability: 0,
 
             colorStability:0,
+
+            bsStreak:0,
+            colorStreak:0,
+
+            lastBigSmall:"",
+            lastColor:"",
             
             repeatCount: 0,
             
@@ -125,6 +131,35 @@ patternMemory[pattern].nextNumbers[actualResult] += 2;
 
 patternMemory[pattern].nextNumbers[actualResult]++;
 
+        // BIG/SMALL Streak Learn
+if(patternMemory[pattern].lastBigSmall === bigSmall){
+
+    patternMemory[pattern].bsStreak =
+        (patternMemory[pattern].bsStreak || 0) + 1;
+
+}else{
+
+    patternMemory[pattern].bsStreak = 1;
+
+}
+
+patternMemory[pattern].lastBigSmall = bigSmall;
+
+
+// COLOR Streak Learn
+if(patternMemory[pattern].lastColor === color){
+
+    patternMemory[pattern].colorStreak =
+        (patternMemory[pattern].colorStreak || 0) + 1;
+
+}else{
+
+    patternMemory[pattern].colorStreak = 1;
+
+}
+
+patternMemory[pattern].lastColor = color;
+        
     patternMemory[pattern].lastSeen = Date.now();
     
     localStorage.setItem(
