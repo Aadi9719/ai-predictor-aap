@@ -37,12 +37,6 @@ function updateLearningMemory(actualResult){
             stability: 0,
 
             colorStability:0,
-
-            bsStreak:0,
-            colorStreak:0,
-
-            lastBigSmall:"",
-            lastColor:"",
             
             repeatCount: 0,
             
