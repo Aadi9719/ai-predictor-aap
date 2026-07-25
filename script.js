@@ -296,6 +296,10 @@ actualResult;
 
     patternMemory[currentPattern].trust += 2;
 
+            if(patternMemory[currentPattern].trust > 100){
+    patternMemory[currentPattern].trust = 100;
+            }
+            
     patternMemory[currentPattern].successStreak++;
 
     patternMemory[currentPattern].failStreak = 0;
@@ -341,6 +345,10 @@ updateStats();
 
     patternMemory[currentPattern].trust -= 2;
 
+        if(patternMemory[currentPattern].trust < 0){
+    patternMemory[currentPattern].trust = 0;
+        }
+        
     patternMemory[currentPattern].failStreak++;
 
     patternMemory[currentPattern].successStreak = 0;
