@@ -46,7 +46,7 @@ function updateLearningMemory(actualResult){
             
             repeatCount: 0,
             
-            lastSeen: 0
+            lastSeen: 0,
 
                 trust: 50,
 
@@ -54,9 +54,8 @@ lastPrediction: null,
 
 successStreak: 0,
 
-failStreak: 0
+failStreak: 0,
         
-            nextNumbers:{},
     numberWeight:{},
     bigSmallWeight:{},
     colorWeight:{}
