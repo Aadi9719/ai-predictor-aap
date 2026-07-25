@@ -21,6 +21,14 @@ let pattern =
 currentInput.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
+
+        let nextNumbers = patternMemory[pattern].nextNumbers;
+
+if(!nextNumbers) continue;
+
+let confidence = patternMemory[pattern].confidence || 1;
+
+let candidates = [1,2,3,4,5,6,7,8,9];
         
         for(let num in nextNumbers){
             
