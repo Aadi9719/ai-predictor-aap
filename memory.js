@@ -1,3 +1,5 @@
+alert("Memory Loaded");
+
 function updateLearningMemory(actualResult){
     
     for (let len = 2; len <= 8; len++) {
