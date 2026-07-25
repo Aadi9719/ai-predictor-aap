@@ -24,9 +24,9 @@ currentInput.slice(0, len).join(",");
         
         for(let num in nextNumbers){
             
-            if(!candidates.includes(Number(num))){
-    continue;
-            }
+           // if(!candidates.includes(Number(num))){
+   // continue;
+         //  }
             
             let info = nextNumbers[num];
 
