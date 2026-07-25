@@ -1,3 +1,5 @@
+alert("Script Loaded");
+
 let allResults =
 JSON.parse(localStorage.getItem("allResults")) || [];
 
