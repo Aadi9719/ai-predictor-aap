@@ -94,6 +94,16 @@ getCandidatePriority(Number(num));
             let masterScore =
 getMasterNumberScore(Number(num), pattern);
 
+            let numberWeight = 50;
+
+if(
+    patternMemory[pattern].numberWeight &&
+    patternMemory[pattern].numberWeight[Number(num)] !== undefined
+){
+    numberWeight =
+    patternMemory[pattern].numberWeight[Number(num)];
+}
+            
             let trust = patternMemory[pattern].trust || 50;
             
 let score =
@@ -108,7 +118,8 @@ trendBonus +
 hotBonus +
 candidateBonus +
 priorityBonus +    
-masterScore;
+masterScore +
+(numberWeight * 3);
             
             if(
                 score > bestScore ||
