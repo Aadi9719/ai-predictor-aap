@@ -66,6 +66,14 @@ if(candidates.includes(Number(num))){
 
             let priorityBonus =
 getCandidatePriority(Number(num));
+
+            let stability = patternMemory[pattern].stability || 0;
+
+            let colorStability = patternMemory[pattern].colorStability || 0;
+
+            let repeat = patternMemory[pattern].repeatCount || 0;
+
+            let lastSeen = patternMemory[pattern].lastSeen || 0;
             
             let winRate = getPatternWinRate(pattern);
 
@@ -77,6 +85,8 @@ getCandidatePriority(Number(num));
 
             let masterScore =
 getMasterNumberScore(Number(num), pattern);
+
+            let trust = patternMemory[pattern].trust || 50;
             
 let score =
 (frequency * len) +
