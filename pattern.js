@@ -1,4 +1,4 @@
-alert("Pattern Start");
+alert("Pattern Loaded");
 
 function getPatternPrediction(){
     
