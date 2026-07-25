@@ -300,8 +300,6 @@ actualResult;
 
     patternMemory[currentPattern].failStreak = 0;
 
-        }
-
     patternMemory[currentPattern].win++;
 
             selfLearning(currentPattern, true);
@@ -346,8 +344,6 @@ updateStats();
     patternMemory[currentPattern].failStreak++;
 
     patternMemory[currentPattern].successStreak = 0;
-
-    }
 
     patternMemory[currentPattern].loss++;
 
