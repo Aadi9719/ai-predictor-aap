@@ -294,6 +294,14 @@ actualResult;
 
         if(patternMemory[currentPattern]){
 
+    patternMemory[currentPattern].trust += 2;
+
+    patternMemory[currentPattern].successStreak++;
+
+    patternMemory[currentPattern].failStreak = 0;
+
+        }
+
     patternMemory[currentPattern].win++;
 
             selfLearning(currentPattern, true);
@@ -331,7 +339,15 @@ updateStats();
 
         aiLosses++;
 
-        if(patternMemory[currentPattern]){
+    if(patternMemory[currentPattern]){
+
+    patternMemory[currentPattern].trust -= 2;
+
+    patternMemory[currentPattern].failStreak++;
+
+    patternMemory[currentPattern].successStreak = 0;
+
+    }
 
     patternMemory[currentPattern].loss++;
 
