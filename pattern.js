@@ -22,14 +22,6 @@ currentInput.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
         
-        let nextNumbers = patternMemory[pattern].nextNumbers;
-        
-        if(!nextNumbers) continue;
-
-        let confidence = patternMemory[pattern].confidence || 1;
-
-        let candidates = getCandidateNumbers();
-        
         for(let num in nextNumbers){
             
             if(!candidates.includes(Number(num))){
@@ -74,6 +66,14 @@ if(candidates.includes(Number(num))){
 
             let priorityBonus =
 getCandidatePriority(Number(num));
+
+            let stability = patternMemory[pattern].stability || 0;
+
+            let colorStability = patternMemory[pattern].colorStability || 0;
+
+            let repeat = patternMemory[pattern].repeatCount || 0;
+
+            let lastSeen = patternMemory[pattern].lastSeen || 0;
             
             let winRate = getPatternWinRate(pattern);
 
