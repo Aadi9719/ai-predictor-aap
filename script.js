@@ -60,6 +60,15 @@ let trendPrediction = getTrendPrediction();
     }
     
     let pattern = numbers.join(",");
+
+    if(patternMemory[pattern]){
+    patternMemory[pattern].lastPrediction = nextPrediction;
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+    }
     
 if(memoryPrediction === null){
 
