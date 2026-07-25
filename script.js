@@ -13,6 +13,8 @@ Number(localStorage.getItem("aiLosses")) || 0;
 let nextPrediction = null;
 
 document.getElementById("analyzeBtn").onclick = function () {
+
+    alert("Analyze Start");
     
     let n1 = Number(document.getElementById("n1").value);
     let n2 = Number(document.getElementById("n2").value);
