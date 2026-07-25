@@ -38,8 +38,13 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     alert("Pattern Prediction = " + getPatternPrediction());
 alert("Final Prediction = " + getFinalPrediction());
+
+    alert("Before Final Prediction");
     
 let finalPrediction = getFinalPrediction();
+
+    alert("After Final Prediction");
+    
 let trendScore = getTrendScore();
 let finalAIScore = getFinalAIScore();
 let hotCold = getHotColdNumbers();
