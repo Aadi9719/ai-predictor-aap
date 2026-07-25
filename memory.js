@@ -129,6 +129,18 @@ if(!patternMemory[pattern].numbers[actualResult]){
 }
 
         patternMemory[pattern].numbers[actualResult]++;
+
+        // Number Weight Learning
+
+if(!patternMemory[pattern].numberWeight){
+    patternMemory[pattern].numberWeight = {};
+}
+
+if(patternMemory[pattern].numberWeight[actualResult] === undefined){
+    patternMemory[pattern].numberWeight[actualResult] = 50;
+}
+
+patternMemory[pattern].numberWeight[actualResult] += 1;
         
 // Next Number Pattern Counter
 
