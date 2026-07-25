@@ -33,12 +33,13 @@ document.getElementById("analyzeBtn").onclick = function () {
         "allResults",
         JSON.stringify(allResults)
     );
+
+    alert("Before getPatternPrediction");
     
     let memoryPrediction = getPatternPrediction();
 
-    alert("Pattern Prediction = " + getPatternPrediction());
-alert("Final Prediction = " + getFinalPrediction());
-
+    alert("Memory Prediction = " + memoryPrediction);
+    
     alert("Before Final Prediction");
     
 let finalPrediction = getFinalPrediction();
