@@ -22,6 +22,14 @@ currentInput.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
 
+        // Rank Filter
+
+let rank = patternMemory[pattern].rank || 0;
+
+if(rank < 60){
+    continue;
+}
+        
         // Weak Pattern Reject
 
 if(patternMemory[pattern].trust < 30){
