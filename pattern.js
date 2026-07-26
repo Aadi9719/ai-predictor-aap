@@ -22,6 +22,20 @@ currentInput.slice(0, len).join(",");
 
         if(!patternMemory[pattern]) continue;
 
+        // Weak Pattern Reject
+
+if(patternMemory[pattern].trust < 30){
+    continue;
+}
+
+if(patternMemory[pattern].patternWeight < 30){
+    continue;
+}
+
+if(patternMemory[pattern].stability < 40){
+    continue;
+}
+        
         let nextNumbers = patternMemory[pattern].nextNumbers;
 
 if(!nextNumbers) continue;
