@@ -45,8 +45,7 @@ document.getElementById("analyzeBtn").onclick = function () {
 let finalPrediction = getFinalPrediction();
 
     alert("After Final Prediction");
-
-let brain = getDecisionBrain();  
+ 
 let trendScore = getTrendScore();
 let finalAIScore = getFinalAIScore();
 let hotCold = getHotColdNumbers();
@@ -166,11 +165,6 @@ Cold Number :
 
 AI Score :
 <b>${finalAIScore}%</b>
-
-<br><br>
-
-Master Brain Score :
-<b>${brain.masterScore}%</b>
 
 <br><br>
 
