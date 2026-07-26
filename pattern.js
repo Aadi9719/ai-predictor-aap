@@ -119,7 +119,8 @@ hotBonus +
 candidateBonus +
 priorityBonus +    
 masterScore +
-(numberWeight * 3);
+(numberWeight * 3) +
+(patternMemory[pattern].patternWeight * 4);
             
             if(
                 score > bestScore ||
