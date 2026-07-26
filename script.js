@@ -169,6 +169,11 @@ AI Score :
 
 <br><br>
 
+Master Brain Score :
+<b>${brain.masterScore}%</b>
+
+<br><br>
+
 Pattern :
 <b>${pattern}</b>
 
