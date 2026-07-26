@@ -45,7 +45,8 @@ document.getElementById("analyzeBtn").onclick = function () {
 let finalPrediction = getFinalPrediction();
 
     alert("After Final Prediction");
-    
+
+let brain = getDecisionBrain();  
 let trendScore = getTrendScore();
 let finalAIScore = getFinalAIScore();
 let hotCold = getHotColdNumbers();
