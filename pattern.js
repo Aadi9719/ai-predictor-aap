@@ -26,7 +26,7 @@ currentInput.slice(0, len).join(",");
 
 let rank = patternMemory[pattern].rank || 0;
 
-if(rank < 60){
+if(rank < 20){
     continue;
 }
         
@@ -141,8 +141,9 @@ hotBonus +
 candidateBonus +
 priorityBonus +    
 masterScore +
-(numberWeight * 3) +
-(patternMemory[pattern].patternWeight * 4);
+(trust * 2) +
+(numberWeight * 1.2) +
+(patternMemory[pattern].patternWeight * 1.5);
             
             if(
                 score > bestScore ||
