@@ -170,6 +170,12 @@ function getPatternScore(){
     // Confidence
     score += Math.min(confidence * 0.30, 30);
 
+    // Read AI Learning Values
+    let trust = patternMemory[pattern].trust || 50;
+    let patternWeight = patternMemory[pattern].patternWeight || 50;
+    let stability = patternMemory[pattern].stability || 0;
+    let colorStability = patternMemory[pattern].colorStability || 0;
+    
     // Win Rate
     score += Math.min(getPatternWinRate(pattern) * 0.20, 20);
 
@@ -179,6 +185,18 @@ function getPatternScore(){
     // Recent Accuracy
     score += Math.min(getRecentAccuracy(pattern) * 0.10, 10);
 
+    // Trust
+score += Math.min(trust * 0.20, 20);
+
+// Pattern Weight
+score += Math.min(patternWeight * 0.20, 20);
+
+// Stability
+score += Math.min(stability * 0.10, 10);
+
+// Color Stability
+score += Math.min(colorStability * 0.10, 10);
+    
     if(score > 100){
         score = 100;
     }
