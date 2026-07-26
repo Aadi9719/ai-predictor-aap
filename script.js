@@ -296,8 +296,14 @@ actualResult;
 
     patternMemory[currentPattern].trust += 2;
 
+            patternMemory[currentPattern].patternWeight += 2;
+            
             if(patternMemory[currentPattern].trust > 100){
     patternMemory[currentPattern].trust = 100;
+            }
+
+            if(patternMemory[currentPattern].patternWeight > 100){
+    patternMemory[currentPattern].patternWeight = 100;
             }
             
     patternMemory[currentPattern].successStreak++;
@@ -345,8 +351,14 @@ updateStats();
 
     patternMemory[currentPattern].trust -= 2;
 
+        patternMemory[currentPattern].patternWeight -= 2;
+        
         if(patternMemory[currentPattern].trust < 0){
     patternMemory[currentPattern].trust = 0;
+        }
+
+        if(patternMemory[currentPattern].patternWeight < 0){
+    patternMemory[currentPattern].patternWeight = 0;
         }
         
     patternMemory[currentPattern].failStreak++;
