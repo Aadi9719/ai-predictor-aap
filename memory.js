@@ -52,6 +52,8 @@ function updateLearningMemory(actualResult){
 
                 trust: 50,
 
+            patternWeight: 50,
+            
 lastPrediction: null,
 
 successStreak: 0,
