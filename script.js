@@ -365,6 +365,23 @@ updateStats();
 
     patternMemory[currentPattern].successStreak = 0;
 
+        // Wrong Prediction Penalty
+
+if(
+    patternMemory[currentPattern].numberWeight &&
+    patternMemory[currentPattern].numberWeight[nextPrediction] !== undefined
+){
+
+    patternMemory[currentPattern].numberWeight[nextPrediction] -= 2;
+
+    if(
+        patternMemory[currentPattern].numberWeight[nextPrediction] < 0
+    ){
+        patternMemory[currentPattern].numberWeight[nextPrediction] = 0;
+    }
+
+}
+        
     patternMemory[currentPattern].loss++;
 
             selfLearning(currentPattern, false);
