@@ -10,6 +10,20 @@ function getDecisionBrain() {
 
     let colorScore = getColorAIScore();
 
+    let masterScore = Math.round(
+
+(patternScore * 0.30) +
+
+(trendScore * 0.20) +
+
+(aiScore * 0.25) +
+
+(bigSmallScore * 0.15) +
+
+(colorScore * 0.10)
+
+);
+    
     return {
 
         patternScore,
@@ -20,8 +34,10 @@ function getDecisionBrain() {
 
         bigSmallScore,
 
-        colorScore
+        colorScore,
 
+        masterScore
+        
     };
 
 }
