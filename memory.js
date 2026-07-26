@@ -53,6 +53,8 @@ function updateLearningMemory(actualResult){
                 trust: 50,
 
             patternWeight: 50,
+
+            rank: 0,
             
 lastPrediction: null,
 
@@ -188,7 +190,21 @@ if(patternMemory[pattern].lastColor === color){
 patternMemory[pattern].lastColor = color;
     
     patternMemory[pattern].lastSeen = Date.now();
-    
+
+        // Pattern Rank Calculate
+
+patternMemory[pattern].rank = Math.round(
+
+    (patternMemory[pattern].trust * 0.30) +
+
+    (patternMemory[pattern].patternWeight * 0.30) +
+
+    (patternMemory[pattern].stability * 0.20) +
+
+    (patternMemory[pattern].colorStability * 0.20)
+
+);
+        
     localStorage.setItem(
         "patternMemory",
         JSON.stringify(patternMemory)
