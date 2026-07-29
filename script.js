@@ -26,14 +26,6 @@ document.getElementById("analyzeBtn").onclick = function () {
 
     let numbers = [n1, n2, n3, n4, n5];
 
-    // Save history
-    allResults.push(...numbers);
-
-    localStorage.setItem(
-        "allResults",
-        JSON.stringify(allResults)
-    );
-
     alert("Before getPatternPrediction");
     
     let memoryPrediction = getPatternPrediction();
