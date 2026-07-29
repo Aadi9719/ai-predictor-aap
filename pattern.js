@@ -706,11 +706,22 @@ function getMasterNumberScore(number, pattern){
 
     let trendScore = getTrendScore();
 
-    let score =
+    let numberScore = 50;
+
+if(
+    patternMemory[pattern] &&
+    patternMemory[pattern].numberWeight &&
+    patternMemory[pattern].numberWeight[number] !== undefined
+){
+    numberScore = patternMemory[pattern].numberWeight[number];
+}
+
+let score =
 (patternScore * (aiEngineWeight.pattern / 100)) +
 (bigSmallConfidence * (aiEngineWeight.bigSmall / 100)) +
 (colorConfidence * (aiEngineWeight.color / 100)) +
-(trendScore * (aiEngineWeight.trend / 100));
+(trendScore * (aiEngineWeight.trend / 100)) +
+(numberScore * 0.5);
 
     return Math.round(score);
 
