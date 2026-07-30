@@ -81,7 +81,7 @@ failStreak: 0,
 
     patternMemory[pattern].total++;
 
-        patternMemory[pattern].repeatCount++;
+       // patternMemory[pattern].repeatCount++;
 
         patternMemory[pattern][bigSmall]++;
         
@@ -102,8 +102,9 @@ if(total > 0){
 }
         
     patternMemory[pattern].confidence =
-Math.round(
-(patternMemory[pattern].total / allResults.length) * 100
+Math.min(
+    95,
+    Math.round(patternMemory[pattern].total * 2)
 );
     
     patternMemory[pattern][color]++;
@@ -155,8 +156,6 @@ if(!patternMemory[pattern].nextNumbers){
 if(patternMemory[pattern].nextNumbers[actualResult] === undefined){
     patternMemory[pattern].nextNumbers[actualResult] = 0;
 }
-
-patternMemory[pattern].nextNumbers[actualResult] += 2;
 
 patternMemory[pattern].nextNumbers[actualResult]++;
 
