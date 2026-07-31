@@ -286,7 +286,7 @@ actualResult;
 
         if(patternMemory[currentPattern]){
 
-    patternMemory[currentPattern].trust += 2;
+    patternMemory[currentPattern].trust += 3;
 
             patternMemory[currentPattern].patternWeight += 2;
             
@@ -341,7 +341,7 @@ updateStats();
 
     if(patternMemory[currentPattern]){
 
-    patternMemory[currentPattern].trust -= 2;
+    patternMemory[currentPattern].trust -= 3;
 
         patternMemory[currentPattern].patternWeight -= 2;
         
