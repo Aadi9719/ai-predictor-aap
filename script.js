@@ -584,8 +584,6 @@ document.getElementById("resetMemoryBtn").onclick = function(){
 
     location.reload();
 
-};
-
 patternMemory = {};
 allResults = [];
 predictionHistory = [];
@@ -595,6 +593,8 @@ colorMemory = {};
 alert("AI Memory Successfully Reset ✅");
 
 location.reload();
+
+};
 
 // =========================
 // AI DATA
