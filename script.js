@@ -566,6 +566,36 @@ function updatePredictionHistoryTable(){
 
 }
 
+document.getElementById("resetMemoryBtn").onclick = function(){
+
+    if(!confirm("Kya aap AI Memory Reset karna chahte hain?")){
+        return;
+    }
+
+    localStorage.removeItem("patternMemory");
+    localStorage.removeItem("allResults");
+    localStorage.removeItem("predictionHistory");
+    localStorage.removeItem("bigSmallMemory");
+    localStorage.removeItem("colorMemory");
+    localStorage.removeItem("aiWins");
+    localStorage.removeItem("aiLosses");
+
+    alert("AI Memory Successfully Reset ✅");
+
+    location.reload();
+
+};
+
+patternMemory = {};
+allResults = [];
+predictionHistory = [];
+bigSmallMemory = {};
+colorMemory = {};
+
+alert("AI Memory Successfully Reset ✅");
+
+location.reload();
+
 // =========================
 // AI DATA
 // =========================
