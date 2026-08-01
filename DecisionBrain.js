@@ -23,6 +23,26 @@ function getDecisionBrain() {
 (colorScore * 0.10)
 
 );
+
+    let decision = "WAIT";
+
+if(masterScore >= 85){
+
+    decision = "STRONG";
+
+}else if(masterScore >= 70){
+
+    decision = "NORMAL";
+
+}else if(masterScore >= 50){
+
+    decision = "WEAK";
+
+}else{
+
+    decision = "BLOCK";
+
+}
     
     return {
 
@@ -36,8 +56,22 @@ function getDecisionBrain() {
 
         colorScore,
 
-        masterScore
+        masterScore,
+
+        decision
         
     };
 
+    function shouldPredict(){
+
+    let brain = getDecisionBrain();
+
+    if(brain.decision === "BLOCK"){
+        return false;
+    }
+
+    return true;
+
+    }
+    
 }
