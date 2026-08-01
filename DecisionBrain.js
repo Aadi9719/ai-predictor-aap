@@ -75,3 +75,15 @@ if(masterScore >= 85){
     }
     
 }
+
+function getHotColdScore(){
+
+    let hotCold = getHotColdNumbers();
+
+    if(!hotCold){
+        return 0;
+    }
+
+    return 50;
+
+}
