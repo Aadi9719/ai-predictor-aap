@@ -33,6 +33,18 @@ document.getElementById("analyzeBtn").onclick = function () {
     alert("Memory Prediction = " + memoryPrediction);
     
     alert("Before Final Prediction");
+
+    if(!shouldPredict()){
+
+    document.getElementById("result").innerHTML = `
+        <h2>AI Decision</h2>
+        <h3 style="color:red;">🚫 Prediction Blocked</h3>
+        <p>Brain Decision : BLOCK</p>
+    `;
+
+    return;
+
+    }
     
 let finalPrediction = getFinalPrediction();
 
