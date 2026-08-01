@@ -70,6 +70,11 @@ function getFinalPrediction(){
 
     let hot = hotCold.hot;
 
+    let memoryScore = getPatternScore();
+let trendScore = getTrendScore();
+let hotScore = getHotColdScore();
+let brain = getDecisionBrain();
+    
     // Sab agree hain
     if(memory !== null && trend !== null){
 
