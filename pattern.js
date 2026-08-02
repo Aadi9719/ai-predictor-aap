@@ -1,45 +1,5 @@
 alert("Pattern Loaded");
 
-function calculateNumberScore(pattern, num, info, len){
-
-    let frequency = 0;
-    let accuracy = 50;
-
-    if(typeof info === "number"){
-
-        frequency = info;
-
-    }else if(typeof info === "object"){
-
-        frequency = info.total || 0;
-        accuracy = info.accuracy || 50;
-
-    }
-
-    let trust = patternMemory[pattern].trust || 50;
-
-    let patternWeight = patternMemory[pattern].patternWeight || 50;
-
-    let numberWeight = 50;
-
-    if(
-        patternMemory[pattern].numberWeight &&
-        patternMemory[pattern].numberWeight[num] !== undefined
-    ){
-        numberWeight =
-        patternMemory[pattern].numberWeight[num];
-    }
-
-    return (
-        (frequency * len) +
-        (accuracy * 2) +
-        (trust * 2) +
-        (patternWeight * 2) +
-        (numberWeight * 1.5)
-    );
-
-}
-
 function getPatternPrediction(){
     
     let bestNumber = null;
@@ -188,7 +148,7 @@ trendBonus +
 hotBonus +
 candidateBonus +
 priorityBonus +    
-masterScore +
+(masterScore * 2) +
 (trust * 2) +
 (numberWeight * 1.2) +
 (patternMemory[pattern].patternWeight * 1.5);
