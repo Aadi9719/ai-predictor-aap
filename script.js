@@ -33,8 +33,6 @@ document.getElementById("analyzeBtn").onclick = function () {
     alert("Memory Prediction = " + memoryPrediction);
     
     alert("Before Final Prediction");
-
-    if(!shouldPredict()){
     
 let finalPrediction = getFinalPrediction();
 
@@ -591,10 +589,6 @@ allResults = [];
 predictionHistory = [];
 bigSmallMemory = {};
 colorMemory = {};
-
-alert("AI Memory Successfully Reset ✅");
-
-location.reload();
 
 };
 
