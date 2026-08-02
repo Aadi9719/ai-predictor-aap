@@ -84,36 +84,22 @@ function getFinalPrediction(){
     // Memory aur Hot same
     if(memory !== null){
 
-        if(memory === hot){
+    if(getPatternScore() >= 70){
 
-            return memory;
+        return memory;
 
-        }
+    }
 
     }
 
     // Trend aur Hot same
     if(trend !== null){
 
-        if(trend === hot){
-
-            return trend;
-
-        }
-
-    }
-
-    // Strong Memory
-    if(memory !== null){
-
-        return memory;
-
-    }
-
-    // Strong Trend
-    if(trend !== null){
+    if(getTrendScore() >= 70){
 
         return trend;
+
+    }
 
     }
 
