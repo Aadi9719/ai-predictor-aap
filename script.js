@@ -37,7 +37,8 @@ document.getElementById("analyzeBtn").onclick = function () {
 let finalPrediction = getFinalPrediction();
 
     alert("After Final Prediction");
- 
+ alert("Final Prediction = " + finalPrediction);
+    
 let trendScore = getTrendScore();
 let finalAIScore = getFinalAIScore();
 let hotCold = getHotColdNumbers();
