@@ -63,9 +63,9 @@ let candidates = [1,2,3,4,5,6,7,8,9];
 let frequency = 0;
 let accuracy = 50; // Default
 
-            if(patternMemory[pattern].repeatCount < 3){
-    continue;
-            }
+           // if(patternMemory[pattern].repeatCount < 3){
+  //  continue;
+          //  }
             
 if(info == null){
 
@@ -86,9 +86,9 @@ if(typeof info === "number"){
 
 }
 
-            if(frequency < 2){
-    continue;
-            }
+           // if(frequency < 2){
+  //  continue;
+        //    }
             
 let trendBonus =
 (Number(num) === getTrendPrediction()) ? 15 : 0;
