@@ -73,8 +73,6 @@ if(masterScore >= 85){
     return true;
 
     }
-    
-}
 
 function getHotColdScore(){
 
