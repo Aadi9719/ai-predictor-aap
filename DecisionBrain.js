@@ -62,6 +62,8 @@ if(masterScore >= 85){
         
     };
 
+}
+
     function shouldPredict(){
 
     let brain = getDecisionBrain();
