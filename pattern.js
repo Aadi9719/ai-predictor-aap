@@ -6,7 +6,6 @@ function getPatternPrediction(){
     let bestScore = -1;
     
     for(let len = 5; len >= 2; len--)
-let bestPatternLength = 0;
     
     {
         
@@ -160,7 +159,6 @@ priorityBonus +
             ){
                 bestScore = score;
                 bestNumber = Number(num);
-                bestPatternLength = len;
             }
 
         } 
@@ -171,8 +169,6 @@ priorityBonus +
         
         return null;
     }
-
-    console.log("Best Pattern Length =", bestPatternLength);
     
     return bestNumber;
     
