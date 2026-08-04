@@ -222,6 +222,12 @@ score += Math.min(trust * 0.20, 20);
 // Pattern Weight
 score += Math.min(patternWeight * 0.20, 20);
 
+    let reward = patternMemory[pattern].reward || 0;
+let penalty = patternMemory[pattern].penalty || 0;
+
+score += Math.min(reward * 0.30, 15);
+score -= Math.min(penalty * 0.30, 15);
+    
 // Stability
 score += Math.min(stability * 0.10, 10);
 
