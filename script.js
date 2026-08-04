@@ -593,6 +593,38 @@ colorMemory = {};
 
 };
 
+function updateRewardPenalty(pattern, isWin){
+
+    if(!patternMemory[pattern]) return;
+
+    if(isWin){
+
+        patternMemory[pattern].reward++;
+        patternMemory[pattern].trust += 1;
+        patternMemory[pattern].patternWeight += 1;
+
+    }else{
+
+        patternMemory[pattern].penalty++;
+        patternMemory[pattern].trust -= 1;
+        patternMemory[pattern].patternWeight -= 1;
+
+    }
+
+    // Limit
+    patternMemory[pattern].trust =
+    Math.max(0, Math.min(100, patternMemory[pattern].trust));
+
+    patternMemory[pattern].patternWeight =
+    Math.max(0, Math.min(100, patternMemory[pattern].patternWeight));
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+}
+
 // =========================
 // AI DATA
 // =========================
