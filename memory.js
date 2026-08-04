@@ -55,6 +55,10 @@ function updateLearningMemory(actualResult){
             patternWeight: 50,
 
             rank: 0,
+
+            reward: 0,
+            
+            penalty: 0,
             
 lastPrediction: null,
 
