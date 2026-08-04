@@ -283,6 +283,8 @@ actualResult;
     
     if(actualResult === nextPrediction){
 
+        updateRewardPenalty(currentPattern, true);
+        
         aiWins++;
 
         if(patternMemory[currentPattern]){
@@ -338,6 +340,8 @@ updateStats();
         
     }else{
 
+        updateRewardPenalty(currentPattern, false);
+        
         aiLosses++;
 
     if(patternMemory[currentPattern]){
