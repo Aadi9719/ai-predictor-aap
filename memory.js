@@ -196,6 +196,8 @@ patternMemory[pattern].lastColor = color;
     
     patternMemory[pattern].lastSeen = Date.now();
 
+        patternMemory[pattern].learningAge = 0;
+        
         // Pattern Rank Calculate
 
 patternMemory[pattern].rank = Math.round(
