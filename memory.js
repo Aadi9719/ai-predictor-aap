@@ -59,6 +59,8 @@ function updateLearningMemory(actualResult){
             reward: 0,
             
             penalty: 0,
+
+            learningAge: 0,
             
 lastPrediction: null,
 
