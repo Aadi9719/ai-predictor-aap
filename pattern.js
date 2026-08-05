@@ -225,7 +225,19 @@ score += Math.min(patternWeight * 0.20, 20);
     let reward = patternMemory[pattern].reward || 0;
 let penalty = patternMemory[pattern].penalty || 0;
 
-score += Math.min(reward * 0.30, 15);
+    let totalLearning = reward + penalty;
+
+let rewardRatio = 50;
+
+if(totalLearning > 0){
+
+    rewardRatio = Math.round(
+        (reward / totalLearning) * 100
+    );
+
+}
+
+score += Math.min(rewardRatio * 0.20, 20);
 score -= Math.min(penalty * 0.30, 15);
     
 // Stability
