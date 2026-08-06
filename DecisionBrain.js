@@ -87,3 +87,22 @@ function getHotColdScore(){
     return 50;
 
 }
+
+function getRewardRatio(pattern){
+
+    if(!patternMemory[pattern]){
+        return 50;
+    }
+
+    let reward = patternMemory[pattern].reward || 0;
+    let penalty = patternMemory[pattern].penalty || 0;
+
+    let total = reward + penalty;
+
+    if(total === 0){
+        return 50;
+    }
+
+    return Math.round((reward / total) * 100);
+
+}
