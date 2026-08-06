@@ -245,6 +245,8 @@ if(
 
     allResults.unshift(actualResult);
 
+    updateLearningAge();
+    
 if(allResults.length > 1000){
     allResults.pop();
 }
