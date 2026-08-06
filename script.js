@@ -629,6 +629,25 @@ function updateRewardPenalty(pattern, isWin){
 
 }
 
+function updateLearningAge(){
+
+    for(let pattern in patternMemory){
+
+        patternMemory[pattern].learningAge++;
+
+        if(patternMemory[pattern].learningAge > 100){
+            patternMemory[pattern].learningAge = 100;
+        }
+
+    }
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+}
+
 // =========================
 // AI DATA
 // =========================
