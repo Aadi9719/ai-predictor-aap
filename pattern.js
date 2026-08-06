@@ -225,6 +225,8 @@ score += Math.min(patternWeight * 0.20, 20);
     let reward = patternMemory[pattern].reward || 0;
 let penalty = patternMemory[pattern].penalty || 0;
 
+    let learningAge = patternMemory[pattern].learningAge || 0;
+    
     let totalLearning = reward + penalty;
 
 let rewardRatio = 50;
@@ -237,6 +239,7 @@ if(totalLearning > 0){
 
 }
 
+score -= Math.min(learningAge * 0.10, 10);
 score += Math.min(rewardRatio * 0.20, 20);
 score -= Math.min(penalty * 0.30, 15);
     
