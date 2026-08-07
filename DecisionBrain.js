@@ -10,6 +10,16 @@ function getDecisionBrain() {
 
     let colorScore = getColorAIScore();
 
+    let currentPattern = [
+    Number(document.getElementById("n1").value),
+    Number(document.getElementById("n2").value),
+    Number(document.getElementById("n3").value),
+    Number(document.getElementById("n4").value),
+    Number(document.getElementById("n5").value)
+].join(",");
+
+let rewardRatio = getRewardRatio(currentPattern);
+    
     let masterScore = Math.round(
 
 (patternScore * 0.30) +
@@ -20,8 +30,10 @@ function getDecisionBrain() {
 
 (bigSmallScore * 0.15) +
 
-(colorScore * 0.10)
+(colorScore * 0.10) +
 
+(rewardRatio * 0.10)
+        
 );
 
     let decision = "WAIT";
