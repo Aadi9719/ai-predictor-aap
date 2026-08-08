@@ -118,3 +118,38 @@ function getRewardRatio(pattern){
     return Math.round((reward / total) * 100);
 
 }
+
+function getConfidenceScore(brain){
+
+    if(!brain){
+        return 0;
+    }
+
+    let scores = [
+        brain.patternScore || 0,
+        brain.trendScore || 0,
+        brain.aiScore || 0,
+        brain.bigSmallScore || 0,
+        brain.colorScore || 0
+    ];
+
+    let total = 0;
+
+    scores.forEach(score => {
+        total += Math.max(0, Math.min(100, score));
+    });
+
+    let average = total / scores.length;
+
+    let confidence = Math.round(average);
+
+    if(confidence > 100){
+        confidence = 100;
+    }
+
+    if(confidence < 0){
+        confidence = 0;
+    }
+
+    return confidence;
+}
