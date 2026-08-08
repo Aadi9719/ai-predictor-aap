@@ -36,6 +36,16 @@ let rewardRatio = getRewardRatio(currentPattern);
         
 );
 
+    let confidence = getConfidenceScore({
+
+    patternScore,
+    trendScore,
+    aiScore,
+    bigSmallScore,
+    colorScore
+
+});
+    
     let decision = "WAIT";
 
 if(masterScore >= 85){
@@ -70,6 +80,8 @@ if(masterScore >= 85){
 
         masterScore,
 
+        confidence,
+        
         decision
         
     };
