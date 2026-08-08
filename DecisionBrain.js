@@ -65,7 +65,13 @@ if(masterScore >= 85){
     decision = "BLOCK";
 
 }
-    
+
+    if(confidence < 50){
+
+    decision = "WAIT";
+
+    }
+ 
     return {
 
         patternScore,
