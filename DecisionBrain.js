@@ -45,6 +45,8 @@ let rewardRatio = getRewardRatio(currentPattern);
     colorScore
 
 });
+
+    let rankScore = getDynamicRankScore(masterScore);
     
     let decision = "WAIT";
 
@@ -87,6 +89,8 @@ if(masterScore >= 85){
         masterScore,
 
         confidence,
+
+        rankScore,
         
         decision
         
