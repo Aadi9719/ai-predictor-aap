@@ -47,6 +47,11 @@ let rewardRatio = getRewardRatio(currentPattern);
 });
 
     let rankScore = getDynamicRankScore(masterScore);
+
+    rankScore = Math.round(
+    (rankScore * 0.70) +
+    (confidence * 0.30)
+);
     
     let decision = "WAIT";
 
