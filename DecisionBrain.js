@@ -78,7 +78,13 @@ if(masterScore >= 85){
     decision = "WAIT";
 
     }
- 
+
+    if(rankScore < 50){
+
+    decision = "WAIT";
+
+    }
+    
     return {
 
         patternScore,
