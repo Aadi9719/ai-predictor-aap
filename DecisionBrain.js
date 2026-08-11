@@ -201,3 +201,20 @@ function getDynamicRankScore(score){
 
     return Math.round(score);
 }
+
+function showAIDebug(){
+
+    let brain = getDecisionBrain();
+
+    console.log("=== AI DEBUG ===");
+    console.log("Pattern Score:", brain.patternScore);
+    console.log("Trend Score:", brain.trendScore);
+    console.log("AI Score:", brain.aiScore);
+    console.log("Big/Small Score:", brain.bigSmallScore);
+    console.log("Color Score:", brain.colorScore);
+    console.log("Master Score:", brain.masterScore);
+    console.log("Confidence:", brain.confidence);
+    console.log("Rank Score:", brain.rankScore);
+    console.log("Decision:", brain.decision);
+
+}
