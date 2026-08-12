@@ -204,6 +204,8 @@ function getDynamicRankScore(score){
 
 function showAIDebug(){
 
+    alert("DEBUG FUNCTION RUNNING");
+    
     let brain = getDecisionBrain();
 
     console.log("=== AI DEBUG ===");
