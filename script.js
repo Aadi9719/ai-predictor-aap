@@ -35,9 +35,13 @@ document.getElementById("analyzeBtn").onclick = function () {
     alert("Memory Prediction = " + memoryPrediction);
     
     alert("Before Final Prediction");
+
+    alert("FINAL PREDICTION START");
     
 let finalPrediction = getFinalPrediction();
 
+    alert("FINAL PREDICTION FINISHED");
+    
     showAIDebug();
     
     alert("After Final Prediction");
