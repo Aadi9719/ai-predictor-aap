@@ -36,6 +36,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     
 let finalPrediction = getFinalPrediction();
 
+    showAIDebug();
+    
     alert("After Final Prediction");
  alert("Final Prediction = " + finalPrediction);
     
