@@ -30,6 +30,8 @@ document.getElementById("analyzeBtn").onclick = function () {
     
     let memoryPrediction = getPatternPrediction();
 
+    alert("GET PATTERN PREDICTION DONE");
+    
     alert("Memory Prediction = " + memoryPrediction);
     
     alert("Before Final Prediction");
