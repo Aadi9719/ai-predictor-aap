@@ -42,7 +42,9 @@ let finalPrediction = getFinalPrediction();
 
     alert("FINAL PREDICTION FINISHED");
     
+   alert("DEBUG CALL SE PEHLE"); 
     showAIDebug();
+    alert("DEBUG CALL KE BAAD");
     
     alert("After Final Prediction");
  alert("Final Prediction = " + finalPrediction);
