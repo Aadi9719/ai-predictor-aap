@@ -43,7 +43,11 @@ let finalPrediction = getFinalPrediction();
     alert("FINAL PREDICTION FINISHED");
     
    alert("DEBUG CALL SE PEHLE"); 
+
+    alert("TYPE = " + typeof showAIDebug);
+    
     showAIDebug();
+    
     alert("DEBUG CALL KE BAAD");
     
     alert("After Final Prediction");
