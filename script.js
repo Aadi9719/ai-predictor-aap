@@ -46,7 +46,7 @@ let finalPrediction = getFinalPrediction();
 
     alert("TYPE = " + typeof showAIDebug);
     
-    showAIDebug();
+    window.showAIDebug();
     
     alert("DEBUG CALL KE BAAD");
     
