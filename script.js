@@ -45,6 +45,8 @@ let finalPrediction = getFinalPrediction();
    alert("DEBUG CALL SE PEHLE"); 
 
     alert("TYPE = " + typeof showAIDebug);
+
+    alert(String(window.showAIDebug));
     
     window.showAIDebug();
     
