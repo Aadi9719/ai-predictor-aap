@@ -48,9 +48,20 @@ let finalPrediction = getFinalPrediction();
 
     alert(String(window.showAIDebug));
 
-    let debugResult =
+    alert("BEFORE DEBUG CALL");
+
+try {
+    
     window.showAIDebug();
 
+    alert("AFTER DEBUG CALL");
+
+} catch(error) {
+
+    alert("DEBUG ERROR = " + error.message);
+
+}
+    
     alert("RESULT = " + debugResult);
     
     alert("DEBUG CALL KE BAAD");
