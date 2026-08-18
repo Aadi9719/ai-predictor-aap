@@ -1,3 +1,5 @@
+alert("DECISION BRAIN JS LOADED");
+
 function getDecisionBrain() {
 
     let patternScore = getPatternScore();
