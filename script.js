@@ -47,8 +47,11 @@ let finalPrediction = getFinalPrediction();
     alert("TYPE = " + typeof showAIDebug);
 
     alert(String(window.showAIDebug));
-    
+
+    let debugResult =
     window.showAIDebug();
+
+    alert("RESULT = " + debugResult);
     
     alert("DEBUG CALL KE BAAD");
     
