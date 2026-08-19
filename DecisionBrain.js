@@ -210,6 +210,13 @@ window.showAIDebug = function(){
 
     let brain = getDecisionBrain();
 
+    alert(
+    "Master=" + brain.masterScore +
+    "\nConfidence=" + brain.confidence +
+    "\nRank=" + brain.rankScore +
+    "\nDecision=" + brain.decision
+);
+    
     console.log("=== AI DEBUG ===");
     console.log("Pattern Score:", brain.patternScore);
     console.log("Trend Score:", brain.trendScore);
