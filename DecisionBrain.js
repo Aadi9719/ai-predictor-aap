@@ -223,8 +223,3 @@ window.showAIDebug = function(){
 
     return "DEBUG OK";
 };
-
-alert("DEBUG FUNCTION RUNNING");
-let brain = getDecisionBrain();
-...
-}
