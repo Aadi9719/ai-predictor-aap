@@ -210,6 +210,21 @@ window.showAIDebug = function(){
 
     let brain = getDecisionBrain();
 
+    let currentPattern = [
+    Number(document.getElementById("n1").value),
+    Number(document.getElementById("n2").value),
+    Number(document.getElementById("n3").value),
+    Number(document.getElementById("n4").value),
+    Number(document.getElementById("n5").value)
+].join(",");
+
+let rewardRatio = getRewardRatio(currentPattern);
+
+alert(
+    "Pattern = " + currentPattern +
+    "\nReward Ratio = " + rewardRatio
+);
+    
     alert(
     "Master=" + brain.masterScore +
     "\nConfidence=" + brain.confidence +
