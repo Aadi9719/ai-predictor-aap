@@ -224,6 +224,11 @@ alert(
     "Pattern = " + currentPattern +
     "\nReward Ratio = " + rewardRatio
 );
+
+    alert(
+    "Pattern Memory Exists = " +
+    Boolean(patternMemory[currentPattern])
+);
     
     alert(
     "Master=" + brain.masterScore +
