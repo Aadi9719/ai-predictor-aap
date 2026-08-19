@@ -229,6 +229,13 @@ alert(
     "Pattern Memory Exists = " +
     Boolean(patternMemory[currentPattern])
 );
+
+    let memory = patternMemory[currentPattern];
+
+alert(
+    "Reward = " + (memory.reward || 0) +
+    "\nPenalty = " + (memory.penalty || 0)
+);
     
     alert(
     "Master=" + brain.masterScore +
