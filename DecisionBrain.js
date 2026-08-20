@@ -291,3 +291,5 @@ function testRewardPenaltyUpdate() {
 
     delete patternMemory[testPattern];
 }
+
+testRewardPenaltyUpdate();
