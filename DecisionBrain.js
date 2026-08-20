@@ -264,6 +264,8 @@ function testRewardPenaltyUpdate() {
     
     let testPattern = "TEST_PATTERN";
 
+    alert("PATTERN SET = " + testPattern);
+    
     patternMemory[testPattern] = {
         reward: 0,
         penalty: 0,
