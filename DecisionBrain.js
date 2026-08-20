@@ -266,6 +266,8 @@ function testRewardPenaltyUpdate() {
 
     alert("PATTERN SET = " + testPattern);
 
+    alert("MEMORY TYPE = " + typeof patternMemory);
+    
     alert("BEFORE MEMORY CREATE");
     
     patternMemory[testPattern] = {
