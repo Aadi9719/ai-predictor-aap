@@ -257,3 +257,37 @@ alert(
 
     return "DEBUG OK";
 };
+
+function testRewardPenaltyUpdate() {
+
+    let testPattern = "TEST_PATTERN";
+
+    patternMemory[testPattern] = {
+        reward: 0,
+        penalty: 0,
+        learningAge: 0
+    };
+
+    let before = {
+        reward: patternMemory[testPattern].reward,
+        penalty: patternMemory[testPattern].penalty
+    };
+
+    updateRewardPenalty(testPattern, true);
+
+    let after = {
+        reward: patternMemory[testPattern].reward,
+        penalty: patternMemory[testPattern].penalty
+    };
+
+    alert(
+        "BEFORE\n" +
+        "Reward = " + before.reward +
+        "\nPenalty = " + before.penalty +
+        "\n\nAFTER\n" +
+        "Reward = " + after.reward +
+        "\nPenalty = " + after.penalty
+    );
+
+    delete patternMemory[testPattern];
+}
