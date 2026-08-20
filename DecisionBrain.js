@@ -260,6 +260,8 @@ alert(
 
 function testRewardPenaltyUpdate() {
 
+    alert("INSIDE REWARD TEST");
+    
     let testPattern = "TEST_PATTERN";
 
     patternMemory[testPattern] = {
