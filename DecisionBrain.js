@@ -201,3 +201,45 @@ function getDynamicRankScore(score){
 
     return Math.round(score);
 }
+
+function testPhase1Connection() {
+
+    console.log("=== PHASE 1 CONNECTION TEST ===");
+
+    let pattern = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ].join(",");
+
+    let memory = patternMemory[pattern];
+
+    let test = {
+        patternMemory: Boolean(memory),
+        selfLearning: typeof selfLearning === "function",
+        rewardPenalty: typeof updateRewardPenalty === "function",
+        confidenceEngine: typeof getConfidenceScore === "function",
+        dynamicRanking: typeof getDynamicRankScore === "function",
+        decisionBrain: typeof getDecisionBrain === "function"
+    };
+
+    console.table(test);
+
+    let passed =
+        test.patternMemory &&
+        test.selfLearning &&
+        test.rewardPenalty &&
+        test.confidenceEngine &&
+        test.dynamicRanking &&
+        test.decisionBrain;
+
+    console.log(
+        passed
+        ? "PHASE 1 CONNECTION = PASS"
+        : "PHASE 1 CONNECTION = CHECK REQUIRED"
+    );
+
+    return test;
+}
