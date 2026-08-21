@@ -1,5 +1,8 @@
 alert("Memory Loaded");
 
+let patternMemory =
+    JSON.parse(localStorage.getItem("patternMemory")) || {};
+
 function updateLearningMemory(actualResult){
     
     for (let len = 2; len <= 8; len++) {
