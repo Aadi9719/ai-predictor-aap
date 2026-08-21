@@ -3,9 +3,6 @@ alert("Script Loaded");
 let allResults =
 JSON.parse(localStorage.getItem("allResults")) || [];
 
-let patternMemory =
-JSON.parse(localStorage.getItem("patternMemory")) || {};
-
 let aiWins =
 Number(localStorage.getItem("aiWins")) || 0;
 
