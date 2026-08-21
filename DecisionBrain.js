@@ -202,9 +202,7 @@ function getDynamicRankScore(score){
     return Math.round(score);
 }
 
-function testPhase1Connection() {
-
-    console.log("=== PHASE 1 CONNECTION TEST ===");
+function testPhase1ConnectionPhone() {
 
     let pattern = [
         Number(document.getElementById("n1").value),
@@ -216,30 +214,36 @@ function testPhase1Connection() {
 
     let memory = patternMemory[pattern];
 
-    let test = {
-        patternMemory: Boolean(memory),
-        selfLearning: typeof selfLearning === "function",
-        rewardPenalty: typeof updateRewardPenalty === "function",
-        confidenceEngine: typeof getConfidenceScore === "function",
-        dynamicRanking: typeof getDynamicRankScore === "function",
-        decisionBrain: typeof getDecisionBrain === "function"
-    };
+    let result =
+        "PHASE 1 TEST\n\n" +
 
-    console.table(test);
+        "Pattern Memory: " +
+        (memory ? "✅ CONNECTED" : "⚠️ NOT FOUND") +
 
-    let passed =
-        test.patternMemory &&
-        test.selfLearning &&
-        test.rewardPenalty &&
-        test.confidenceEngine &&
-        test.dynamicRanking &&
-        test.decisionBrain;
+        "\n\nSelf Learning: " +
+        (typeof selfLearning === "function"
+            ? "✅ CONNECTED"
+            : "❌ ERROR") +
 
-    console.log(
-        passed
-        ? "PHASE 1 CONNECTION = PASS"
-        : "PHASE 1 CONNECTION = CHECK REQUIRED"
-    );
+        "\n\nReward/Penalty: " +
+        (typeof updateRewardPenalty === "function"
+            ? "✅ CONNECTED"
+            : "❌ ERROR") +
 
-    return test;
+        "\n\nConfidence Engine: " +
+        (typeof getConfidenceScore === "function"
+            ? "✅ CONNECTED"
+            : "❌ ERROR") +
+
+        "\n\nDynamic Ranking: " +
+        (typeof getDynamicRankScore === "function"
+            ? "✅ CONNECTED"
+            : "❌ ERROR") +
+
+        "\n\nDecision Brain: " +
+        (typeof getDecisionBrain === "function"
+            ? "✅ CONNECTED"
+            : "❌ ERROR");
+
+    alert(result);
 }
