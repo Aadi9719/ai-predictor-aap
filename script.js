@@ -59,8 +59,6 @@ try {
 
 }
     
-    alert("RESULT = " + debugResult);
-    
     alert("DEBUG CALL KE BAAD");
     
     alert("After Final Prediction");
