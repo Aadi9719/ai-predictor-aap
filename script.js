@@ -634,3 +634,14 @@ function updateLearningAge(){
 // =========================
 
 updateStats();
+
+function testMemoryStoragePhone() {
+
+    let keys = Object.keys(patternMemory);
+
+    alert(
+        "MEMORY COUNT = " + keys.length +
+        "\n\nFIRST PATTERN = " +
+        (keys.length > 0 ? keys[0] : "NONE")
+    );
+}
