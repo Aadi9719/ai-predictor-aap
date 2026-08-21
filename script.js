@@ -22,52 +22,13 @@ document.getElementById("analyzeBtn").onclick = function () {
     let n5 = Number(document.getElementById("n5").value);
 
     let numbers = [n1, n2, n3, n4, n5];
-
-    alert("Before getPatternPrediction");
     
     let memoryPrediction = getPatternPrediction();
-
-    alert("GET PATTERN PREDICTION DONE");
-    
-    alert("Memory Prediction = " + memoryPrediction);
-    
-    alert("Before Final Prediction");
-
-    alert("FINAL PREDICTION START");
-    
-let finalPrediction = getFinalPrediction();
-
-    alert("FINAL PREDICTION FINISHED");
-    
-   alert("DEBUG CALL SE PEHLE"); 
-
-    alert("TYPE = " + typeof showAIDebug);
-
-    alert(String(window.showAIDebug));
-
-    alert("BEFORE DEBUG CALL");
-
-try {
-    
-    window.showAIDebug();
-
-    alert("AFTER DEBUG CALL");
-
-} catch(error) {
-
-    alert("DEBUG ERROR = " + error.message);
-
-}
-    
-    alert("DEBUG CALL KE BAAD");
-    
-    alert("After Final Prediction");
- alert("Final Prediction = " + finalPrediction);
-    
-let trendScore = getTrendScore();
-let finalAIScore = getFinalAIScore();
-let hotCold = getHotColdNumbers();
-let trendPrediction = getTrendPrediction();
+    let finalPrediction = getFinalPrediction();
+    let trendScore = getTrendScore();
+    let finalAIScore = getFinalAIScore();
+    let hotCold = getHotColdNumbers();
+    let trendPrediction = getTrendPrediction();
     
     if(memoryPrediction !== null){
 
@@ -512,13 +473,6 @@ function getPredictionConfidence(){
             }
 
         }
-
-        alert(
-"Pattern = " + pattern +
-"\nTotal = " + total +
-"\nBest = " + best +
-"\nNumbers = " + JSON.stringify(memoryNumbers)
-);
         
         return Math.round((best / total) * 100);
 
