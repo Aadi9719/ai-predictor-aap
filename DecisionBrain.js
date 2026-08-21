@@ -301,9 +301,3 @@ function testRewardPenaltyUpdate() {
 
     delete patternMemory[testPattern];
 }
-
-alert("REWARD TEST START");
-
-testRewardPenaltyUpdate();
-
-alert("REWARD TEST END");
