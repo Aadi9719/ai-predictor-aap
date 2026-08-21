@@ -276,6 +276,8 @@ function testRewardPenaltyUpdate() {
         learningAge: 0
     };
 
+    alert("MEMORY CREATED");
+    
     let before = {
         reward: patternMemory[testPattern].reward,
         penalty: patternMemory[testPattern].penalty
