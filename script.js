@@ -719,3 +719,85 @@ function showMLDatasetStatus() {
         )
     );
 }
+
+// ========================================
+// REAL AI — PHASE 3B
+// TRAIN / VALIDATION SPLIT
+// ========================================
+
+function buildMLTrainValidationSet() {
+
+    let dataset = buildMLDataset();
+
+    if (!dataset.inputs || dataset.inputs.length < 20) {
+        return {
+            ready: false,
+            message: "Not enough samples"
+        };
+    }
+
+    let total = dataset.inputs.length;
+
+    // Last 20% = validation
+    let validationSize = Math.max(
+        1,
+        Math.floor(total * 0.20)
+    );
+
+    let trainSize = total - validationSize;
+
+    return {
+
+        ready: true,
+
+        trainInputs:
+            dataset.inputs.slice(0, trainSize),
+
+        trainTargets:
+            dataset.targets.slice(0, trainSize),
+
+        validationInputs:
+            dataset.inputs.slice(trainSize),
+
+        validationTargets:
+            dataset.targets.slice(trainSize),
+
+        trainSamples: trainSize,
+
+        validationSamples: validationSize
+
+    };
+}
+
+
+// Phone/Acode test
+function showMLSplitStatus() {
+
+    let split = buildMLTrainValidationSet();
+
+    if (!split.ready) {
+
+        alert(
+            "REAL AI SPLIT\n\n" +
+            "❌ " + split.message
+        );
+
+        return;
+    }
+
+    alert(
+        "REAL AI — PHASE 3B\n\n" +
+
+        "Total Samples = " +
+        (split.trainSamples +
+         split.validationSamples) +
+
+        "\n\nTraining Samples = " +
+        split.trainSamples +
+
+        "\nValidation Samples = " +
+        split.validationSamples +
+
+        "\n\nTRAIN / VALIDATION READY ✅"
+    );
+}
