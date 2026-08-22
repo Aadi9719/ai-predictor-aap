@@ -645,3 +645,77 @@ function testMemoryStoragePhone() {
         (keys.length > 0 ? keys[0] : "NONE")
     );
 }
+
+// ========================================
+// REAL AI — PHASE 3A DATASET
+// ========================================
+
+function buildMLDataset() {
+
+    let history = Array.isArray(allResults)
+        ? allResults
+        : [];
+
+    if (history.length < 20) {
+        return {
+            samples: 0,
+            message: "Not enough historical data"
+        };
+    }
+
+    let X = [];
+    let Y = [];
+
+    // allResults newest -> oldest hai.
+    // Training ke liye chronological order use karenge.
+    let data = [...history].reverse();
+
+    for (let i = 5; i < data.length; i++) {
+
+        let input = [
+            data[i - 5],
+            data[i - 4],
+            data[i - 3],
+            data[i - 2],
+            data[i - 1]
+        ];
+
+        let target = data[i];
+
+        // Sirf valid results
+        if (
+            input.some(n => !Number.isFinite(n)) ||
+            !Number.isFinite(target)
+        ) {
+            continue;
+        }
+
+        X.push(input);
+        Y.push(target);
+    }
+
+    return {
+        samples: X.length,
+        inputs: X,
+        targets: Y
+    };
+}
+
+
+// Phone/Acode test
+function showMLDatasetStatus() {
+
+    let dataset = buildMLDataset();
+
+    alert(
+        "REAL AI DATASET\n\n" +
+        "Total History = " + allResults.length +
+        "\nTraining Samples = " + dataset.samples +
+        "\n\n" +
+        (
+            dataset.samples > 0
+            ? "DATASET READY ✅"
+            : "NOT ENOUGH DATA ⚠️"
+        )
+    );
+}
