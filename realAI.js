@@ -250,3 +250,105 @@ async function trainRealAIModel() {
     }
 }
 
+// ========================================
+// REAL AI — PHASE 3E
+// PREDICTION DISTRIBUTION TEST
+// ========================================
+
+async function testRealAIDistribution() {
+
+    if (!realAIModel) {
+        alert("REAL AI MODEL NOT TRAINED ❌");
+        return;
+    }
+
+    let split = buildMLTrainValidationSet();
+
+    if (!split.ready) {
+        alert("VALIDATION DATA NOT READY ❌");
+        return;
+    }
+
+    const validationX = tf.tensor2d(
+        split.validationInputs,
+        [split.validationInputs.length, 5]
+    );
+
+    try {
+
+        const predictions =
+            realAIModel.predict(validationX);
+
+        const predictionArray =
+            await predictions.array();
+
+        let counts = [
+            0,0,0,0,0,0,0,0,0,0
+        ];
+
+        let correct = 0;
+
+        for(let i = 0; i < predictionArray.length; i++) {
+
+            let row = predictionArray[i];
+
+            let predicted =
+                row.indexOf(Math.max(...row));
+
+            counts[predicted]++;
+
+            if(
+                predicted ===
+                Number(split.validationTargets[i])
+            ) {
+                correct++;
+            }
+        }
+
+        let accuracy =
+            (correct /
+            predictionArray.length) * 100;
+
+        alert(
+            "REAL AI DIAGNOSIS\n\n" +
+
+            "Validation Samples = " +
+            predictionArray.length +
+
+            "\nCorrect = " +
+            correct +
+
+            "\nAccuracy = " +
+            accuracy.toFixed(2) +
+            "%\n\n" +
+
+            "0 = " + counts[0] +
+            "\n1 = " + counts[1] +
+            "\n2 = " + counts[2] +
+            "\n3 = " + counts[3] +
+            "\n4 = " + counts[4] +
+            "\n5 = " + counts[5] +
+            "\n6 = " + counts[6] +
+            "\n7 = " + counts[7] +
+            "\n8 = " + counts[8] +
+            "\n9 = " + counts[9]
+        );
+
+        console.log(
+            "REAL AI Prediction Distribution:",
+            counts
+        );
+
+    } catch(error) {
+
+        alert(
+            "DIAGNOSIS ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        validationX.dispose();
+
+    }
+}
