@@ -105,9 +105,9 @@ async function trainRealAIModel() {
     );
 
     const trainY = tf.tensor1d(
-        split.trainTargets,
-        "int32"
-    );
+    split.trainTargets,
+    "float32"
+);
 
     const validationX = tf.tensor2d(
         split.validationInputs,
@@ -115,9 +115,9 @@ async function trainRealAIModel() {
     );
 
     const validationY = tf.tensor1d(
-        split.validationTargets,
-        "int32"
-    );
+    split.validationTargets,
+    "float32"
+);
 
     alert(
         "REAL AI TRAINING START\n\n" +
