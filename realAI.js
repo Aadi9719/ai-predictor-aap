@@ -1150,3 +1150,233 @@ window.testPhase3LNormalization = function() {
     alert(report);
 };
 
+// ========================================
+// REAL AI — PHASE 3M
+// NORMALIZED MODEL TRAINING
+// ========================================
+
+let phase3MModel = null;
+let phase3MTrainingRunning = false;
+
+async function createPhase3MModel() {
+
+    const model = tf.sequential();
+
+    model.add(tf.layers.dense({
+        inputShape: [5],
+        units: 32,
+        activation: "relu"
+    }));
+
+    model.add(tf.layers.dense({
+        units: 16,
+        activation: "relu"
+    }));
+
+    model.add(tf.layers.dense({
+        units: 10,
+        activation: "softmax"
+    }));
+
+    model.compile({
+        optimizer: tf.train.adam(0.001),
+        loss: "sparseCategoricalCrossentropy",
+        metrics: ["accuracy"]
+    });
+
+    return model;
+}
+
+
+window.trainPhase3M = async function () {
+
+    if (phase3MTrainingRunning) {
+
+        alert(
+            "PHASE 3M ⚠️\n\n" +
+            "Training already running."
+        );
+
+        return;
+    }
+
+    const split =
+        buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+
+        alert(
+            "PHASE 3M ❌\n\n" +
+            "Dataset not ready."
+        );
+
+        return;
+    }
+
+    phase3MTrainingRunning = true;
+
+    let model = null;
+    let trainX = null;
+    let trainY = null;
+    let valX = null;
+    let valY = null;
+
+    try {
+
+        const normalizedTrain =
+            normalizeRealAIInputs(
+                split.trainInputs
+            );
+
+        const normalizedValidation =
+            normalizeRealAIInputs(
+                split.validationInputs
+            );
+
+        trainX = tf.tensor2d(
+            normalizedTrain,
+            [normalizedTrain.length, 5],
+            "float32"
+        );
+
+        trainY = tf.tensor1d(
+            split.trainTargets.map(Number),
+            "int32"
+        );
+
+        valX = tf.tensor2d(
+            normalizedValidation,
+            [normalizedValidation.length, 5],
+            "float32"
+        );
+
+        valY = tf.tensor1d(
+            split.validationTargets.map(Number),
+            "int32"
+        );
+
+        model =
+            await createPhase3MModel();
+
+        console.log(
+            "REAL AI PHASE 3M MODEL CREATED"
+        );
+
+        alert(
+            "REAL AI PHASE 3M\n\n" +
+            "Normalized Model Ready\n\n" +
+            "Training Samples = " +
+            split.trainInputs.length +
+            "\nValidation Samples = " +
+            split.validationInputs.length
+        );
+
+        const history =
+            await model.fit(
+                trainX,
+                trainY,
+                {
+                    epochs: 40,
+                    batchSize: 32,
+                    shuffle: false,
+                    validationData: [
+                        valX,
+                        valY
+                    ],
+                    callbacks: {
+
+                        onEpochEnd: async function (
+                            epoch,
+                            logs
+                        ) {
+
+                            if (
+                                epoch === 0 ||
+                                (epoch + 1) % 10 === 0
+                            ) {
+
+                                console.log(
+                                    "Phase 3M Epoch",
+                                    epoch + 1,
+                                    logs
+                                );
+                            }
+
+                            await tf.nextFrame();
+                        }
+
+                    }
+                }
+            );
+
+        const finalTrainAccuracy =
+            history.history.acc
+                ? history.history.acc[
+                    history.history.acc.length - 1
+                  ]
+                : history.history.accuracy[
+                    history.history.accuracy.length - 1
+                  ];
+
+        const finalValAccuracy =
+            history.history.val_acc
+                ? history.history.val_acc[
+                    history.history.val_acc.length - 1
+                  ]
+                : history.history.val_accuracy[
+                    history.history.val_accuracy.length - 1
+                  ];
+
+        const finalValLoss =
+            history.history.val_loss[
+                history.history.val_loss.length - 1
+            ];
+
+        phase3MModel = model;
+
+        model = null;
+
+        alert(
+            "REAL AI — PHASE 3M COMPLETE\n\n" +
+
+            "Training Accuracy = " +
+            (Number(finalTrainAccuracy) * 100)
+                .toFixed(2) +
+            "%\n\n" +
+
+            "Validation Accuracy = " +
+            (Number(finalValAccuracy) * 100)
+                .toFixed(2) +
+            "%\n\n" +
+
+            "Validation Loss = " +
+            Number(finalValLoss)
+                .toFixed(4)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "PHASE 3M ERROR:",
+            error
+        );
+
+        alert(
+            "PHASE 3M ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (model) {
+            model.dispose();
+        }
+
+        if (trainX) trainX.dispose();
+        if (trainY) trainY.dispose();
+        if (valX) valX.dispose();
+        if (valY) valY.dispose();
+
+        phase3MTrainingRunning = false;
+    }
+};
