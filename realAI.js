@@ -941,3 +941,95 @@ window.runPhase3J = async function () {
         }
     }
 };
+
+// ========================================
+// REAL AI — PHASE 3K
+// INPUT / TARGET ALIGNMENT DIAGNOSTIC
+// ========================================
+
+window.runPhase3K = function () {
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert("PHASE 3K ❌ DATASET NOT READY");
+        return;
+    }
+
+    let report =
+        "PHASE 3K — INPUT FEATURE DIAGNOSTIC\n\n" +
+        "Training Samples = " +
+        split.trainInputs.length +
+        "\nValidation Samples = " +
+        split.validationInputs.length +
+        "\n\n";
+
+    report += "FIRST 10 TRAINING SAMPLES\n\n";
+
+    const trainLimit = Math.min(
+        10,
+        split.trainInputs.length
+    );
+
+    for (let i = 0; i < trainLimit; i++) {
+
+        const input = split.trainInputs[i];
+        const target = split.trainTargets[i];
+
+        report +=
+            (i + 1) +
+            ". Input = [" +
+            input.join(",") +
+            "]" +
+            " → Target = " +
+            target +
+            "\n";
+    }
+
+    report += "\nFIRST 10 VALIDATION SAMPLES\n\n";
+
+    const validationLimit = Math.min(
+        10,
+        split.validationInputs.length
+    );
+
+    for (let i = 0; i < validationLimit; i++) {
+
+        const input =
+            split.validationInputs[i];
+
+        const target =
+            split.validationTargets[i];
+
+        report +=
+            (i + 1) +
+            ". Input = [" +
+            input.join(",") +
+            "]" +
+            " → Target = " +
+            target +
+            "\n";
+    }
+
+    console.log(
+        "=== PHASE 3K TRAIN INPUTS ===",
+        split.trainInputs.slice(0, 10)
+    );
+
+    console.log(
+        "=== PHASE 3K TRAIN TARGETS ===",
+        split.trainTargets.slice(0, 10)
+    );
+
+    console.log(
+        "=== PHASE 3K VALIDATION INPUTS ===",
+        split.validationInputs.slice(0, 10)
+    );
+
+    console.log(
+        "=== PHASE 3K VALIDATION TARGETS ===",
+        split.validationTargets.slice(0, 10)
+    );
+
+    alert(report);
+};
