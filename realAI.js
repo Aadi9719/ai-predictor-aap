@@ -1241,7 +1241,7 @@ window.trainPhase3M = async function () {
 
         trainY = tf.tensor1d(
             split.trainTargets.map(Number),
-            "int32"
+            "float32"
         );
 
         valX = tf.tensor2d(
@@ -1252,7 +1252,7 @@ window.trainPhase3M = async function () {
 
         valY = tf.tensor1d(
             split.validationTargets.map(Number),
-            "int32"
+            "float32"
         );
 
         model =
