@@ -786,3 +786,158 @@ async function diagnoseConfusionMatrix() {
     }
 }
 
+// ========================================
+// REAL AI — PHASE 3J
+// FIXED VALIDATION + CLASS DIAGNOSTIC
+// ========================================
+
+let phase3JValidationSet = null;
+
+function createFixedPhase3JSet() {
+
+    if (phase3JValidationSet) {
+        return phase3JValidationSet;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert("PHASE 3J ❌ DATASET NOT READY");
+        return null;
+    }
+
+    phase3JValidationSet = {
+        inputs: split.validationInputs.map(row => [...row]),
+        targets: [...split.validationTargets]
+    };
+
+    return phase3JValidationSet;
+}
+
+
+window.runPhase3J = async function () {
+
+    if (!realAIModel) {
+        alert("PHASE 3J ❌ MODEL NOT READY");
+        return;
+    }
+
+    const fixed = createFixedPhase3JSet();
+
+    if (!fixed) return;
+
+    let xTensor = null;
+    let predictionTensor = null;
+
+    try {
+
+        xTensor = tf.tensor2d(
+            fixed.inputs,
+            [fixed.inputs.length, 5],
+            "float32"
+        );
+
+        predictionTensor =
+            realAIModel.predict(xTensor);
+
+        const predictions =
+            await predictionTensor.array();
+
+        const classCount = 10;
+
+        const actualCount =
+            Array(classCount).fill(0);
+
+        const predictedCount =
+            Array(classCount).fill(0);
+
+        const correctCount =
+            Array(classCount).fill(0);
+
+        for (let i = 0; i < fixed.targets.length; i++) {
+
+            const actual =
+                Number(fixed.targets[i]);
+
+            const predicted =
+                predictions[i].indexOf(
+                    Math.max(...predictions[i])
+                );
+
+            if (
+                actual >= 0 &&
+                actual < classCount
+            ) {
+                actualCount[actual]++;
+            }
+
+            if (
+                predicted >= 0 &&
+                predicted < classCount
+            ) {
+                predictedCount[predicted]++;
+            }
+
+            if (actual === predicted) {
+                correctCount[actual]++;
+            }
+        }
+
+        let report =
+            "PHASE 3J — FIXED DATASET DIAGNOSTIC\n\n";
+
+        report +=
+            "Validation Samples = " +
+            fixed.targets.length +
+            "\n\n";
+
+        report += "CLASS | ACTUAL | PREDICTED | CORRECT | ACCURACY\n";
+
+        for (let c = 0; c < classCount; c++) {
+
+            const accuracy =
+                actualCount[c] > 0
+                    ? ((correctCount[c] / actualCount[c]) * 100)
+                        .toFixed(2)
+                    : "0.00";
+
+            report +=
+                c +
+                " | " +
+                actualCount[c] +
+                " | " +
+                predictedCount[c] +
+                " | " +
+                correctCount[c] +
+                " | " +
+                accuracy +
+                "%\n";
+        }
+
+        console.log("=== PHASE 3J ===");
+        console.log("Actual Count:", actualCount);
+        console.log("Predicted Count:", predictedCount);
+        console.log("Correct Count:", correctCount);
+
+        alert(report);
+
+    } catch (error) {
+
+        console.error("PHASE 3J ERROR:", error);
+
+        alert(
+            "PHASE 3J ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+    }
+};
