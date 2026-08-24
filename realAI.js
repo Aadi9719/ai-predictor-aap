@@ -1033,3 +1033,120 @@ window.runPhase3K = function () {
 
     alert(report);
 };
+
+// ========================================
+// REAL AI — PHASE 3L
+// INPUT NORMALIZATION
+// ========================================
+
+function normalizeRealAIInput(row) {
+
+    if (!Array.isArray(row)) {
+        return [];
+    }
+
+    return row.map(function(value) {
+
+        let n = Number(value);
+
+        if (!Number.isFinite(n)) {
+            n = 0;
+        }
+
+        n = Math.max(0, Math.min(9, n));
+
+        return n / 9;
+
+    });
+}
+
+
+function normalizeRealAIInputs(rows) {
+
+    if (!Array.isArray(rows)) {
+        return [];
+    }
+
+    return rows.map(function(row) {
+        return normalizeRealAIInput(row);
+    });
+}
+
+
+window.testPhase3LNormalization = function() {
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+
+        alert(
+            "PHASE 3L ❌\n" +
+            "DATASET NOT READY"
+        );
+
+        return;
+    }
+
+    const trainNormalized =
+        normalizeRealAIInputs(
+            split.trainInputs
+        );
+
+    const validationNormalized =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let report =
+        "PHASE 3L — NORMALIZATION TEST\n\n" +
+
+        "Training Samples = " +
+        trainNormalized.length +
+
+        "\nValidation Samples = " +
+        validationNormalized.length +
+
+        "\n\nFIRST 5 TRAINING INPUTS:\n";
+
+    for (
+        let i = 0;
+        i < Math.min(5, trainNormalized.length);
+        i++
+    ) {
+
+        report +=
+            JSON.stringify(
+                trainNormalized[i]
+            ) +
+            "\n";
+    }
+
+    report +=
+        "\nFIRST 5 VALIDATION INPUTS:\n";
+
+    for (
+        let i = 0;
+        i < Math.min(5, validationNormalized.length);
+        i++
+    ) {
+
+        report +=
+            JSON.stringify(
+                validationNormalized[i]
+            ) +
+            "\n";
+    }
+
+    console.log(
+        "PHASE 3L TRAIN NORMALIZED:",
+        trainNormalized.slice(0, 5)
+    );
+
+    console.log(
+        "PHASE 3L VALIDATION NORMALIZED:",
+        validationNormalized.slice(0, 5)
+    );
+
+    alert(report);
+};
+
