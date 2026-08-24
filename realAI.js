@@ -544,3 +544,124 @@ function diagnoseValidationDataset() {
         invalid: invalid
     };
 }
+
+// ========================================
+// REAL AI — PHASE 3H
+// ACTUAL vs PREDICTED
+// ========================================
+
+async function diagnoseActualVsPredicted() {
+
+    if (!realAIModel) {
+        alert("REAL AI MODEL NOT READY ❌");
+        return;
+    }
+
+    let split = buildMLTrainValidationSet();
+
+    if (!split.ready) {
+        alert("VALIDATION DATA NOT READY ❌");
+        return;
+    }
+
+    let validationX = tf.tensor2d(
+        split.validationInputs,
+        [split.validationInputs.length, 5]
+    );
+
+    try {
+
+        let predictionTensor =
+            realAIModel.predict(validationX);
+
+        let predictions =
+            await predictionTensor.array();
+
+        let output = "";
+        let correct = 0;
+
+        let limit = Math.min(
+            20,
+            predictions.length
+        );
+
+        for (let i = 0; i < limit; i++) {
+
+            let row = predictions[i];
+
+            let predicted =
+                row.indexOf(Math.max(...row));
+
+            let actual =
+                Number(split.validationTargets[i]);
+
+            let status =
+                predicted === actual
+                ? "✅ CORRECT"
+                : "❌ WRONG";
+
+            if (predicted === actual) {
+                correct++;
+            }
+
+            output +=
+                (i + 1) +
+                ". Actual = " +
+                actual +
+                " | Predicted = " +
+                predicted +
+                " | " +
+                status +
+                "\n";
+        }
+
+        alert(
+            "PHASE 3H\n\n" +
+            "First " + limit +
+            " Validation Samples\n\n" +
+            output +
+            "\nCorrect = " +
+            correct +
+            "/" +
+            limit
+        );
+
+        console.log(
+            "=== ACTUAL VS PREDICTED ==="
+        );
+
+        console.table(
+            predictions.map(
+                (row, index) => ({
+                    actual:
+                        Number(
+                            split.validationTargets[index]
+                        ),
+
+                    predicted:
+                        row.indexOf(
+                            Math.max(...row)
+                        )
+                })
+            ).slice(0, 20)
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "PHASE 3H ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        validationX.dispose();
+
+        if (typeof predictionTensor !== "undefined") {
+            predictionTensor.dispose();
+        }
+
+    }
+}
