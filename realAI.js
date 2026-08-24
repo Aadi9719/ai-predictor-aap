@@ -665,3 +665,124 @@ async function diagnoseActualVsPredicted() {
 
     }
 }
+
+// ========================================
+// REAL AI — PHASE 3I
+// CONFUSION MATRIX DIAGNOSTIC
+// ========================================
+
+async function diagnoseConfusionMatrix() {
+
+    if (!realAIModel) {
+        alert("REAL AI MODEL NOT READY ❌");
+        return;
+    }
+
+    let split = buildMLTrainValidationSet();
+
+    if (!split.ready) {
+        alert("VALIDATION DATA NOT READY ❌");
+        return;
+    }
+
+    let validationX = tf.tensor2d(
+        split.validationInputs,
+        [split.validationInputs.length, 5]
+    );
+
+    let predictionTensor = null;
+
+    try {
+
+        predictionTensor =
+            realAIModel.predict(validationX);
+
+        let predictions =
+            await predictionTensor.array();
+
+        // rows = Actual
+        // columns = Predicted
+
+        let matrix = Array.from(
+            { length: 10 },
+            () => Array(10).fill(0)
+        );
+
+        for (let i = 0; i < predictions.length; i++) {
+
+            let actual =
+                Number(split.validationTargets[i]);
+
+            let predicted =
+                predictions[i].indexOf(
+                    Math.max(...predictions[i])
+                );
+
+            if (
+                Number.isInteger(actual) &&
+                actual >= 0 &&
+                actual <= 9 &&
+                predicted >= 0 &&
+                predicted <= 9
+            ) {
+                matrix[actual][predicted]++;
+            }
+        }
+
+        let output =
+            "Actual → Predicted\n\n";
+
+        for (let actual = 0; actual <= 9; actual++) {
+
+            output +=
+                "Actual " + actual + " → ";
+
+            let rowTotal = 0;
+
+            for (let predicted = 0; predicted <= 9; predicted++) {
+
+                if (matrix[actual][predicted] > 0) {
+
+                    output +=
+                        predicted +
+                        "(" +
+                        matrix[actual][predicted] +
+                        ") ";
+
+                }
+
+                rowTotal += matrix[actual][predicted];
+            }
+
+            output +=
+                "| Total = " +
+                rowTotal +
+                "\n";
+        }
+
+        alert(
+            "PHASE 3I — CONFUSION MATRIX\n\n" +
+            output
+        );
+
+        console.table(matrix);
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "PHASE 3I ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        validationX.dispose();
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+    }
+}
+
