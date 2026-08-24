@@ -352,3 +352,85 @@ async function testRealAIDistribution() {
 
     }
 }
+
+// ========================================
+// REAL AI — PHASE 3F
+// ACTUAL TARGET DISTRIBUTION
+// ========================================
+
+function getTargetDistribution() {
+
+    let split = buildMLTrainValidationSet();
+
+    if (!split.ready) {
+        alert("DATA NOT READY ❌");
+        return;
+    }
+
+    let trainCounts = [0,0,0,0,0,0,0,0,0,0];
+    let validationCounts = [0,0,0,0,0,0,0,0,0,0];
+
+    split.trainTargets.forEach(function(value) {
+
+        value = Number(value);
+
+        if (value >= 0 && value <= 9) {
+            trainCounts[value]++;
+        }
+
+    });
+
+    split.validationTargets.forEach(function(value) {
+
+        value = Number(value);
+
+        if (value >= 0 && value <= 9) {
+            validationCounts[value]++;
+        }
+
+    });
+
+    let trainText = "";
+    let validationText = "";
+
+    for (let i = 0; i <= 9; i++) {
+
+        trainText +=
+            i + " = " + trainCounts[i] + "\n";
+
+        validationText +=
+            i + " = " + validationCounts[i] + "\n";
+
+    }
+
+    alert(
+        "REAL AI — TARGET DISTRIBUTION\n\n" +
+
+        "TRAINING (" +
+        split.trainSamples +
+        ")\n\n" +
+
+        trainText +
+
+        "\nVALIDATION (" +
+        split.validationSamples +
+        ")\n\n" +
+
+        validationText
+    );
+
+    console.log(
+        "TRAIN TARGET DISTRIBUTION:",
+        trainCounts
+    );
+
+    console.log(
+        "VALIDATION TARGET DISTRIBUTION:",
+        validationCounts
+    );
+
+    return {
+        train: trainCounts,
+        validation: validationCounts
+    };
+}
