@@ -434,3 +434,113 @@ function getTargetDistribution() {
         validation: validationCounts
     };
 }
+
+// ========================================
+// REAL AI — PHASE 3G
+// VALIDATION DATA DIAGNOSTIC
+// ========================================
+
+function diagnoseValidationDataset() {
+
+    let split = buildMLTrainValidationSet();
+
+    if (!split.ready) {
+        alert("DATA NOT READY ❌");
+        return;
+    }
+
+    let counts = [0,0,0,0,0,0,0,0,0,0];
+    let invalid = [];
+
+    split.validationTargets.forEach(function(value, index) {
+
+        let n = Number(value);
+
+        if (
+            Number.isInteger(n) &&
+            n >= 0 &&
+            n <= 9
+        ) {
+
+            counts[n]++;
+
+        } else {
+
+            invalid.push({
+                index: index,
+                value: value
+            });
+
+        }
+
+    });
+
+    let totalValid = counts.reduce(
+        (sum, value) => sum + value,
+        0
+    );
+
+    let text = "";
+
+    for (let i = 0; i <= 9; i++) {
+
+        text +=
+            i + " = " + counts[i] + "\n";
+
+    }
+
+    text +=
+        "\nValidation Samples = " +
+        split.validationTargets.length;
+
+    text +=
+        "\nValid Targets = " +
+        totalValid;
+
+    text +=
+        "\nInvalid Targets = " +
+        invalid.length;
+
+    if (invalid.length > 0) {
+
+        text += "\n\nINVALID VALUES:\n";
+
+        invalid.slice(0, 20).forEach(function(item) {
+
+            text +=
+                "[" +
+                item.index +
+                "] = " +
+                String(item.value) +
+                "\n";
+
+        });
+
+    }
+
+    alert(
+        "PHASE 3G — VALIDATION DIAGNOSTIC\n\n" +
+        text
+    );
+
+    console.log(
+        "Validation Targets:",
+        split.validationTargets
+    );
+
+    console.log(
+        "Validation Counts:",
+        counts
+    );
+
+    console.log(
+        "Invalid Targets:",
+        invalid
+    );
+
+    return {
+        counts: counts,
+        valid: totalValid,
+        invalid: invalid
+    };
+}
