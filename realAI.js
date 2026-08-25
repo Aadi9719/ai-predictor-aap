@@ -1602,20 +1602,29 @@ window.resetPhase3OFixedSplit = function () {
 };
 
 // ========================================
-// REAL AI — PHASE 3P
-// BASELINE COMPARISON
+// REAL AI — PHASE 3P FIXED
+// LOCKED VALIDATION BASELINE
 // ========================================
 
 window.runPhase3P = async function () {
 
-    const fixed = createPhase3OFixedSplit();
+    const fixed = phase3OFixedSplit;
 
     if (!fixed) {
+        alert(
+            "PHASE 3P ❌\n\n" +
+            "Phase 3O locked dataset not found.\n\n" +
+            "First create the Phase 3O lock."
+        );
         return;
     }
 
     if (!phase3MModel) {
-        alert("PHASE 3P ❌ NORMALIZED MODEL NOT READY");
+        alert(
+            "PHASE 3P ❌\n\n" +
+            "Normalized Model not ready.\n\n" +
+            "Train Phase 3M first."
+        );
         return;
     }
 
@@ -1624,11 +1633,35 @@ window.runPhase3P = async function () {
 
     try {
 
-        // -------------------------------
-        // 1. MOST-FREQUENT BASELINE
-        // -------------------------------
+        // ====================================
+        // LOCKED VALIDATION ONLY
+        // ====================================
 
-        const frequency = Array(10).fill(0);
+        const validationInputs =
+            normalizeRealAIInputs(
+                fixed.validationInputs
+            );
+
+        const validationTargets =
+            fixed.validationTargets;
+
+        const validationCount =
+            validationTargets.length;
+
+
+        // ====================================
+        // 1. RANDOM BASELINE
+        // ====================================
+
+        const randomBaseline = 10;
+
+
+        // ====================================
+        // 2. MOST FREQUENT BASELINE
+        // ====================================
+
+        const frequency =
+            Array(10).fill(0);
 
         fixed.trainTargets.forEach(function (value) {
 
@@ -1644,7 +1677,10 @@ window.runPhase3P = async function () {
 
         for (let i = 1; i <= 9; i++) {
 
-            if (frequency[i] > frequency[mostFrequent]) {
+            if (
+                frequency[i] >
+                frequency[mostFrequent]
+            ) {
                 mostFrequent = i;
             }
 
@@ -1652,9 +1688,12 @@ window.runPhase3P = async function () {
 
         let frequencyCorrect = 0;
 
-        fixed.validationTargets.forEach(function (actual) {
+        validationTargets.forEach(function (actual) {
 
-            if (Number(actual) === mostFrequent) {
+            if (
+                Number(actual) ===
+                mostFrequent
+            ) {
                 frequencyCorrect++;
             }
 
@@ -1663,32 +1702,18 @@ window.runPhase3P = async function () {
         const frequencyAccuracy =
             (
                 frequencyCorrect /
-                fixed.validationTargets.length
+                validationCount
             ) * 100;
 
 
-        // -------------------------------
-        // 2. RANDOM BASELINE
-        // -------------------------------
-
-        // Expected theoretical accuracy
-        // for 10 equally likely classes.
-        const randomBaseline = 10;
-
-
-        // -------------------------------
+        // ====================================
         // 3. NORMALIZED NEURAL NETWORK
-        // -------------------------------
-
-        const normalizedValidation =
-            normalizeRealAIInputs(
-                fixed.validationInputs
-            );
+        // ====================================
 
         modelX = tf.tensor2d(
-            normalizedValidation,
+            validationInputs,
             [
-                normalizedValidation.length,
+                validationInputs.length,
                 5
             ],
             "float32"
@@ -1715,32 +1740,33 @@ window.runPhase3P = async function () {
 
             const actual =
                 Number(
-                    fixed.validationTargets[i]
+                    validationTargets[i]
                 );
 
-            if (predicted === actual) {
+            if (
+                predicted === actual
+            ) {
                 neuralCorrect++;
             }
-
         }
 
         const neuralAccuracy =
             (
                 neuralCorrect /
-                fixed.validationTargets.length
+                validationCount
             ) * 100;
 
 
-        // -------------------------------
+        // ====================================
         // REPORT
-        // -------------------------------
+        // ====================================
 
         let report =
-            "PHASE 3P — BASELINE COMPARISON\n\n";
+            "PHASE 3P — FIXED BASELINE\n\n";
 
         report +=
-            "FIXED VALIDATION = " +
-            fixed.validationTargets.length +
+            "LOCKED VALIDATION = " +
+            validationCount +
             "\n\n";
 
         report +=
@@ -1763,10 +1789,12 @@ window.runPhase3P = async function () {
             neuralAccuracy.toFixed(2) +
             "%\n\n";
 
+
         if (
             neuralAccuracy >
             frequencyAccuracy &&
-            neuralAccuracy > randomBaseline
+            neuralAccuracy >
+            randomBaseline
         ) {
 
             report +=
@@ -1776,20 +1804,40 @@ window.runPhase3P = async function () {
 
             report +=
                 "RESULT = NO CLEAR ADVANTAGE ⚠️";
-
         }
 
-        alert(report);
 
         console.log(
-            "PHASE 3P RESULTS",
-            {
-                randomBaseline,
-                mostFrequent,
-                frequencyAccuracy,
-                neuralAccuracy
-            }
+            "=== PHASE 3P FIXED ==="
         );
+
+        console.log(
+            "Locked Validation:",
+            validationCount
+        );
+
+        console.log(
+            "Random:",
+            randomBaseline
+        );
+
+        console.log(
+            "Most Frequent:",
+            mostFrequent
+        );
+
+        console.log(
+            "Frequency Accuracy:",
+            frequencyAccuracy
+        );
+
+        console.log(
+            "Neural Accuracy:",
+            neuralAccuracy
+        );
+
+
+        alert(report);
 
     } catch (error) {
 
@@ -1812,7 +1860,6 @@ window.runPhase3P = async function () {
         if (predictionTensor) {
             predictionTensor.dispose();
         }
-
     }
 };
 
