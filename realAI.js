@@ -1523,3 +1523,81 @@ window.runPhase3N = async function () {
     }
 };
 
+// ========================================
+// REAL AI — PHASE 3O
+// FIXED TRAIN / VALIDATION SNAPSHOT
+// ========================================
+
+let phase3OFixedSplit = null;
+
+function createPhase3OFixedSplit() {
+
+    if (phase3OFixedSplit !== null) {
+        return phase3OFixedSplit;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert("PHASE 3O ❌ DATASET NOT READY");
+        return null;
+    }
+
+    phase3OFixedSplit = {
+
+        trainInputs:
+            split.trainInputs.map(row => [...row]),
+
+        trainTargets:
+            split.trainTargets.map(Number),
+
+        validationInputs:
+            split.validationInputs.map(row => [...row]),
+
+        validationTargets:
+            split.validationTargets.map(Number)
+
+    };
+
+    console.log(
+        "PHASE 3O FIXED SPLIT CREATED",
+        phase3OFixedSplit
+    );
+
+    return phase3OFixedSplit;
+}
+
+
+window.testPhase3OFixedSplit = function () {
+
+    const fixed = createPhase3OFixedSplit();
+
+    if (!fixed) {
+        return;
+    }
+
+    alert(
+        "PHASE 3O — FIXED SPLIT READY\n\n" +
+
+        "Training Samples = " +
+        fixed.trainInputs.length +
+
+        "\nValidation Samples = " +
+        fixed.validationInputs.length +
+
+        "\n\nThis validation set is now LOCKED."
+    );
+};
+
+
+window.resetPhase3OFixedSplit = function () {
+
+    phase3OFixedSplit = null;
+
+    alert(
+        "PHASE 3O\n\n" +
+        "Fixed split reset.\n" +
+        "A new snapshot will be created next time."
+    );
+};
+
