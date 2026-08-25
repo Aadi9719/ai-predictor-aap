@@ -1380,3 +1380,146 @@ window.trainPhase3M = async function () {
         phase3MTrainingRunning = false;
     }
 };
+
+// ========================================
+// REAL AI — PHASE 3N
+// NORMALIZED MODEL DIAGNOSTIC
+// ========================================
+
+window.runPhase3N = async function () {
+
+    if (!phase3MModel) {
+        alert("PHASE 3N ❌ NORMALIZED MODEL NOT READY");
+        return;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert("PHASE 3N ❌ DATASET NOT READY");
+        return;
+    }
+
+    const normalizedValidation =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let xTensor = null;
+    let predictionTensor = null;
+
+    try {
+
+        xTensor = tf.tensor2d(
+            normalizedValidation,
+            [normalizedValidation.length, 5],
+            "float32"
+        );
+
+        predictionTensor =
+            phase3MModel.predict(xTensor);
+
+        const predictions =
+            await predictionTensor.array();
+
+        const actualCount = Array(10).fill(0);
+        const predictedCount = Array(10).fill(0);
+        const correctCount = Array(10).fill(0);
+
+        for (let i = 0; i < predictions.length; i++) {
+
+            const actual =
+                Number(split.validationTargets[i]);
+
+            const predicted =
+                predictions[i].indexOf(
+                    Math.max(...predictions[i])
+                );
+
+            if (actual >= 0 && actual <= 9) {
+                actualCount[actual]++;
+            }
+
+            if (predicted >= 0 && predicted <= 9) {
+                predictedCount[predicted]++;
+            }
+
+            if (actual === predicted) {
+                correctCount[actual]++;
+            }
+        }
+
+        let report =
+            "PHASE 3N — NORMALIZED MODEL DIAGNOSTIC\n\n" +
+            "Validation Samples = " +
+            split.validationTargets.length +
+            "\n\n";
+
+        report +=
+            "CLASS | ACTUAL | PREDICTED | CORRECT | ACCURACY\n";
+
+        for (let c = 0; c <= 9; c++) {
+
+            const accuracy =
+                actualCount[c] > 0
+                    ? (
+                        correctCount[c] /
+                        actualCount[c] *
+                        100
+                    ).toFixed(2)
+                    : "0.00";
+
+            report +=
+                c +
+                " | " +
+                actualCount[c] +
+                " | " +
+                predictedCount[c] +
+                " | " +
+                correctCount[c] +
+                " | " +
+                accuracy +
+                "%\n";
+        }
+
+        alert(report);
+
+        console.log(
+            "PHASE 3N ACTUAL:",
+            actualCount
+        );
+
+        console.log(
+            "PHASE 3N PREDICTED:",
+            predictedCount
+        );
+
+        console.log(
+            "PHASE 3N CORRECT:",
+            correctCount
+        );
+
+    } catch (error) {
+
+        console.error(
+            "PHASE 3N ERROR:",
+            error
+        );
+
+        alert(
+            "PHASE 3N ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+    }
+};
+
