@@ -1601,3 +1601,218 @@ window.resetPhase3OFixedSplit = function () {
     );
 };
 
+// ========================================
+// REAL AI — PHASE 3P
+// BASELINE COMPARISON
+// ========================================
+
+window.runPhase3P = async function () {
+
+    const fixed = createPhase3OFixedSplit();
+
+    if (!fixed) {
+        return;
+    }
+
+    if (!phase3MModel) {
+        alert("PHASE 3P ❌ NORMALIZED MODEL NOT READY");
+        return;
+    }
+
+    let modelX = null;
+    let predictionTensor = null;
+
+    try {
+
+        // -------------------------------
+        // 1. MOST-FREQUENT BASELINE
+        // -------------------------------
+
+        const frequency = Array(10).fill(0);
+
+        fixed.trainTargets.forEach(function (value) {
+
+            const n = Number(value);
+
+            if (n >= 0 && n <= 9) {
+                frequency[n]++;
+            }
+
+        });
+
+        let mostFrequent = 0;
+
+        for (let i = 1; i <= 9; i++) {
+
+            if (frequency[i] > frequency[mostFrequent]) {
+                mostFrequent = i;
+            }
+
+        }
+
+        let frequencyCorrect = 0;
+
+        fixed.validationTargets.forEach(function (actual) {
+
+            if (Number(actual) === mostFrequent) {
+                frequencyCorrect++;
+            }
+
+        });
+
+        const frequencyAccuracy =
+            (
+                frequencyCorrect /
+                fixed.validationTargets.length
+            ) * 100;
+
+
+        // -------------------------------
+        // 2. RANDOM BASELINE
+        // -------------------------------
+
+        // Expected theoretical accuracy
+        // for 10 equally likely classes.
+        const randomBaseline = 10;
+
+
+        // -------------------------------
+        // 3. NORMALIZED NEURAL NETWORK
+        // -------------------------------
+
+        const normalizedValidation =
+            normalizeRealAIInputs(
+                fixed.validationInputs
+            );
+
+        modelX = tf.tensor2d(
+            normalizedValidation,
+            [
+                normalizedValidation.length,
+                5
+            ],
+            "float32"
+        );
+
+        predictionTensor =
+            phase3MModel.predict(modelX);
+
+        const predictions =
+            await predictionTensor.array();
+
+        let neuralCorrect = 0;
+
+        for (
+            let i = 0;
+            i < predictions.length;
+            i++
+        ) {
+
+            const predicted =
+                predictions[i].indexOf(
+                    Math.max(...predictions[i])
+                );
+
+            const actual =
+                Number(
+                    fixed.validationTargets[i]
+                );
+
+            if (predicted === actual) {
+                neuralCorrect++;
+            }
+
+        }
+
+        const neuralAccuracy =
+            (
+                neuralCorrect /
+                fixed.validationTargets.length
+            ) * 100;
+
+
+        // -------------------------------
+        // REPORT
+        // -------------------------------
+
+        let report =
+            "PHASE 3P — BASELINE COMPARISON\n\n";
+
+        report +=
+            "FIXED VALIDATION = " +
+            fixed.validationTargets.length +
+            "\n\n";
+
+        report +=
+            "Random Baseline = " +
+            randomBaseline.toFixed(2) +
+            "%\n";
+
+        report +=
+            "Most Frequent Number = " +
+            mostFrequent +
+            "\n";
+
+        report +=
+            "Frequency Baseline = " +
+            frequencyAccuracy.toFixed(2) +
+            "%\n";
+
+        report +=
+            "Neural Network = " +
+            neuralAccuracy.toFixed(2) +
+            "%\n\n";
+
+        if (
+            neuralAccuracy >
+            frequencyAccuracy &&
+            neuralAccuracy > randomBaseline
+        ) {
+
+            report +=
+                "RESULT = NEURAL NETWORK BETTER ✅";
+
+        } else {
+
+            report +=
+                "RESULT = NO CLEAR ADVANTAGE ⚠️";
+
+        }
+
+        alert(report);
+
+        console.log(
+            "PHASE 3P RESULTS",
+            {
+                randomBaseline,
+                mostFrequent,
+                frequencyAccuracy,
+                neuralAccuracy
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "PHASE 3P ERROR:",
+            error
+        );
+
+        alert(
+            "PHASE 3P ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (modelX) {
+            modelX.dispose();
+        }
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+
+    }
+};
+
