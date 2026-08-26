@@ -3,233 +3,345 @@ alert("Memory Loaded");
 let patternMemory =
     JSON.parse(localStorage.getItem("patternMemory")) || {};
 
-function updateLearningMemory(actualResult){
-    
-    for (let len = 2; len <= 8; len++) {
+// ========================================
+// SEQUENCE-ALIGNED PATTERN MEMORY
+// Pattern = inputs BEFORE the actual result
+// nextNumbers = result that followed that pattern
+// ========================================
 
-    let pattern = allResults.slice(0, len).join(",");
+function updateLearningMemory(actualResult) {
 
-    if (pattern.split(",").length < len) continue;
+    actualResult = Number(actualResult);
 
-    if (!patternMemory[pattern]) {
-
-        patternMemory[pattern] = {
-
-            total: 0,
-
-            GREEN: 0,
-            RED: 0,
-
-            BIG: 0,
-            SMALL: 0,
-
-            GREEN_BIG: 0,
-            GREEN_SMALL: 0,
-
-            RED_BIG: 0,
-            RED_SMALL: 0,
-
-            numbers: {},
-
-            nextNumbers: {},
-
-            win: 0,
-
-            loss: 0,
-
-            confidence: 0,
-
-            stability: 0,
-
-            colorStability:0,
-
-            bsStreak:0,
-            colorStreak:0,
-
-            lastBigSmall:"",
-            lastColor:"",
-            
-            repeatCount: 0,
-            
-            lastSeen: 0,
-
-                trust: 50,
-
-            patternWeight: 50,
-
-            rank: 0,
-
-            reward: 0,
-            
-            penalty: 0,
-
-            learningAge: 0,
-            
-lastPrediction: null,
-
-successStreak: 0,
-
-failStreak: 0,
-        
-    numberWeight:{},
-    bigSmallWeight:{},
-    colorWeight:{}
-        };
-
+    if (
+        !Number.isInteger(actualResult) ||
+        actualResult < 0 ||
+        actualResult > 9
+    ) {
+        return;
     }
 
-    let color =
-    [1,3,7,9].includes(actualResult)
-    ? "GREEN"
-    : "RED";
+    /*
+       IMPORTANT:
 
-    let bigSmall =
-    actualResult >= 5
-    ? "BIG"
-    : "SMALL";
+       allResults mein actual result already unshift()
+       ho chuka hai.
 
-    patternMemory[pattern].total++;
+       Isliye:
+       allResults[0] = CURRENT actual result
+       allResults[1] = previous result
+       allResults[2] = older result
+       ...
 
-       // patternMemory[pattern].repeatCount++;
+       Prediction se pehle jo 5 inputs the,
+       unko current actual result se associate karna hai.
+    */
 
-        patternMemory[pattern][bigSmall]++;
-        
-let total =
-patternMemory[pattern].BIG +
-patternMemory[pattern].SMALL;
+    const currentInput = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
 
-if(total > 0){
+    // Validate inputs
+    if (
+        currentInput.length !== 5 ||
+        currentInput.some(
+            n => !Number.isInteger(n) || n < 0 || n > 9
+        )
+    ) {
+        console.warn(
+            "Learning skipped: invalid input",
+            currentInput
+        );
+        return;
+    }
 
-    let best = Math.max(
-        patternMemory[pattern].BIG,
-        patternMemory[pattern].SMALL
-    );
+    // ------------------------------------
+    // Learn 2, 3, 4 and 5-number patterns
+    // ------------------------------------
 
-    patternMemory[pattern].stability =
-    Math.round((best / total) * 100);
+    for (let len = 2; len <= 5; len++) {
 
-}
-        
-    patternMemory[pattern].confidence =
-Math.min(
-    95,
-    Math.round(patternMemory[pattern].total * 2)
-);
-    
-    patternMemory[pattern][color]++;
+        const pattern =
+            currentInput
+                .slice(0, len)
+                .join(",");
 
-        let colorTotal =
-patternMemory[pattern].GREEN +
-patternMemory[pattern].RED;
+        if (!pattern) continue;
 
-if(colorTotal > 0){
+        // Create pattern
+        if (!patternMemory[pattern]) {
 
-    let bestColor = Math.max(
-        patternMemory[pattern].GREEN,
-        patternMemory[pattern].RED
-    );
+            patternMemory[pattern] = {
 
-    patternMemory[pattern].colorStability =
-    Math.round((bestColor / colorTotal) * 100);
+                total: 0,
 
-}
-        
-    patternMemory[pattern][color + "_" + bigSmall]++;
+                GREEN: 0,
+                RED: 0,
 
-if(!patternMemory[pattern].numbers[actualResult]){
+                BIG: 0,
+                SMALL: 0,
 
-    patternMemory[pattern].numbers[actualResult]=0;
+                GREEN_BIG: 0,
+                GREEN_SMALL: 0,
 
-}
+                RED_BIG: 0,
+                RED_SMALL: 0,
 
-        patternMemory[pattern].numbers[actualResult]++;
+                numbers: {},
+                nextNumbers: {},
 
-        // Number Weight Learning
+                win: 0,
+                loss: 0,
 
-if(!patternMemory[pattern].numberWeight){
-    patternMemory[pattern].numberWeight = {};
-}
+                confidence: 0,
+                stability: 0,
+                colorStability: 0,
 
-if(patternMemory[pattern].numberWeight[actualResult] === undefined){
-    patternMemory[pattern].numberWeight[actualResult] = 50;
-}
+                bsStreak: 0,
+                colorStreak: 0,
 
-patternMemory[pattern].numberWeight[actualResult] += 1;
-        
-// Next Number Pattern Counter
+                lastBigSmall: "",
+                lastColor: "",
 
-if(!patternMemory[pattern].nextNumbers){
-    patternMemory[pattern].nextNumbers = {};
-}
+                repeatCount: 0,
+                lastSeen: 0,
 
-if(patternMemory[pattern].nextNumbers[actualResult] === undefined){
-    patternMemory[pattern].nextNumbers[actualResult] = 0;
-}
+                trust: 50,
+                patternWeight: 50,
+                rank: 0,
 
-patternMemory[pattern].nextNumbers[actualResult]++;
+                reward: 0,
+                penalty: 0,
 
-    // BIG/SMALL Streak Learn
-if(patternMemory[pattern].lastBigSmall === bigSmall){
+                learningAge: 0,
+                lastPrediction: null,
 
-    patternMemory[pattern].bsStreak =
-        (patternMemory[pattern].bsStreak || 0) + 1;
+                successStreak: 0,
+                failStreak: 0,
 
-}else{
+                numberWeight: {},
+                bigSmallWeight: {},
+                colorWeight: {}
+            };
+        }
 
-    patternMemory[pattern].bsStreak = 1;
+        const memory =
+            patternMemory[pattern];
 
-}
+        // ------------------------------------
+        // Current actual result classification
+        // ------------------------------------
 
-patternMemory[pattern].lastBigSmall = bigSmall;
+        const color =
+            [1, 3, 7, 9].includes(actualResult)
+                ? "GREEN"
+                : "RED";
 
+        const bigSmall =
+            actualResult >= 5
+                ? "BIG"
+                : "SMALL";
 
-// COLOR Streak Learn
-if(patternMemory[pattern].lastColor === color){
+        // ------------------------------------
+        // Total observations
+        // ------------------------------------
 
-    patternMemory[pattern].colorStreak =
-        (patternMemory[pattern].colorStreak || 0) + 1;
+        memory.total++;
 
-}else{
+        // ------------------------------------
+        // Number frequency
+        // ------------------------------------
 
-    patternMemory[pattern].colorStreak = 1;
+        if (
+            memory.numbers[actualResult] === undefined
+        ) {
+            memory.numbers[actualResult] = 0;
+        }
 
-}
+        memory.numbers[actualResult]++;
 
-patternMemory[pattern].lastColor = color;
-    
-    patternMemory[pattern].lastSeen = Date.now();
+        // ------------------------------------
+        // NEXT NUMBER RELATIONSHIP
+        //
+        // This is now correctly:
+        //
+        // input pattern → actual result
+        //
+        // The actual result is NOT inserted into
+        // the pattern itself.
+        // ------------------------------------
 
-        patternMemory[pattern].learningAge = 0;
-        
-        // Pattern Rank Calculate
+        if (
+            memory.nextNumbers[actualResult] === undefined
+        ) {
+            memory.nextNumbers[actualResult] = 0;
+        }
 
-patternMemory[pattern].rank = Math.round(
+        memory.nextNumbers[actualResult]++;
 
-    (patternMemory[pattern].trust * 0.30) +
+        // ------------------------------------
+        // Number weight
+        // ------------------------------------
 
-    (patternMemory[pattern].patternWeight * 0.30) +
+        if (
+            memory.numberWeight[actualResult] === undefined
+        ) {
+            memory.numberWeight[actualResult] = 50;
+        }
 
-    (patternMemory[pattern].stability * 0.20) +
+        memory.numberWeight[actualResult] += 1;
 
-    (patternMemory[pattern].colorStability * 0.20)
+        // ------------------------------------
+        // Big / Small
+        // ------------------------------------
 
-);
-        
+        memory[bigSmall]++;
+
+        const bsTotal =
+            memory.BIG +
+            memory.SMALL;
+
+        if (bsTotal > 0) {
+
+            const bestBS =
+                Math.max(
+                    memory.BIG,
+                    memory.SMALL
+                );
+
+            memory.stability =
+                Math.round(
+                    (bestBS / bsTotal) * 100
+                );
+        }
+
+        // ------------------------------------
+        // Color
+        // ------------------------------------
+
+        memory[color]++;
+
+        const colorTotal =
+            memory.GREEN +
+            memory.RED;
+
+        if (colorTotal > 0) {
+
+            const bestColor =
+                Math.max(
+                    memory.GREEN,
+                    memory.RED
+                );
+
+            memory.colorStability =
+                Math.round(
+                    (bestColor / colorTotal) * 100
+                );
+        }
+
+        // ------------------------------------
+        // Combined color + Big/Small
+        // ------------------------------------
+
+        memory[
+            color + "_" + bigSmall
+        ]++;
+
+        // ------------------------------------
+        // Big/Small streak
+        // ------------------------------------
+
+        if (
+            memory.lastBigSmall ===
+            bigSmall
+        ) {
+
+            memory.bsStreak =
+                (memory.bsStreak || 0) + 1;
+
+        } else {
+
+            memory.bsStreak = 1;
+        }
+
+        memory.lastBigSmall =
+            bigSmall;
+
+        // ------------------------------------
+        // Color streak
+        // ------------------------------------
+
+        if (
+            memory.lastColor ===
+            color
+        ) {
+
+            memory.colorStreak =
+                (memory.colorStreak || 0) + 1;
+
+        } else {
+
+            memory.colorStreak = 1;
+        }
+
+        memory.lastColor =
+            color;
+
+        // ------------------------------------
+        // Confidence
+        // ------------------------------------
+
+        memory.confidence =
+            Math.min(
+                95,
+                Math.round(memory.total * 2)
+            );
+
+        // ------------------------------------
+        // Metadata
+        // ------------------------------------
+
+        memory.lastSeen =
+            Date.now();
+
+        memory.learningAge = 0;
+
+        // ------------------------------------
+        // Rank
+        // ------------------------------------
+
+        memory.rank =
+            Math.round(
+
+                (memory.trust * 0.30) +
+
+                (memory.patternWeight * 0.30) +
+
+                (memory.stability * 0.20) +
+
+                (memory.colorStability * 0.20)
+
+            );
+    }
+
+    // Save ONCE after all patterns are updated
     localStorage.setItem(
         "patternMemory",
         JSON.stringify(patternMemory)
     );
-        
-    console.log(patternMemory);
 
+    console.log(
+        "SEQUENCE MEMORY UPDATED",
+        {
+            input: currentInput,
+            actual: actualResult
+        }
+    );
 }
-
-}
-
-let bigSmallMemory = JSON.parse(localStorage.getItem("bigSmallMemory")) || {};
-
-let predictionHistory =
-JSON.parse(localStorage.getItem("predictionHistory")) || [];
 
 function updateBigSmallMemory(actualResult){
 
