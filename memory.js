@@ -343,6 +343,168 @@ function updateLearningMemory(actualResult) {
     );
 }
 
+// ========================================
+// SAFE PATTERN MEMORY REBUILD
+// Keeps allResults safe
+// Rebuilds patternMemory from old history
+// ========================================
+
+function rebuildPatternMemoryFromHistory() {
+
+    if (!Array.isArray(allResults) || allResults.length < 3) {
+
+        alert(
+            "Rebuild nahi ho sakta.\n" +
+            "Kam se kam 3 historical results chahiye."
+        );
+
+        return;
+    }
+
+    const backupResults = [...allResults];
+
+    // IMPORTANT:
+    // Existing wrong memory remove only.
+    // allResults ko touch nahi karna.
+    patternMemory = {};
+
+    /*
+       allResults:
+       index 0 = latest
+       index 1 = previous
+       index 2 = older
+       ...
+
+       Isliye oldest → newest process karenge.
+    */
+
+    const chronological =
+        [...backupResults].reverse();
+
+    let learned = 0;
+
+    for (
+        let i = 5;
+        i < chronological.length;
+        i++
+    ) {
+
+        /*
+           Previous 5 results
+           → current result
+        */
+
+        const input =
+            chronological.slice(i - 5, i);
+
+        const actual =
+            Number(chronological[i]);
+
+        if (
+            input.length !== 5 ||
+            input.some(
+                n =>
+                    !Number.isInteger(Number(n)) ||
+                    Number(n) < 0 ||
+                    Number(n) > 9
+            )
+        ) {
+            continue;
+        }
+
+        if (
+            !Number.isInteger(actual) ||
+            actual < 0 ||
+            actual > 9
+        ) {
+            continue;
+        }
+
+        /*
+           updateLearningMemory() currently
+           DOM inputs read karta hai.
+
+           Isliye temporary inputs set karenge.
+        */
+
+        document.getElementById("n1").value =
+            input[0];
+
+        document.getElementById("n2").value =
+            input[1];
+
+        document.getElementById("n3").value =
+            input[2];
+
+        document.getElementById("n4").value =
+            input[3];
+
+        document.getElementById("n5").value =
+            input[4];
+
+        updateLearningMemory(actual);
+
+        learned++;
+    }
+
+    /*
+       Original latest inputs restore karo.
+    */
+
+    const latestFive =
+        backupResults.slice(0, 5).reverse();
+
+    if (latestFive.length === 5) {
+
+        document.getElementById("n1").value =
+            latestFive[0];
+
+        document.getElementById("n2").value =
+            latestFive[1];
+
+        document.getElementById("n3").value =
+            latestFive[2];
+
+        document.getElementById("n4").value =
+            latestFive[3];
+
+        document.getElementById("n5").value =
+            latestFive[4];
+    }
+
+    /*
+       Final save
+    */
+
+    localStorage.setItem(
+        "patternMemory",
+        JSON.stringify(patternMemory)
+    );
+
+    console.log(
+        "SAFE MEMORY REBUILD COMPLETE",
+        {
+            history: backupResults.length,
+            learnedSamples: learned,
+            patterns: Object.keys(patternMemory).length
+        }
+    );
+
+    alert(
+        "SAFE MEMORY REBUILD COMPLETE ✅\n\n" +
+        "Historical Results = " +
+        backupResults.length +
+        "\n" +
+        "Learned Samples = " +
+        learned +
+        "\n" +
+        "Patterns = " +
+        Object.keys(patternMemory).length +
+        "\n\n" +
+        "All historical results preserved."
+    );
+}
+
 function updateBigSmallMemory(actualResult){
 
     let bsHistory = allResults
