@@ -222,6 +222,8 @@ if(input === ""){
 
 let actualResult = Number(input);
 
+alert("STEP 1: actualResult = " + actualResult);
+    
 if(
     isNaN(actualResult) ||
     actualResult < 0 ||
@@ -233,6 +235,8 @@ if(
 
     allResults.unshift(actualResult);
 
+alert("STEP 2: allResults updated = " + allResults.length);
+    
     updateLearningAge();
     
 if(allResults.length > 1000){
@@ -246,10 +250,16 @@ localStorage.setItem(
     
     updateLearningMemory(actualResult);
 
+alert("STEP 3: learning memory updated");
+    
     updateBigSmallMemory(actualResult);
 
+    alert("STEP 4: Big/Small updated");
+    
     updateColorMemory(actualResult);
 
+    alert("STEP 5: Color updated");
+    
     savePredictionHistory(nextPrediction, actualResult);
     
     let currentPattern = allResults.slice(1,7).join(",");
