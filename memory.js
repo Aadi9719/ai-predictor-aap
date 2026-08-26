@@ -505,6 +505,20 @@ function rebuildPatternMemoryFromHistory() {
     );
 }
 
+document.getElementById("rebuildMemoryBtn").onclick =
+function () {
+
+    if (
+        !confirm(
+            "Existing historical results ko preserve karke AI Memory rebuild karni hai?"
+        )
+    ) {
+        return;
+    }
+
+    rebuildPatternMemoryFromHistory();
+};
+
 function updateBigSmallMemory(actualResult){
 
     let bsHistory = allResults
