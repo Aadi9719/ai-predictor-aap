@@ -205,6 +205,8 @@ if(memoryPrediction !== null){
 
 document.getElementById("checkBtn").onclick = function(){
 
+alert("CHECK RESULT START");
+    
  let input = prompt("Enter Actual Result");
 
 if(input === null){
