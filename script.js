@@ -252,9 +252,25 @@ localStorage.setItem(
 
 alert("STEP 3: learning memory updated");
     
+    try {
     updateBigSmallMemory(actualResult);
 
     alert("STEP 4: Big/Small updated");
+
+} catch (error) {
+
+    alert(
+        "BIG/SMALL ERROR:\n" +
+        error.message
+    );
+
+    console.error(
+        "updateBigSmallMemory ERROR:",
+        error
+    );
+
+    return;
+    }
     
     updateColorMemory(actualResult);
 
