@@ -11,6 +11,18 @@ Number(localStorage.getItem("aiLosses")) || 0;
 
 let nextPrediction = null;
 
+let patternMemory =
+    JSON.parse(localStorage.getItem("patternMemory")) || {};
+
+let bigSmallMemory =
+    JSON.parse(localStorage.getItem("bigSmallMemory")) || {};
+
+let colorMemory =
+    JSON.parse(localStorage.getItem("colorMemory")) || {};
+
+let predictionHistory =
+    JSON.parse(localStorage.getItem("predictionHistory")) || [];
+
 document.getElementById("analyzeBtn").onclick = function () {
 
     alert("Analyze Start");
