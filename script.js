@@ -823,37 +823,53 @@ document.addEventListener(
 
                     }
 
+function shiftInputsAfterResult(actualResult) {
 
-                    // =================================
-                    // AUTO SHIFT
-                    // =================================
+    const inputIds = ["n1", "n2", "n3", "n4", "n5"];
 
-                    document.getElementById(
-                        "n5"
-                    ).value =
-                        predictionInput[4];
+    const currentValues = inputIds.map(id => {
+        const el = document.getElementById(id);
+        return el ? Number(el.value) : NaN;
+    });
 
-                    document.getElementById(
-                        "n4"
-                    ).value =
-                        predictionInput[3];
+    if (
+        !Number.isInteger(Number(actualResult)) ||
+        actualResult < 0 ||
+        actualResult > 9
+    ) {
+        console.warn("Invalid actual result:", actualResult);
+        return false;
+    }
 
-                    document.getElementById(
-                        "n3"
-                    ).value =
-                        predictionInput[2];
+    // IMPORTANT:
+    // Purane 5 inputs ko ek saath copy karke shift karo.
+    // Isse assignment-order ki wajah se koi value overwrite nahi hogi.
+    const newValues = [
+        Number(actualResult),
+        currentValues[0],
+        currentValues[1],
+        currentValues[2],
+        currentValues[3]
+    ];
 
-                    document.getElementById(
-                        "n2"
-                    ).value =
-                        predictionInput[1];
+    inputIds.forEach((id, index) => {
+        const el = document.getElementById(id);
 
-                    document.getElementById(
-                        "n1"
-                    ).value =
-                        actualResult;
+        if (el) {
+            el.value = newValues[index];
+        }
+    });
 
+    console.log(
+        "INPUT SHIFT:",
+        currentValues,
+        "=>",
+        newValues
+    );
 
+    return true;
+}
+                    
                     // =================================
                     // RESET PENDING
                     // =================================
