@@ -3,7 +3,7 @@
 // MAIN APP FLOW
 // ========================================
 
-alert("Script.js Loaded ✅");("Pattern Loaded");
+alert("Script.js Loaded ✅")
 
 // ========================================
 // PENDING PREDICTION
