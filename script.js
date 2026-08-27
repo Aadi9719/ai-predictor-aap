@@ -3,7 +3,7 @@
 // MAIN APP FLOW
 // ========================================
 
-alert("Script.js Loaded ✅")
+alert("Script.js Loaded ✅");
 
 // ========================================
 // PENDING PREDICTION
@@ -24,6 +24,8 @@ document.addEventListener(
         const analyzeBtn =
             document.getElementById("analyzeBtn");
 
+alert("Analyze Start");
+        
         const checkBtn =
             document.getElementById("checkBtn");
 
