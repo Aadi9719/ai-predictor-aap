@@ -23,8 +23,6 @@ document.addEventListener(
 
         const analyzeBtn =
             document.getElementById("analyzeBtn");
-
-alert("Analyze Start");
         
         const checkBtn =
             document.getElementById("checkBtn");
