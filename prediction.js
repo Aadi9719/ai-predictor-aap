@@ -1,53 +1,84 @@
-function getColorPrediction(number){
+// ========================================
+// PREDICTION.JS
+// FINAL PREDICTION ENGINE
+// ========================================
 
-    if([1,3,7,9].includes(number)){
+
+// ========================================
+// COLOR
+// ========================================
+
+function getColorPrediction(number) {
+
+    number = Number(number);
+
+    if ([1, 3, 7, 9].includes(number)) {
         return "🟢 GREEN";
     }
 
-    if([2,4,6,8].includes(number)){
+    if ([2, 4, 6, 8].includes(number)) {
         return "🔴 RED";
     }
 
     return "🟣 VIOLET";
-
 }
 
-function getBigSmallPrediction(number){
 
-    if(number >= 5){
+// ========================================
+// BIG / SMALL
+// ========================================
+
+function getBigSmallPrediction(number) {
+
+    number = Number(number);
+
+    if (number >= 5) {
         return "🔵 BIG";
     }
 
     return "🟡 SMALL";
-
 }
 
-function getTrendPrediction(){
 
-    if(allResults.length < 20){
+// ========================================
+// TREND PREDICTION
+// ========================================
+
+function getTrendPrediction() {
+
+    if (!Array.isArray(allResults) || allResults.length < 20) {
         return null;
     }
 
-    let recent = allResults.slice(-20);
+    // allResults[0] = latest result
+    const recent = allResults.slice(0, 20);
 
-    let count = {};
+    const count = {};
 
-    for(let i=0;i<=9;i++){
-        count[i]=0;
+    for (let i = 1; i <= 9; i++) {
+        count[i] = 0;
     }
 
-    recent.forEach(n=>{
-        count[n]++;
+    recent.forEach(function (value) {
+
+        const n = Number(value);
+
+        if (
+            Number.isInteger(n) &&
+            n >= 1 &&
+            n <= 9
+        ) {
+            count[n]++;
+        }
+
     });
 
     let best = null;
     let max = -1;
 
-    for(let i=0;i<=9;i++){
+    for (let i = 1; i <= 9; i++) {
 
-        if(i===0) continue;   // 0 ko ignore karega
-
-        if(count[i] > max){
+        if (count[i] > max) {
 
             max = count[i];
             best = i;
@@ -57,180 +88,124 @@ function getTrendPrediction(){
     }
 
     return best;
-
 }
 
-function getFinalPrediction(){
 
-    let memory = getPatternPrediction();
+// ========================================
+// TREND SCORE
+// ========================================
 
-    let trend = getTrendPrediction();
+function getTrendScore() {
 
-    let hotCold = getHotColdNumbers();
-
-    let hot = hotCold.hot;
-    
-    // Sab agree hain
-    if(memory !== null && trend !== null){
-
-        if(memory === trend){
-
-            return memory;
-
-        }
-
-    }
-
-    // Memory aur Hot same
-    if(memory !== null){
-
-    if(getPatternScore() >= 70){
-
-        return memory;
-
-    }
-
-    }
-
-    // Trend aur Hot same
-    if(trend !== null){
-
-    if(getTrendScore() >= 70){
-
-        return trend;
-
-    }
-
-    }
-
-    // Last option
-    return hot;
-
-}
-
-function getTrendScore(){
-
-    if(allResults.length < 20){
+    if (!Array.isArray(allResults) || allResults.length < 20) {
         return 0;
     }
 
-    let recent = allResults.slice(-20);
+    const recent = allResults.slice(0, 20);
 
-    let count = {};
-    let streak = 1;
-    let maxStreak = 1;
+    const count = {};
 
-    for(let i = 0; i < recent.length; i++){
+    for (let i = 1; i <= 9; i++) {
+        count[i] = 0;
+    }
 
-        let n = recent[i];
+    recent.forEach(function (value) {
 
-        count[n] = (count[n] || 0) + 1;
+        const n = Number(value);
 
-        if(i > 0){
-
-            if(recent[i] === recent[i-1]){
-                streak++;
-                if(streak > maxStreak){
-                    maxStreak = streak;
-                }
-            }else{
-                streak = 1;
-            }
-
+        if (
+            Number.isInteger(n) &&
+            n >= 1 &&
+            n <= 9
+        ) {
+            count[n]++;
         }
 
-    }
+    });
 
     let maxFrequency = 0;
 
-    for(let num in count){
+    for (let i = 1; i <= 9; i++) {
 
-        if(count[num] > maxFrequency){
-            maxFrequency = count[num];
+        if (count[i] > maxFrequency) {
+            maxFrequency = count[i];
         }
 
     }
 
-    let frequencyScore = (maxFrequency / 20) * 70;
-    let streakScore = (maxStreak / 5) * 30;
+    /*
+       20 results mein maximum frequency
+       ko trend strength maana ja raha hai.
 
-    let finalScore = frequencyScore + streakScore;
+       Example:
+       4/20 = 20%
+       6/20 = 30%
+    */
 
-    if(finalScore > 100){
-        finalScore = 100;
-    }
+    const score =
+        (maxFrequency / 20) * 100;
 
-    return Math.round(finalScore);
-
+    return Math.round(
+        Math.min(100, score)
+    );
 }
 
-function getFinalAIScore(){
 
-    let memory = getPredictionConfidence();
+// ========================================
+// HOT / COLD
+// ========================================
 
-    let pattern = getPatternScore();
+function getHotColdNumbers() {
 
-    let trend = getTrendScore();
-
-    let hotCold = getHotColdNumbers();
-
-    let hotBonus =
-    (nextPrediction === hotCold.hot) ? 10 : 0;
-
-    let score =
-        (memory * 0.35) +
-        (pattern * 0.30) +
-        (trend * 0.20) +
-        hotBonus;
-
-    if(score > 100){
-        score = 100;
-    }
-
-    return Math.round(score);
-
-}
-
-function getHotColdNumbers(){
-
-    if(allResults.length < 20){
+    if (!Array.isArray(allResults) || allResults.length < 20) {
 
         return {
-            hot:null,
-            cold:null
+            hot: null,
+            cold: null
         };
 
     }
 
-    let recent = allResults.slice(0,20);
+    const recent = allResults.slice(0, 20);
 
-    let count = {};
+    const count = {};
 
-    for(let i=0;i<=9;i++){
-
-        count[i]=0;
-
+    for (let i = 1; i <= 9; i++) {
+        count[i] = 0;
     }
 
-    recent.forEach(n=>{
+    recent.forEach(function (value) {
 
-        count[n]++;
+        const n = Number(value);
+
+        if (
+            Number.isInteger(n) &&
+            n >= 1 &&
+            n <= 9
+        ) {
+            count[n]++;
+        }
 
     });
 
-    let hot = recent[0];
-let cold = recent[0];
+    let hot = null;
+    let cold = null;
 
-    for(let i=0;i<=9;i++){
+    let hotCount = -1;
+    let coldCount = Infinity;
 
-        if(count[i] > count[hot]){
+    for (let i = 1; i <= 9; i++) {
 
+        if (count[i] > hotCount) {
+
+            hotCount = count[i];
             hot = i;
 
         }
 
-        if(count[i] < count[cold]){
+        if (count[i] < coldCount) {
 
+            coldCount = count[i];
             cold = i;
 
         }
@@ -238,11 +213,247 @@ let cold = recent[0];
     }
 
     return {
-
-        hot,
-
-        cold
-
+        hot: hot,
+        cold: cold
     };
+}
 
+
+// ========================================
+// FINAL NUMBER PREDICTION
+// ========================================
+
+function getFinalPrediction() {
+
+    let memory = null;
+    let trend = null;
+    let hot = null;
+
+    // -----------------------------
+    // Memory
+    // -----------------------------
+
+    if (typeof getPatternPrediction === "function") {
+
+        try {
+            memory = getPatternPrediction();
+        } catch (error) {
+
+            console.error(
+                "Pattern prediction error:",
+                error
+            );
+
+            memory = null;
+        }
+
+    }
+
+
+    // -----------------------------
+    // Trend
+    // -----------------------------
+
+    trend = getTrendPrediction();
+
+
+    // -----------------------------
+    // Hot
+    // -----------------------------
+
+    const hotCold = getHotColdNumbers();
+
+    hot = hotCold.hot;
+
+
+    // -----------------------------
+    // Memory + Trend agreement
+    // -----------------------------
+
+    if (
+        memory !== null &&
+        trend !== null &&
+        memory === trend
+    ) {
+
+        return memory;
+
+    }
+
+
+    // -----------------------------
+    // Strong pattern memory
+    // -----------------------------
+
+    if (
+        memory !== null &&
+        typeof getPatternScore === "function"
+    ) {
+
+        let patternScore = 0;
+
+        try {
+            patternScore = getPatternScore();
+        } catch (error) {
+
+            console.error(
+                "Pattern score error:",
+                error
+            );
+
+        }
+
+        if (patternScore >= 70) {
+            return memory;
+        }
+
+    }
+
+
+    // -----------------------------
+    // Strong trend
+    // -----------------------------
+
+    if (
+        trend !== null &&
+        getTrendScore() >= 70
+    ) {
+
+        return trend;
+
+    }
+
+
+    // -----------------------------
+    // Hot fallback
+    // -----------------------------
+
+    if (hot !== null) {
+        return hot;
+    }
+
+
+    // -----------------------------
+    // Memory fallback
+    // -----------------------------
+
+    if (memory !== null) {
+        return memory;
+    }
+
+
+    // -----------------------------
+    // Trend fallback
+    // -----------------------------
+
+    if (trend !== null) {
+        return trend;
+    }
+
+
+    return null;
+}
+
+
+// ========================================
+// FINAL AI SCORE
+// ========================================
+
+function getFinalAIScore() {
+
+    let memoryScore = 0;
+    let patternScore = 0;
+    let trendScore = getTrendScore();
+
+
+    // Prediction confidence
+    if (
+        typeof getPredictionConfidence === "function"
+    ) {
+
+        try {
+
+            memoryScore =
+                Number(
+                    getPredictionConfidence()
+                ) || 0;
+
+        } catch (error) {
+
+            console.error(
+                "Prediction confidence error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // Pattern score
+    if (
+        typeof getPatternScore === "function"
+    ) {
+
+        try {
+
+            patternScore =
+                Number(
+                    getPatternScore()
+                ) || 0;
+
+        } catch (error) {
+
+            console.error(
+                "Pattern score error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    memoryScore =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                memoryScore
+            )
+        );
+
+
+    patternScore =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                patternScore
+            )
+        );
+
+
+    trendScore =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                trendScore
+            )
+        );
+
+
+    const finalScore =
+        (memoryScore * 0.35) +
+        (patternScore * 0.40) +
+        (trendScore * 0.25);
+
+
+    return Math.round(
+        Math.min(
+            100,
+            finalScore
+        )
+    );
 }
