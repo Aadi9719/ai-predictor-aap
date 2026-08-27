@@ -753,7 +753,228 @@ document.addEventListener(
                         }
 
 
-                        addHistory(
+                    addHistory(
                             "✅ AI WON | Prediction : " +
                             prediction +
-                        
+                            " | Result : " +
+                            actualResult
+                        );
+
+
+                        alert(
+                            "AI WON ✅\n\n" +
+                            "Prediction = " +
+                            prediction +
+                            "\nActual Result = " +
+                            actualResult
+                        );
+
+
+                    } else {
+
+                        aiLosses++;
+
+                        localStorage.setItem(
+                            "aiLosses",
+                            String(aiLosses)
+                        );
+
+
+                        if (
+                            typeof updateRewardPenalty ===
+                            "function"
+                        ) {
+
+                            updateRewardPenalty(
+                                currentPattern,
+                                false
+                            );
+
+                        }
+
+
+                        if (
+                            typeof selfLearning ===
+                            "function"
+                        ) {
+
+                            selfLearning(
+                                currentPattern,
+                                false
+                            );
+
+                        }
+
+
+                        addHistory(
+                            "❌ AI LOST | Prediction : " +
+                            prediction +
+                            " | Result : " +
+                            actualResult
+                        );
+
+
+                        alert(
+                            "AI LOST ❌\n\n" +
+                            "Prediction = " +
+                            prediction +
+                            "\nActual Result = " +
+                            actualResult
+                        );
+
+                    }
+
+
+                    // =================================
+                    // AUTO SHIFT
+                    // =================================
+
+                    document.getElementById(
+                        "n5"
+                    ).value =
+                        predictionInput[4];
+
+                    document.getElementById(
+                        "n4"
+                    ).value =
+                        predictionInput[3];
+
+                    document.getElementById(
+                        "n3"
+                    ).value =
+                        predictionInput[2];
+
+                    document.getElementById(
+                        "n2"
+                    ).value =
+                        predictionInput[1];
+
+                    document.getElementById(
+                        "n1"
+                    ).value =
+                        actualResult;
+
+
+                    // =================================
+                    // RESET PENDING
+                    // =================================
+
+                    pendingPrediction =
+                        null;
+
+                    pendingInput =
+                        null;
+
+                    nextPrediction =
+                        null;
+
+
+                    // =================================
+                    // DEBUG
+                    // =================================
+
+                    const debugSource =
+                        document.getElementById(
+                            "debugSource"
+                        );
+
+                    const debugMemory =
+                        document.getElementById(
+                            "debugMemory"
+                        );
+
+
+                    if (debugSource) {
+                        debugSource.innerText =
+                            "RESULT SAVED";
+                    }
+
+                    if (debugMemory) {
+                        debugMemory.innerText =
+                            "UPDATED";
+                    }
+
+
+                    // =================================
+                    // UPDATE STATS
+                    // =================================
+
+                    if (
+                        typeof updateStats ===
+                        "function"
+                    ) {
+
+                        updateStats();
+
+                    }
+
+
+                    // =================================
+                    // UPDATE HISTORY TABLE
+                    // =================================
+
+                    if (
+                        typeof updatePredictionHistoryTable ===
+                        "function"
+                    ) {
+
+                        updatePredictionHistoryTable();
+
+                    }
+
+
+                    console.log(
+                        "RESULT SAVED",
+                        {
+
+                            prediction:
+                                prediction,
+
+                            actual:
+                                actualResult,
+
+                            win:
+                                isWin,
+
+                            savedNumbers:
+                                allResults.length,
+
+                            aiWins:
+                                aiWins,
+
+                            aiLosses:
+                                aiLosses
+
+                        }
+                    );
+
+                };
+
+        }
+
+
+        // ========================================
+        // INITIAL STATS
+        // ========================================
+
+        if (
+            typeof updateStats ===
+            "function"
+        ) {
+
+            updateStats();
+
+        }
+
+
+        if (
+            typeof updatePredictionHistoryTable ===
+            "function"
+        ) {
+
+            updatePredictionHistoryTable();
+
+        }
+
+    }
+);
