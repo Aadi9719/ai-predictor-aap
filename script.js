@@ -37,6 +37,8 @@ let pendingInput = null;
 
 document.getElementById("analyzeBtn").onclick = function () {
 
+    alert("Analyze Start");
+    
     const input = [
         Number(document.getElementById("n1").value),
         Number(document.getElementById("n2").value),
