@@ -5,9 +5,6 @@ alert("Pattern Loaded");
 // PATTERN ANALYSIS + BIG/SMALL + COLOR
 // ========================================
 
-console.log("Pattern.js Loaded ✅");
-
-
 // ========================================
 // SAFE INPUT READER
 // ========================================
@@ -1204,4 +1201,232 @@ function getFinalColorPrediction() {
 
     if (
         pattern !== null &&
-        c
+        confidence >= 70
+    ) {
+        return pattern;
+    }
+
+    return recent;
+}
+
+
+// ========================================
+// CANDIDATE NUMBERS
+// ========================================
+
+function getCandidateNumbers() {
+
+    const bs =
+        getFinalBigSmallPrediction();
+
+    const color =
+        getFinalColorPrediction();
+
+    if (
+        bs === "BIG" &&
+        color === "GREEN"
+    ) {
+        return [7, 9];
+    }
+
+    if (
+        bs === "BIG" &&
+        color === "RED"
+    ) {
+        return [6, 8];
+    }
+
+    if (
+        bs === "SMALL" &&
+        color === "GREEN"
+    ) {
+        return [1, 3];
+    }
+
+    if (
+        bs === "SMALL" &&
+        color === "RED"
+    ) {
+        return [2, 4];
+    }
+
+    return [
+        1, 2, 3, 4, 5,
+        6, 7, 8, 9
+    ];
+}
+
+
+// ========================================
+// CANDIDATE PRIORITY
+// ========================================
+
+function getCandidatePriority(number) {
+
+    number =
+        Number(number);
+
+    let priority = 0;
+
+    const hotCold =
+        getHotColdNumbers();
+
+    if (
+        hotCold.hot !== null &&
+        number === hotCold.hot
+    ) {
+        priority += 15;
+    }
+
+    const candidates =
+        getCandidateNumbers();
+
+    if (
+        candidates.includes(number)
+    ) {
+        priority += 20;
+    }
+
+    const trend =
+        getTrendPrediction();
+
+    if (
+        trend !== null &&
+        number === trend
+    ) {
+        priority += 10;
+    }
+
+    return priority;
+}
+
+
+// ========================================
+// MASTER NUMBER SCORE
+// ========================================
+
+function getMasterNumberScore(
+    number,
+    pattern
+) {
+
+    number =
+        Number(number);
+
+    let patternScore = 0;
+
+    if (pattern) {
+
+        const memory =
+            patternMemory[pattern];
+
+        if (memory) {
+
+            patternScore =
+                getPatternScore();
+        }
+    }
+
+    const bigSmall =
+        getBigSmallConfidence();
+
+    const color =
+        getColorConfidence();
+
+    const trend =
+        getTrendScore();
+
+    let numberScore = 50;
+
+    if (
+        patternMemory[pattern] &&
+        patternMemory[pattern].numberWeight &&
+        patternMemory[pattern]
+            .numberWeight[number] !== undefined
+    ) {
+
+        numberScore =
+            Number(
+                patternMemory[pattern]
+                    .numberWeight[number]
+            ) || 50;
+    }
+
+    const score =
+
+        (patternScore * 0.40) +
+
+        (bigSmall * 0.20) +
+
+        (color * 0.15) +
+
+        (trend * 0.15) +
+
+        (numberScore * 0.10);
+
+    return Math.round(
+        Math.max(
+            0,
+            Math.min(
+                100,
+                score
+            )
+        )
+    );
+}
+
+
+// ========================================
+// PATTERN DEBUG
+// ========================================
+
+function getCurrentPattern() {
+
+    if (!isValidCurrentInput()) {
+        return null;
+    }
+
+    return getCurrentInput().join(",");
+}
+
+
+function getPatternDebugInfo() {
+
+    const pattern =
+        getCurrentPattern();
+
+    if (!pattern) {
+
+        return {
+            pattern: null,
+            exists: false,
+            total: 0,
+            prediction: null
+        };
+    }
+
+    const memory =
+        patternMemory[pattern];
+
+    return {
+
+        pattern,
+
+        exists:
+            !!memory,
+
+        total:
+            memory
+                ? Number(memory.total) || 0
+                : 0,
+
+        prediction:
+            getPatternPrediction()
+    };
+}
+
+
+console.log(
+    "Pattern.js Ready ✅"
+);
+
