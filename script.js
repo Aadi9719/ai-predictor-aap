@@ -23,425 +23,521 @@ let colorMemory =
 let predictionHistory =
     JSON.parse(localStorage.getItem("predictionHistory")) || [];
 
+// ========================================
+// FIXED PREDICTION / RESULT FLOW
+// ========================================
+
+let pendingPrediction = null;
+let pendingInput = null;
+
+
+// ========================================
+// ANALYZE AI
+// ========================================
+
 document.getElementById("analyzeBtn").onclick = function () {
 
-    alert("Analyze Start");
-    
-    let n1 = Number(document.getElementById("n1").value);
-    let n2 = Number(document.getElementById("n2").value);
-    let n3 = Number(document.getElementById("n3").value);
-    let n4 = Number(document.getElementById("n4").value);
-    let n5 = Number(document.getElementById("n5").value);
+    const input = [
+        Number(document.getElementById("n1").value),
+        Number(document.getElementById("n2").value),
+        Number(document.getElementById("n3").value),
+        Number(document.getElementById("n4").value),
+        Number(document.getElementById("n5").value)
+    ];
 
-    let numbers = [n1, n2, n3, n4, n5];
-    
-    let memoryPrediction = getPatternPrediction();
-    let finalPrediction = getFinalPrediction();
-    let trendScore = getTrendScore();
-    let finalAIScore = getFinalAIScore();
-    let hotCold = getHotColdNumbers();
-    let trendPrediction = getTrendPrediction();
-    
-    if(memoryPrediction !== null){
-
-    nextPrediction = memoryPrediction;
-
-        memoryPrediction = nextPrediction;
-        
-    }
-    
-    let pattern = numbers.join(",");
-
-    if(patternMemory[pattern]){
-    patternMemory[pattern].lastPrediction = nextPrediction;
-
-    localStorage.setItem(
-        "patternMemory",
-        JSON.stringify(patternMemory)
-    );
-    }
-    
-if(memoryPrediction === null){
-
-    memoryPrediction = getMemoryPrediction();
-
-    if(memoryPrediction !== null){
-
-        nextPrediction = memoryPrediction;
-
+    // Validate
+    if (
+        input.some(
+            n => !Number.isInteger(n) || n < 0 || n > 9
+        )
+    ) {
+        alert("Please enter all 5 numbers between 0 and 9.");
+        return;
     }
 
-}
 
-    let confidence =
-memoryPrediction !== null
-? getPredictionConfidence()
-: 0;
+    // IMPORTANT:
+    // Prediction ke waqt ke inputs ko freeze karo.
+    pendingInput = [...input];
 
-    if(finalPrediction !== null){
 
-    nextPrediction = finalPrediction;
+    // Current prediction calculate karo
+    const prediction = getFinalPrediction();
 
-}else if(memoryPrediction !== null){
 
-    nextPrediction = memoryPrediction;
-
-}else{
-
-    nextPrediction = getTrendPrediction();
-
-    if(nextPrediction === null){
-        nextPrediction = Math.floor(Math.random()*10);
+    if (
+        prediction === null ||
+        prediction === undefined ||
+        !Number.isInteger(Number(prediction))
+    ) {
+        alert("AI Prediction available nahi hai.");
+        pendingPrediction = null;
+        return;
     }
 
-    }
-        
+
+    pendingPrediction = Number(prediction);
+
+    // Existing system variable
+    nextPrediction = pendingPrediction;
+
+
+    // ====================================
+    // DISPLAY
+    // ====================================
+
+    const pattern = pendingInput.join(",");
+
+    const hotCold =
+        typeof getHotColdNumbers === "function"
+            ? getHotColdNumbers()
+            : { hot: null, cold: null };
+
+
+    const trendScore =
+        typeof getTrendScore === "function"
+            ? getTrendScore()
+            : 0;
+
+
+    const aiScore =
+        typeof getFinalAIScore === "function"
+            ? getFinalAIScore()
+            : 0;
+
+
+    const confidence =
+        typeof getPredictionConfidence === "function"
+            ? getPredictionConfidence()
+            : 0;
+
+
     document.getElementById("result").innerHTML = `
-    <h2>AI Prediction 🔥</h2>
 
-    Final Prediction :
-<b>${finalPrediction}</b>
+        <h2>AI Prediction 🔥</h2>
 
-<br><br>
+        Final Prediction :
+        <b>${pendingPrediction}</b>
 
-Color :
-<b>${getColorPrediction(finalPrediction)}</b>
+        <br><br>
 
-<br><br>
+        Color :
+        <b>${getColorPrediction(pendingPrediction)}</b>
 
-Color AI :
-<b>${getFinalColorPrediction()}</b>
+        <br><br>
 
-<br><br>
+        Big/Small :
+        <b>${getBigSmallPrediction(pendingPrediction)}</b>
 
-Color Confidence :
-<b>${getColorConfidence()}%</b>
+        <br><br>
 
-<br><br>
+        Confidence :
+        <b>${confidence}%</b>
 
-Color AI Score :
-<b>${getColorAIScore()}%</b>
+        <br><br>
 
-<br><br>
+        Pattern :
+        <b>${pattern}</b>
 
-Big/Small :
-<b>${getBigSmallPrediction(finalPrediction)}</b>
+        <br><br>
 
-<br><br>
+        Trend Score :
+        <b>${trendScore}%</b>
 
-Confidence :
-<b>${confidence}%</b>
+        <br><br>
 
-<br><br>
+        Hot Number :
+        <b>${hotCold.hot ?? "-"}</b>
 
-Pattern Score :
-<b>${getPatternScore(pattern)}%</b>
+        <br><br>
 
-<br><br>
+        Cold Number :
+        <b>${hotCold.cold ?? "-"}</b>
 
-Trend Score :
-<b>${trendScore}%</b>
+        <br><br>
 
-<br><br>
+        AI Score :
+        <b>${aiScore}%</b>
 
-Hot Number :
-<b>${hotCold.hot}</b>
+        <br><br>
 
-<br><br>
-
-Cold Number :
-<b>${hotCold.cold}</b>
-
-<br><br>
-
-AI Score :
-<b>${finalAIScore}%</b>
-
-<br><br>
-
-Pattern :
-<b>${pattern}</b>
-
-  <br><br>
-
-  Trend Prediction :
-<b>${trendPrediction !== null ? trendPrediction : "-"}</b>
-
-<br><br>
-
-Big/Small AI :
-<b>${getFinalBigSmallPrediction()}</b>
-
-<br><br>
-
-Big/Small Confidence :
-<b>${getBigSmallConfidence()}%</b>
-
-<br><br>
-
-Big/Small AI Score :
-<b>${getBigSmallAIScore()}%</b>
-
-    Total Saved Numbers :
-    ${allResults.length}
+        Total Saved Numbers :
+        <b>${allResults.length}</b>
     `;
-    
+
+
+    // Debug
     document.getElementById("debugPattern").innerText =
-pattern;
-    
-document.getElementById("debugPrediction").innerText =
-nextPrediction;
+        pattern;
 
-if(memoryPrediction !== null){
+    document.getElementById("debugPrediction").innerText =
+        pendingPrediction;
 
     document.getElementById("debugSource").innerText =
-    "🧠 MEMORY";
+        "🧠 AI";
 
     document.getElementById("debugMemory").innerText =
-    "FOUND";
+        "PENDING RESULT";
 
-}else{
 
-    document.getElementById("debugSource").innerText =
-    "🎲 RANDOM";
+    updateStats();
 
-    document.getElementById("debugMemory").innerText =
-    "NOT FOUND";
-
-}
-    
-   updateStats();
-    console.log(allResults);
-    
+    console.log(
+        "PREDICTION CREATED",
+        {
+            input: pendingInput,
+            prediction: pendingPrediction
+        }
+    );
 };
 
-document.getElementById("checkBtn").onclick = function(){
 
-alert("CHECK RESULT START");
-    
- let input = prompt("Enter Actual Result");
 
-if(input === null){
-    return;
-}
+// ========================================
+// CHECK RESULT
+// ========================================
 
-input = input.trim();
+document.getElementById("checkBtn").onclick = function () {
 
-if(input === ""){
-    alert("Please Enter Result");
-    return;
-}
+    // Prediction ke bina result check mat karo
+    if (
+        pendingPrediction === null ||
+        pendingPrediction === undefined
+    ) {
 
-let actualResult = Number(input);
+        alert(
+            "Pehle Analyze AI dabao, phir Check Result dabao."
+        );
 
-alert("STEP 1: actualResult = " + actualResult);
-    
-if(
-    isNaN(actualResult) ||
-    actualResult < 0 ||
-    actualResult > 9
-){
-    alert("Please Enter Number Between 0 and 9");
-    return;
-}
+        return;
+    }
+
+
+    if (!pendingInput || pendingInput.length !== 5) {
+
+        alert(
+            "Prediction input memory missing hai."
+        );
+
+        return;
+    }
+
+
+    const input = prompt(
+        "Enter Actual Result (0-9)"
+    );
+
+
+    if (input === null) {
+        return;
+    }
+
+
+    const actualResult = Number(input.trim());
+
+
+    if (
+        !Number.isInteger(actualResult) ||
+        actualResult < 0 ||
+        actualResult > 9
+    ) {
+
+        alert(
+            "Please Enter Number Between 0 and 9"
+        );
+
+        return;
+    }
+
+
+    // ====================================
+    // IMPORTANT:
+    // Prediction ke waqt ka input preserve hai.
+    // Actual result ko ab history mein save karo.
+    // ====================================
+
+    const prediction =
+        Number(pendingPrediction);
+
+    const predictionInput =
+        [...pendingInput];
+
+
+    // WIN / LOSS BEFORE RESET
+    const isWin =
+        prediction === actualResult;
+
+
+    // ====================================
+    // SAVE ACTUAL RESULT
+    // ====================================
 
     allResults.unshift(actualResult);
 
-alert("STEP 2: allResults updated = " + allResults.length);
-    
-    updateLearningAge();
-    
-if(allResults.length > 1000){
-    allResults.pop();
-}
 
-localStorage.setItem(
-    "allResults",
-    JSON.stringify(allResults)
-);
-    
-    updateLearningMemory(actualResult);
-
-alert("STEP 3: learning memory updated");
-    
-    try {
-    updateBigSmallMemory(actualResult);
-
-    alert("STEP 4: Big/Small updated");
-
-} catch (error) {
-
-    alert(
-        "BIG/SMALL ERROR:\n" +
-        error.message
-    );
-
-    console.error(
-        "updateBigSmallMemory ERROR:",
-        error
-    );
-
-    return;
+    if (allResults.length > 1000) {
+        allResults.pop();
     }
-    
-    updateColorMemory(actualResult);
 
-    alert("STEP 5: Color updated");
-    
-    savePredictionHistory(nextPrediction, actualResult);
-    
-    let currentPattern = allResults.slice(1,7).join(",");
-    
-    // Auto Shift Inputs
 
-document.getElementById("n5").value =
-document.getElementById("n4").value;
+    localStorage.setItem(
+        "allResults",
+        JSON.stringify(allResults)
+    );
 
-document.getElementById("n4").value =
-document.getElementById("n3").value;
 
-document.getElementById("n3").value =
-document.getElementById("n2").value;
+    // ====================================
+    // LEARNING
+    //
+    // IMPORTANT:
+    // Learning function ko DOM ke current
+    // values par depend nahi karne denge.
+    // ====================================
 
-document.getElementById("n2").value =
-document.getElementById("n1").value;
+    const oldInputs = [
+        document.getElementById("n1").value,
+        document.getElementById("n2").value,
+        document.getElementById("n3").value,
+        document.getElementById("n4").value,
+        document.getElementById("n5").value
+    ];
 
-document.getElementById("n1").value =
-actualResult;
-    
-    if(actualResult === nextPrediction){
 
-        updateRewardPenalty(currentPattern, true);
-        
+    // Prediction ke exact inputs restore
+    document.getElementById("n1").value =
+        predictionInput[0];
+
+    document.getElementById("n2").value =
+        predictionInput[1];
+
+    document.getElementById("n3").value =
+        predictionInput[2];
+
+    document.getElementById("n4").value =
+        predictionInput[3];
+
+    document.getElementById("n5").value =
+        predictionInput[4];
+
+
+    // Learning memory
+    if (
+        typeof updateLearningMemory === "function"
+    ) {
+
+        updateLearningMemory(
+            actualResult
+        );
+    }
+
+
+    // Big/Small memory
+    if (
+        typeof updateBigSmallMemory === "function"
+    ) {
+
+        updateBigSmallMemory(
+            actualResult
+        );
+    }
+
+
+    // Color memory
+    if (
+        typeof updateColorMemory === "function"
+    ) {
+
+        updateColorMemory(
+            actualResult
+        );
+    }
+
+
+    // ====================================
+    // PREDICTION HISTORY
+    // ====================================
+
+    if (
+        typeof savePredictionHistory === "function"
+    ) {
+
+        savePredictionHistory(
+            prediction,
+            actualResult
+        );
+    }
+
+
+    // ====================================
+    // WIN / LOSS
+    // ====================================
+
+    const currentPattern =
+        predictionInput.join(",");
+
+
+    if (isWin) {
+
         aiWins++;
 
-        if(patternMemory[currentPattern]){
+        localStorage.setItem(
+            "aiWins",
+            aiWins
+        );
 
-    patternMemory[currentPattern].trust += 3;
 
-            patternMemory[currentPattern].patternWeight += 2;
-            
-            if(patternMemory[currentPattern].trust > 100){
-    patternMemory[currentPattern].trust = 100;
-            }
+        if (
+            typeof updateRewardPenalty ===
+            "function"
+        ) {
 
-            if(patternMemory[currentPattern].patternWeight > 100){
-    patternMemory[currentPattern].patternWeight = 100;
-            }
-            
-    patternMemory[currentPattern].successStreak++;
-
-    patternMemory[currentPattern].failStreak = 0;
-
-    patternMemory[currentPattern].win++;
-
-            selfLearning(currentPattern, true);
-            
-            selfLearnBigSmall(
-    currentPattern,
-    getFinalBigSmallPrediction(),
-    actualResult
-);
-
-            selfLearnColor(
-    currentPattern,
-    getFinalColorPrediction(),
-    actualResult
-);
-            
-    localStorage.setItem(
-        "patternMemory",
-        JSON.stringify(patternMemory)
-    );
-
+            updateRewardPenalty(
+                currentPattern,
+                true
+            );
         }
-        
-        localStorage.setItem("aiWins", aiWins);
 
-        alert("AI WON ✅");
 
-        addHistory("✅ Prediction : " + nextPrediction + " | Result : " + actualResult);
-        
-updateStats();
-  updatePredictionHistoryTable();
-   updateEngineWeight(true);
-        
-    }else{
+        if (
+            typeof selfLearning ===
+            "function"
+        ) {
 
-        updateRewardPenalty(currentPattern, false);
-        
+            selfLearning(
+                currentPattern,
+                true
+            );
+        }
+
+
+        addHistory(
+            "✅ Prediction : " +
+            prediction +
+            " | Result : " +
+            actualResult
+        );
+
+
+        alert(
+            "AI WON ✅\n\n" +
+            "Prediction = " +
+            prediction +
+            "\nActual Result = " +
+            actualResult
+        );
+
+    } else {
+
         aiLosses++;
 
-    if(patternMemory[currentPattern]){
+        localStorage.setItem(
+            "aiLosses",
+            aiLosses
+        );
 
-    patternMemory[currentPattern].trust -= 3;
 
-        patternMemory[currentPattern].patternWeight -= 2;
-        
-        if(patternMemory[currentPattern].trust < 0){
-    patternMemory[currentPattern].trust = 0;
+        if (
+            typeof updateRewardPenalty ===
+            "function"
+        ) {
+
+            updateRewardPenalty(
+                currentPattern,
+                false
+            );
         }
 
-        if(patternMemory[currentPattern].patternWeight < 0){
-    patternMemory[currentPattern].patternWeight = 0;
+
+        if (
+            typeof selfLearning ===
+            "function"
+        ) {
+
+            selfLearning(
+                currentPattern,
+                false
+            );
         }
-        
-    patternMemory[currentPattern].failStreak++;
 
-    patternMemory[currentPattern].successStreak = 0;
 
-        // Wrong Prediction Penalty
+        addHistory(
+            "❌ Prediction : " +
+            prediction +
+            " | Result : " +
+            actualResult
+        );
 
-if(
-    patternMemory[currentPattern].numberWeight &&
-    patternMemory[currentPattern].numberWeight[nextPrediction] !== undefined
-){
 
-    patternMemory[currentPattern].numberWeight[nextPrediction] -= 2;
-
-    if(
-        patternMemory[currentPattern].numberWeight[nextPrediction] < 0
-    ){
-        patternMemory[currentPattern].numberWeight[nextPrediction] = 0;
+        alert(
+            "AI LOST ❌\n\n" +
+            "Prediction = " +
+            prediction +
+            "\nActual Result = " +
+            actualResult
+        );
     }
 
-}
-        
-    patternMemory[currentPattern].loss++;
 
-            selfLearning(currentPattern, false);
+    // ====================================
+    // AUTO SHIFT
+    // ====================================
 
-            selfLearnBigSmall(
-    currentPattern,
-    getFinalBigSmallPrediction(),
-    actualResult
-);
+    document.getElementById("n5").value =
+        document.getElementById("n4").value;
 
-            selfLearnColor(
-    currentPattern,
-    getFinalColorPrediction(),
-    actualResult
-);
-            
-    localStorage.setItem(
-        "patternMemory",
-        JSON.stringify(patternMemory)
+    document.getElementById("n4").value =
+        document.getElementById("n3").value;
+
+    document.getElementById("n3").value =
+        document.getElementById("n2").value;
+
+    document.getElementById("n2").value =
+        document.getElementById("n1").value;
+
+    document.getElementById("n1").value =
+        actualResult;
+
+
+    // ====================================
+    // RESET PENDING PREDICTION
+    // ====================================
+
+    pendingPrediction = null;
+    pendingInput = null;
+
+    nextPrediction = null;
+
+
+    document.getElementById(
+        "debugSource"
+    ).innerText = "RESULT SAVED";
+
+    document.getElementById(
+        "debugMemory"
+    ).innerText = "UPDATED";
+
+
+    updateStats();
+
+
+    if (
+        typeof updatePredictionHistoryTable ===
+        "function"
+    ) {
+
+        updatePredictionHistoryTable();
+    }
+
+
+    console.log(
+        "RESULT SAVED",
+        {
+            prediction: prediction,
+            actual: actualResult,
+            win: isWin,
+            savedNumbers: allResults.length
+        }
     );
-
-        }
-        
-        localStorage.setItem("aiLosses", aiLosses);
-
-        alert("AI LOST ❌");
-
-        addHistory("❌ Prediction : " + nextPrediction + " | Result : " + actualResult);
-        
-updateStats();
-   updatePredictionHistoryTable();
-    updateEngineWeight(false);
-        
-    }
-
 };
 
 function getMemoryPrediction(){
