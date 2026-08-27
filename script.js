@@ -3,8 +3,7 @@
 // MAIN APP FLOW
 // ========================================
 
-console.log("Script.js Loaded ✅");
-
+alert("Script.js Loaded ✅");("Pattern Loaded");
 
 // ========================================
 // PENDING PREDICTION
