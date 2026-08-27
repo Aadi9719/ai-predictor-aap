@@ -1,781 +1,1207 @@
 alert("Pattern Loaded");
 
-function getPatternPrediction(){
-    
-    let bestNumber = null;
-    let bestScore = -1;
-    
-    for(let len = 5; len >= 2; len--)
-    
-    {
-        
-        let currentInput = [
-    Number(document.getElementById("n1").value),
-    Number(document.getElementById("n2").value),
-    Number(document.getElementById("n3").value),
-    Number(document.getElementById("n4").value),
-    Number(document.getElementById("n5").value)
-];
+// ========================================
+// PATTERN.JS
+// PATTERN ANALYSIS + BIG/SMALL + COLOR
+// ========================================
 
-let pattern =
-currentInput.slice(0, len).join(",");
+console.log("Pattern.js Loaded ✅");
 
-        if(!patternMemory[pattern]) continue;
 
-        // Rank Filter
+// ========================================
+// SAFE INPUT READER
+// ========================================
 
-let rank = patternMemory[pattern].rank || 0;
+function getCurrentInput() {
 
-if(rank < 20){
-    continue;
-}
-        
-        // Weak Pattern Reject
+    const ids = ["n1", "n2", "n3", "n4", "n5"];
 
-if(patternMemory[pattern].trust < 30){
-    continue;
+    const values = ids.map(id => {
+
+        const element = document.getElementById(id);
+
+        if (!element) {
+            return NaN;
+        }
+
+        return Number(element.value);
+    });
+
+    return values;
 }
 
-if(patternMemory[pattern].patternWeight < 30){
-    continue;
+
+// ========================================
+// INPUT VALIDATION
+// ========================================
+
+function isValidCurrentInput() {
+
+    const input = getCurrentInput();
+
+    return (
+        input.length === 5 &&
+        input.every(
+            n =>
+                Number.isInteger(n) &&
+                n >= 0 &&
+                n <= 9
+        )
+    );
 }
 
-if(patternMemory[pattern].stability < 40){
-    continue;
-}
-        
-        let nextNumbers = patternMemory[pattern].nextNumbers;
 
-if(!nextNumbers) continue;
+// ========================================
+// PATTERN PREDICTION
+// ========================================
 
-let confidence = patternMemory[pattern].confidence || 1;
+function getPatternPrediction() {
 
-let candidates = [1,2,3,4,5,6,7,8,9];
-        
-        for(let num in nextNumbers){
-            
-           // if(!candidates.includes(Number(num))){
-   // continue;
-         //  }
-            
-            let info = nextNumbers[num];
-
-let frequency = 0;
-let accuracy = 50; // Default
-
-           // if(patternMemory[pattern].repeatCount < 3){
-  //  continue;
-          //  }
-            
-if(info == null){
-
-    continue;
-
-}
-
-if(typeof info === "number"){
-
-    // Old Memory Format
-    frequency = info;
-
-}else if(typeof info === "object"){
-
-    // New Memory Format
-    frequency = info.total || 0;
-    accuracy = info.accuracy || 50;
-
-}
-
-           // if(frequency < 2){
-  //  continue;
-        //    }
-            
-let trendBonus =
-(Number(num) === getTrendPrediction()) ? 15 : 0;
-            
-let hotBonus =
-(Number(num) === getHotColdNumbers().hot) ? 10 : 0;
-            
-            let candidateBonus = 0;
-
-if(candidates.includes(Number(num))){
-    candidateBonus = 20;
-}
-
-            let priorityBonus =
-getCandidatePriority(Number(num));
-
-            let stability = patternMemory[pattern].stability || 0;
-
-            let colorStability = patternMemory[pattern].colorStability || 0;
-
-            let repeat = patternMemory[pattern].repeatCount || 0;
-
-            let lastSeen = patternMemory[pattern].lastSeen || 0;
-            
-            let winRate = getPatternWinRate(pattern);
-
-            let strength = getPatternStrength(pattern);
-
-            let recentAccuracy = getRecentAccuracy(pattern);
-
-            let priority = getPriorityLevel(pattern);
-
-            let masterScore =
-getMasterNumberScore(Number(num), pattern);
-
-            let numberWeight = 50;
-
-if(
-    patternMemory[pattern].numberWeight &&
-    patternMemory[pattern].numberWeight[Number(num)] !== undefined
-){
-    numberWeight =
-    patternMemory[pattern].numberWeight[Number(num)];
-}
-            
-            let trust = patternMemory[pattern].trust || 50;
-            
-let score =
-(frequency * len) +
-(accuracy * 2) +
-(confidence * 2) +
-(winRate * 3) +
-(strength * 2) +
-(recentAccuracy * 3) +
-(priority * 4) +
-trendBonus +
-hotBonus +
-candidateBonus +
-priorityBonus +    
-(masterScore * 2) +
-(trust * 2) +
-(numberWeight * 1.2) +
-(patternMemory[pattern].patternWeight * 1.5);
-            
-            if(
-                score > bestScore ||
-                (score === bestScore && Number(num) !== 0)
-            ){
-                bestScore = score;
-                bestNumber = Number(num);
-            }
-
-        } 
-
-    } 
-
-    if(bestNumber === null){
-        
+    if (!isValidCurrentInput()) {
         return null;
     }
-    
+
+    const currentInput = getCurrentInput();
+
+    let bestNumber = null;
+    let bestScore = -Infinity;
+
+    /*
+       Longest pattern first:
+       5 → 4 → 3 → 2
+
+       Only existing learned patterns are used.
+    */
+
+    for (let len = 5; len >= 2; len--) {
+
+        const pattern =
+            currentInput
+                .slice(0, len)
+                .join(",");
+
+        const memory =
+            patternMemory[pattern];
+
+        if (!memory) {
+            continue;
+        }
+
+        const nextNumbers =
+            memory.nextNumbers || {};
+
+        const total =
+            Number(memory.total) || 0;
+
+        if (total <= 0) {
+            continue;
+        }
+
+        for (const key of Object.keys(nextNumbers)) {
+
+            const number =
+                Number(key);
+
+            if (
+                !Number.isInteger(number) ||
+                number < 0 ||
+                number > 9
+            ) {
+                continue;
+            }
+
+            const frequency =
+                Number(nextNumbers[key]) || 0;
+
+            if (frequency <= 0) {
+                continue;
+            }
+
+            /*
+               Simple stable score.
+
+               Frequency is the main signal.
+               Longer matching pattern gets more weight.
+               Trust/stability are secondary filters.
+            */
+
+            const trust =
+                Number(memory.trust);
+
+            const safeTrust =
+                Number.isFinite(trust)
+                    ? trust
+                    : 50;
+
+            const stability =
+                Number(memory.stability) || 0;
+
+            const patternWeight =
+                Number(memory.patternWeight) || 50;
+
+            const score =
+
+                (frequency * len * 10) +
+
+                (safeTrust * 0.50) +
+
+                (stability * 0.30) +
+
+                (patternWeight * 0.20);
+
+            if (score > bestScore) {
+
+                bestScore = score;
+
+                bestNumber = number;
+            }
+        }
+
+        /*
+           Agar 5-number pattern mil gaya,
+           use priority do.
+        */
+
+        if (
+            len === 5 &&
+            bestNumber !== null
+        ) {
+            return bestNumber;
+        }
+    }
+
     return bestNumber;
-    
 }
 
-function getPatternScore(){
 
-    let currentInput = [
-        Number(document.getElementById("n1").value),
-        Number(document.getElementById("n2").value),
-        Number(document.getElementById("n3").value),
-        Number(document.getElementById("n4").value),
-        Number(document.getElementById("n5").value)
-    ];
+// ========================================
+// BASIC MEMORY PREDICTION
+// ========================================
 
-    let pattern = currentInput.join(",");
+function getMemoryPrediction() {
 
-    if(!patternMemory[pattern]){
+    if (!isValidCurrentInput()) {
+        return null;
+    }
+
+    const currentInput =
+        getCurrentInput();
+
+    const pattern =
+        currentInput.join(",");
+
+    const memory =
+        patternMemory[pattern];
+
+    if (!memory) {
+        return null;
+    }
+
+    const numbers =
+        memory.numbers || {};
+
+    let bestNumber = null;
+    let bestCount = -1;
+
+    for (const key of Object.keys(numbers)) {
+
+        const number =
+            Number(key);
+
+        const count =
+            Number(numbers[key]) || 0;
+
+        if (count > bestCount) {
+
+            bestCount = count;
+
+            bestNumber = number;
+        }
+    }
+
+    return bestNumber;
+}
+
+
+// ========================================
+// PATTERN SCORE
+// ========================================
+
+function getPatternScore() {
+
+    if (!isValidCurrentInput()) {
         return 0;
     }
 
-    let total = patternMemory[pattern].total || 0;
-    let confidence = patternMemory[pattern].confidence || 0;
+    const pattern =
+        getCurrentInput().join(",");
+
+    const memory =
+        patternMemory[pattern];
+
+    if (!memory) {
+        return 0;
+    }
+
+    const total =
+        Number(memory.total) || 0;
+
+    const confidence =
+        Number(memory.confidence) || 0;
+
+    const trust =
+        Number(memory.trust);
+
+    const safeTrust =
+        Number.isFinite(trust)
+            ? trust
+            : 50;
+
+    const patternWeight =
+        Number(memory.patternWeight) || 50;
+
+    const stability =
+        Number(memory.stability) || 0;
+
+    const colorStability =
+        Number(memory.colorStability) || 0;
+
+    /*
+       Keep score bounded.
+    */
 
     let score = 0;
 
-    // Pattern Frequency
-    score += Math.min(total * 3, 30);
+    score += Math.min(total * 2, 20);
 
-    // Confidence
-    score += Math.min(confidence * 0.30, 30);
-
-    // Read AI Learning Values
-    let trust = patternMemory[pattern].trust || 50;
-    let patternWeight = patternMemory[pattern].patternWeight || 50;
-    let stability = patternMemory[pattern].stability || 0;
-    let colorStability = patternMemory[pattern].colorStability || 0;
-    
-    // Win Rate
-    score += Math.min(getPatternWinRate(pattern) * 0.20, 20);
-
-    // Pattern Strength
-    score += Math.min(getPatternStrength(pattern) * 0.10, 10);
-
-    // Recent Accuracy
-    score += Math.min(getRecentAccuracy(pattern) * 0.10, 10);
-
-    // Trust
-score += Math.min(trust * 0.20, 20);
-
-// Pattern Weight
-score += Math.min(patternWeight * 0.20, 20);
-
-    let reward = patternMemory[pattern].reward || 0;
-let penalty = patternMemory[pattern].penalty || 0;
-
-    let learningAge = patternMemory[pattern].learningAge || 0;
-    
-    let totalLearning = reward + penalty;
-
-let rewardRatio = 50;
-
-if(totalLearning > 0){
-
-    rewardRatio = Math.round(
-        (reward / totalLearning) * 100
+    score += Math.min(
+        confidence * 0.20,
+        20
     );
 
+    score +=
+        safeTrust * 0.20;
+
+    score +=
+        patternWeight * 0.20;
+
+    score +=
+        stability * 0.20;
+
+    score +=
+        colorStability * 0.10;
+
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(score)
+        )
+    );
 }
 
-score -= Math.min(learningAge * 0.10, 10);
-score += Math.min(rewardRatio * 0.20, 20);
-score -= Math.min(penalty * 0.30, 15);
-    
-// Stability
-score += Math.min(stability * 0.10, 10);
 
-// Color Stability
-score += Math.min(colorStability * 0.10, 10);
-    
-    if(score > 100){
-        score = 100;
-    }
+// ========================================
+// PATTERN WIN RATE
+// ========================================
 
-    return Math.round(score);
+function getPatternWinRate(pattern) {
 
-}
+    const memory =
+        patternMemory[pattern];
 
-function getPatternWinRate(pattern){
-
-    if(!patternMemory[pattern]){
+    if (!memory) {
         return 0;
     }
 
-    let win = patternMemory[pattern].win || 0;
-    let loss = patternMemory[pattern].loss || 0;
+    const win =
+        Number(memory.win) || 0;
 
-    let total = win + loss;
+    const loss =
+        Number(memory.loss) || 0;
 
-    if(total === 0){
-        return 50;   // Default score
+    const total =
+        win + loss;
+
+    if (total <= 0) {
+        return 50;
     }
 
-    return Math.round((win / total) * 100);
-
+    return Math.round(
+        (win / total) * 100
+    );
 }
 
-function getPatternStrength(pattern){
 
-    if(!patternMemory[pattern]){
+// ========================================
+// PATTERN STRENGTH
+// ========================================
+
+function getPatternStrength(pattern) {
+
+    const memory =
+        patternMemory[pattern];
+
+    if (!memory) {
         return 0;
     }
 
-    let data = patternMemory[pattern];
+    const seen =
+        Number(memory.total) || 0;
 
-    let seen = data.total || 0;
-
-    let winRate = getPatternWinRate(pattern);
+    const winRate =
+        getPatternWinRate(pattern);
 
     let strength =
-    (seen * 2) +
-    (winRate * 3);
+        (seen * 2) +
+        (winRate * 3);
 
-    if(strength > 100){
-        strength = 100;
-    }
-
-    return Math.round(strength);
-
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(strength)
+        )
+    );
 }
 
-function getRecentAccuracy(pattern){
 
-    if(!patternMemory[pattern]){
+// ========================================
+// RECENT ACCURACY
+// ========================================
+
+function getRecentAccuracy(pattern) {
+
+    const memory =
+        patternMemory[pattern];
+
+    if (!memory) {
         return 50;
     }
 
-    let data = patternMemory[pattern];
+    const win =
+        Number(memory.win) || 0;
 
-    let win = data.win || 0;
-    let loss = data.loss || 0;
+    const loss =
+        Number(memory.loss) || 0;
 
-    let total = win + loss;
+    const total =
+        win + loss;
 
-    if(total < 5){
+    if (total < 5) {
         return 50;
     }
 
-    return Math.round((win / total) * 100);
-
+    return Math.round(
+        (win / total) * 100
+    );
 }
 
-function getPriorityLevel(pattern){
 
-    let winRate = getPatternWinRate(pattern);
-    let strength = getPatternStrength(pattern);
-    let recent = getRecentAccuracy(pattern);
+// ========================================
+// PRIORITY LEVEL
+// ========================================
 
-    let priority =
-    (winRate * 0.4) +
-    (strength * 0.3) +
-    (recent * 0.3);
+function getPriorityLevel(pattern) {
 
-    return Math.round(priority);
+    const winRate =
+        getPatternWinRate(pattern);
 
+    const strength =
+        getPatternStrength(pattern);
+
+    const recent =
+        getRecentAccuracy(pattern);
+
+    return Math.round(
+        (winRate * 0.40) +
+        (strength * 0.30) +
+        (recent * 0.30)
+    );
 }
 
-function getBigSmallPatternPrediction(){
-    
-    let currentInput = [
-        Number(document.getElementById("n1").value),
-        Number(document.getElementById("n2").value),
-        Number(document.getElementById("n3").value),
-        Number(document.getElementById("n4").value),
-        Number(document.getElementById("n5").value)
-    ];
 
-    for(let len = 5; len >= 2; len--){
+// ========================================
+// TREND PREDICTION
+// ========================================
 
-        let pattern = currentInput.slice(0, len).join(",");
+function getTrendPrediction() {
 
-        if(!patternMemory[pattern]){
-            continue;
+    if (
+        !Array.isArray(allResults) ||
+        allResults.length < 20
+    ) {
+        return null;
+    }
+
+    const recent =
+        allResults.slice(0, 20);
+
+    const count = {};
+
+    for (let i = 0; i <= 9; i++) {
+        count[i] = 0;
+    }
+
+    recent.forEach(n => {
+
+        const number =
+            Number(n);
+
+        if (
+            Number.isInteger(number) &&
+            number >= 0 &&
+            number <= 9
+        ) {
+            count[number]++;
+        }
+    });
+
+    let best = null;
+    let max = -1;
+
+    for (let i = 1; i <= 9; i++) {
+
+        if (count[i] > max) {
+
+            max =
+                count[i];
+
+            best = i;
+        }
+    }
+
+    return best;
+}
+
+
+// ========================================
+// TREND SCORE
+// ========================================
+
+function getTrendScore() {
+
+    if (
+        !Array.isArray(allResults) ||
+        allResults.length < 20
+    ) {
+        return 0;
+    }
+
+    const recent =
+        allResults.slice(0, 20);
+
+    const count = {};
+
+    let currentStreak = 1;
+    let maxStreak = 1;
+
+    for (
+        let i = 0;
+        i < recent.length;
+        i++
+    ) {
+
+        const number =
+            Number(recent[i]);
+
+        count[number] =
+            (count[number] || 0) + 1;
+
+        if (i > 0) {
+
+            if (
+                Number(recent[i]) ===
+                Number(recent[i - 1])
+            ) {
+
+                currentStreak++;
+
+                maxStreak =
+                    Math.max(
+                        maxStreak,
+                        currentStreak
+                    );
+
+            } else {
+
+                currentStreak = 1;
+            }
+        }
+    }
+
+    let maxFrequency = 0;
+
+    for (const key of Object.keys(count)) {
+
+        if (
+            count[key] >
+            maxFrequency
+        ) {
+            maxFrequency =
+                count[key];
+        }
+    }
+
+    const frequencyScore =
+        (maxFrequency / 20) * 70;
+
+    const streakScore =
+        Math.min(
+            (maxStreak / 5) * 30,
+            30
+        );
+
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            Math.round(
+                frequencyScore +
+                streakScore
+            )
+        )
+    );
+}
+
+
+// ========================================
+// HOT / COLD
+// ========================================
+
+function getHotColdNumbers() {
+
+    if (
+        !Array.isArray(allResults) ||
+        allResults.length < 20
+    ) {
+
+        return {
+            hot: null,
+            cold: null
+        };
+    }
+
+    const recent =
+        allResults.slice(0, 20);
+
+    const count = {};
+
+    for (let i = 0; i <= 9; i++) {
+        count[i] = 0;
+    }
+
+    recent.forEach(n => {
+
+        const number =
+            Number(n);
+
+        if (
+            Number.isInteger(number) &&
+            number >= 0 &&
+            number <= 9
+        ) {
+            count[number]++;
+        }
+    });
+
+    let hot = null;
+    let cold = null;
+
+    let hotCount = -1;
+    let coldCount = Infinity;
+
+    for (let i = 1; i <= 9; i++) {
+
+        if (count[i] > hotCount) {
+
+            hotCount =
+                count[i];
+
+            hot = i;
         }
 
-        let big = patternMemory[pattern].BIG || 0;
-        let small = patternMemory[pattern].SMALL || 0;
+        if (count[i] < coldCount) {
 
-        if(big === 0 && small === 0){
-            continue;
+            coldCount =
+                count[i];
+
+            cold = i;
         }
+    }
 
-        return big >= small ? "BIG" : "SMALL";
+    return {
+        hot,
+        cold
+    };
+}
+
+
+// ========================================
+// FINAL NUMBER PREDICTION
+// ========================================
+
+function getFinalPrediction() {
+
+    const memory =
+        getPatternPrediction();
+
+    const trend =
+        getTrendPrediction();
+
+    const hotCold =
+        getHotColdNumbers();
+
+    const hot =
+        hotCold.hot;
+
+    /*
+       1. Strong exact pattern
+    */
+
+    if (memory !== null) {
+
+        return memory;
+    }
+
+    /*
+       2. Trend
+    */
+
+    if (trend !== null) {
+
+        return trend;
+    }
+
+    /*
+       3. Hot number
+    */
+
+    if (hot !== null) {
+
+        return hot;
     }
 
     return null;
-
 }
 
-function getBigSmallConfidence(){
-    
-    let currentInput = [
-        Number(document.getElementById("n1").value),
-        Number(document.getElementById("n2").value),
-        Number(document.getElementById("n3").value),
-        Number(document.getElementById("n4").value),
-        Number(document.getElementById("n5").value)
-    ];
 
-    for(let len = 5; len >= 2; len--){
+// ========================================
+// BIG / SMALL
+// ========================================
 
-        let pattern = currentInput.slice(0, len).join(",");
+function getBigSmallPatternPrediction() {
 
-        if(!patternMemory[pattern]){
-            continue;
-        }
-
-        let big = patternMemory[pattern].BIG || 0;
-        let small = patternMemory[pattern].SMALL || 0;
-
-        let total = big + small;
-
-        if(total === 0){
-            continue;
-        }
-
-        let best = Math.max(big, small);
-        
-        return Math.round((best / total) * 100);
+    if (!isValidCurrentInput()) {
+        return null;
     }
-    
+
+    const input =
+        getCurrentInput();
+
+    for (
+        let len = 5;
+        len >= 2;
+        len--
+    ) {
+
+        const pattern =
+            input
+                .slice(0, len)
+                .join(",");
+
+        const memory =
+            patternMemory[pattern];
+
+        if (!memory) {
+            continue;
+        }
+
+        const big =
+            Number(memory.BIG) || 0;
+
+        const small =
+            Number(memory.SMALL) || 0;
+
+        if (
+            big === 0 &&
+            small === 0
+        ) {
+            continue;
+        }
+
+        return (
+            big >= small
+                ? "BIG"
+                : "SMALL"
+        );
+    }
+
+    return null;
+}
+
+
+// ========================================
+// BIG / SMALL CONFIDENCE
+// ========================================
+
+function getBigSmallConfidence() {
+
+    if (!isValidCurrentInput()) {
+        return 0;
+    }
+
+    const input =
+        getCurrentInput();
+
+    for (
+        let len = 5;
+        len >= 2;
+        len--
+    ) {
+
+        const pattern =
+            input
+                .slice(0, len)
+                .join(",");
+
+        const memory =
+            patternMemory[pattern];
+
+        if (!memory) {
+            continue;
+        }
+
+        const big =
+            Number(memory.BIG) || 0;
+
+        const small =
+            Number(memory.SMALL) || 0;
+
+        const total =
+            big + small;
+
+        if (total <= 0) {
+            continue;
+        }
+
+        const best =
+            Math.max(
+                big,
+                small
+            );
+
+        return Math.round(
+            (best / total) * 100
+        );
+    }
+
     return 0;
-
 }
 
-function getBigSmallAIScore(){
 
-    let confidence = getBigSmallConfidence();
+// ========================================
+// BIG / SMALL AI SCORE
+// ========================================
 
-    let trend = getTrendScore();
+function getBigSmallAIScore() {
 
-    let score =
-        (confidence * 0.70) +
-        (trend * 0.30);
+    const confidence =
+        getBigSmallConfidence();
 
-    if(score > 100){
-        score = 100;
-    }
+    const trend =
+        getTrendScore();
 
-    return Math.round(score);
-
+    return Math.min(
+        100,
+        Math.round(
+            (confidence * 0.70) +
+            (trend * 0.30)
+        )
+    );
 }
 
-function getBigSmallRatio(data){
+
+// ========================================
+// RECENT BIG / SMALL
+// ========================================
+
+function getBigSmallRatio(data) {
 
     let big = 0;
     let small = 0;
 
+    if (!Array.isArray(data)) {
+        return { big, small };
+    }
+
     data.forEach(n => {
 
-        if(n >= 5){
+        const number =
+            Number(n);
 
+        if (number >= 5) {
             big++;
-
-        }else{
-
+        } else {
             small++;
-
         }
-
     });
 
-    return{
-
+    return {
         big,
         small
-
     };
-
 }
 
-function getRecentBigSmallPrediction(){
-    
-    let last20 = allResults.slice(-20);
 
-let last100 = allResults.slice(-100);
+function getRecentBigSmallPrediction() {
 
-let history1000 = allResults.slice(-1000);
-    
-    let r20 = getBigSmallRatio(last20);
+    if (
+        !Array.isArray(allResults) ||
+        allResults.length === 0
+    ) {
+        return "UNKNOWN";
+    }
 
-    let r100 = getBigSmallRatio(last100);
+    const last20 =
+        allResults.slice(0, 20);
 
-    let r1000 = getBigSmallRatio(history1000);
+    const last100 =
+        allResults.slice(0, 100);
 
-    let bigScore =
+    const last1000 =
+        allResults.slice(0, 1000);
+
+    const r20 =
+        getBigSmallRatio(last20);
+
+    const r100 =
+        getBigSmallRatio(last100);
+
+    const r1000 =
+        getBigSmallRatio(last1000);
+
+    const bigScore =
         (r20.big * 0.50) +
         (r100.big * 0.30) +
         (r1000.big * 0.20);
 
-    let smallScore =
+    const smallScore =
         (r20.small * 0.50) +
         (r100.small * 0.30) +
         (r1000.small * 0.20);
 
-    return bigScore >= smallScore ? "BIG" : "SMALL";
-
+    return (
+        bigScore >= smallScore
+            ? "BIG"
+            : "SMALL"
+    );
 }
 
-function getColorRatio(data){
 
-    let green = 0;
+function getFinalBigSmallPrediction() {
 
-    let red = 0;
+    const pattern =
+        getBigSmallPatternPrediction();
 
-    let violet = 0;
+    const recent =
+        getRecentBigSmallPrediction();
 
-    data.forEach(n=>{
+    const confidence =
+        getBigSmallConfidence();
 
-        if([1,3,7,9].includes(n)){
+    if (
+        pattern !== null &&
+        pattern === recent &&
+        confidence >= 60
+    ) {
+        return pattern;
+    }
 
-            green++;
+    if (
+        pattern !== null &&
+        confidence >= 70
+    ) {
+        return pattern;
+    }
 
-        }else if([2,4,6,8].includes(n)){
-
-            red++;
-
-        }else{
-
-            violet++;
-
-        }
-
-    });
-
-    return{
-
-        green,
-
-        red,
-
-        violet
-
-    };
-
+    return recent;
 }
 
-function getRecentColorPrediction(){
 
-    let last20 = allResults.slice(-20);
+// ========================================
+// COLOR
+// ========================================
 
-let last100 = allResults.slice(-100);
+function getColorPrediction(number) {
 
-let history1000 = allResults.slice(-1000);
-    
-    let r20 = getColorRatio(last20);
+    number =
+        Number(number);
 
-    let r100 = getColorRatio(last100);
-
-    let r1000 = getColorRatio(history1000);
-
-    let greenScore =
-        (r20.green * 0.50) +
-        (r100.green * 0.30) +
-        (r1000.green * 0.20);
-
-    let redScore =
-        (r20.red * 0.50) +
-        (r100.red * 0.30) +
-        (r1000.red * 0.20);
-
-    let violetScore =
-        (r20.violet * 0.50) +
-        (r100.violet * 0.30) +
-        (r1000.violet * 0.20);
-
-    if(
-        greenScore >= redScore &&
-        greenScore >= violetScore
-    ){
+    if (
+        [1, 3, 7, 9]
+            .includes(number)
+    ) {
         return "GREEN";
     }
 
-    if(
-        redScore >= greenScore &&
-        redScore >= violetScore
-    ){
+    if (
+        [2, 4, 6, 8]
+            .includes(number)
+    ) {
         return "RED";
     }
 
     return "VIOLET";
-
 }
 
-function getFinalBigSmallPrediction(){
-    
-    let pattern = getBigSmallPatternPrediction();
 
-    let recent = getRecentBigSmallPrediction();
+function getColorPatternPrediction() {
 
-    let confidence = getBigSmallConfidence();
-
-    // Pattern aur Recent dono same hain
-    if(pattern !== null &&
-       pattern === recent &&
-       confidence >= 60){
-
-        return pattern;
-
+    if (!isValidCurrentInput()) {
+        return null;
     }
 
-    // Agar Recent aur Pattern alag hain
-    if(pattern !== recent){
+    const input =
+        getCurrentInput();
 
-        return recent;
+    for (
+        let len = 5;
+        len >= 2;
+        len--
+    ) {
 
-    }
+        const pattern =
+            input
+                .slice(0, len)
+                .join(",");
 
-    // Normal Pattern
-    if(pattern !== null){
+        const memory =
+            patternMemory[pattern];
 
-        return pattern;
-
-    }
-
-    return "UNKNOWN";
-
-}
-
-function getColorPatternPrediction(){
-
-    let currentInput = [
-        Number(document.getElementById("n1").value),
-        Number(document.getElementById("n2").value),
-        Number(document.getElementById("n3").value),
-        Number(document.getElementById("n4").value),
-        Number(document.getElementById("n5").value)
-    ];
-
-    for(let len = 5; len >= 2; len--){
-
-        let pattern = currentInput.slice(0,len).join(",");
-
-        if(!patternMemory[pattern]){
+        if (!memory) {
             continue;
         }
 
-        let green = patternMemory[pattern].GREEN || 0;
-        let red = patternMemory[pattern].RED || 0;
+        const green =
+            Number(memory.GREEN) || 0;
 
-        if(green === 0 && red === 0){
+        const red =
+            Number(memory.RED) || 0;
+
+        if (
+            green === 0 &&
+            red === 0
+        ) {
             continue;
         }
 
-        return green >= red ? "GREEN" : "RED";
+        return (
+            green >= red
+                ? "GREEN"
+                : "RED"
+        );
     }
 
     return null;
-
 }
 
-function getColorConfidence(){
 
-    let currentInput = [
-        Number(document.getElementById("n1").value),
-        Number(document.getElementById("n2").value),
-        Number(document.getElementById("n3").value),
-        Number(document.getElementById("n4").value),
-        Number(document.getElementById("n5").value)
-    ];
+function getColorConfidence() {
 
-    let pattern = currentInput.join(",");
-
-    if(!patternMemory[pattern]){
+    if (!isValidCurrentInput()) {
         return 0;
     }
 
-    let green = patternMemory[pattern].GREEN || 0;
-    let red = patternMemory[pattern].RED || 0;
+    const input =
+        getCurrentInput();
 
-    let total = green + red;
+    for (
+        let len = 5;
+        len >= 2;
+        len--
+    ) {
 
-    if(total === 0){
-        return 0;
+        const pattern =
+            input
+                .slice(0, len)
+                .join(",");
+
+        const memory =
+            patternMemory[pattern];
+
+        if (!memory) {
+            continue;
+        }
+
+        const green =
+            Number(memory.GREEN) || 0;
+
+        const red =
+            Number(memory.RED) || 0;
+
+        const total =
+            green + red;
+
+        if (total <= 0) {
+            continue;
+        }
+
+        return Math.round(
+            (Math.max(green, red) /
+                total) * 100
+        );
     }
 
-    return Math.round(
-        (Math.max(green, red) / total) * 100
+    return 0;
+}
+
+
+function getColorAIScore() {
+
+    const confidence =
+        getColorConfidence();
+
+    const trend =
+        getTrendScore();
+
+    return Math.min(
+        100,
+        Math.round(
+            (confidence * 0.70) +
+            (trend * 0.30)
+        )
     );
-
 }
 
-function getColorAIScore(){
 
-    let confidence = getColorConfidence();
+// ========================================
+// RECENT COLOR
+// ========================================
 
-    let trend = getTrendScore();
+function getColorRatio(data) {
 
-    let score =
-        (confidence * 0.70) +
-        (trend * 0.30);
+    let green = 0;
+    let red = 0;
+    let violet = 0;
 
-    if(score > 100){
-        score = 100;
+    if (!Array.isArray(data)) {
+        return {
+            green,
+            red,
+            violet
+        };
     }
 
-    return Math.round(score);
+    data.forEach(n => {
 
+        const number =
+            Number(n);
+
+        if (
+            [1, 3, 7, 9]
+                .includes(number)
+        ) {
+
+            green++;
+
+        } else if (
+            [2, 4, 6, 8]
+                .includes(number)
+        ) {
+
+            red++;
+
+        } else {
+
+            violet++;
+        }
+    });
+
+    return {
+        green,
+        red,
+        violet
+    };
 }
 
-function getFinalColorPrediction(){
 
-    let pattern = getColorPatternPrediction();
+function getRecentColorPrediction() {
 
-    let recent = getRecentColorPrediction();
+    if (
+        !Array.isArray(allResults) ||
+        allResults.length === 0
+    ) {
+        return "UNKNOWN";
+    }
 
-    let confidence = getColorConfidence();
+    const r20 =
+        getColorRatio(
+            allResults.slice(0, 20)
+        );
 
-    // Pattern aur Recent dono same
-    if(
+    const r100 =
+        getColorRatio(
+            allResults.slice(0, 100)
+        );
+
+    const r1000 =
+        getColorRatio(
+            allResults.slice(0, 1000)
+        );
+
+    const greenScore =
+        (r20.green * 0.50) +
+        (r100.green * 0.30) +
+        (r1000.green * 0.20);
+
+    const redScore =
+        (r20.red * 0.50) +
+        (r100.red * 0.30) +
+        (r1000.red * 0.20);
+
+    const violetScore =
+        (r20.violet * 0.50) +
+        (r100.violet * 0.30) +
+        (r1000.violet * 0.20);
+
+    if (
+        greenScore >= redScore &&
+        greenScore >= violetScore
+    ) {
+        return "GREEN";
+    }
+
+    if (
+        redScore >= greenScore &&
+        redScore >= violetScore
+    ) {
+        return "RED";
+    }
+
+    return "VIOLET";
+}
+
+
+function getFinalColorPrediction() {
+
+    const pattern =
+        getColorPatternPrediction();
+
+    const recent =
+        getRecentColorPrediction();
+
+    const confidence =
+        getColorConfidence();
+
+    if (
         pattern !== null &&
         pattern === recent &&
         confidence >= 60
-    ){
+    ) {
         return pattern;
     }
 
-    // Recent aur Pattern alag
-    if(pattern !== recent){
-        return recent;
-    }
-
-    // Normal Pattern
-    if(pattern !== null){
-        return pattern;
-    }
-
-    return "UNKNOWN";
-
-}
-
-function getCandidateNumbers(){
-
-    let bs = getFinalBigSmallPrediction();
-
-    let color = getFinalColorPrediction();
-
-    // BIG + GREEN
-    if(bs === "BIG" && color.includes("GREEN")){
-        return [7,9];
-    }
-
-    return [1,2,3,4,5,6,7,8,9];
-
-}
-
-function getMasterNumberScore(number, pattern){
-
-    let patternScore = getPatternScore(pattern);
-
-    let bigSmallConfidence = getBigSmallConfidence();
-
-    let colorConfidence = getColorConfidence();
-
-    let trendScore = getTrendScore();
-
-    let numberScore = 50;
-
-if(
-    patternMemory[pattern] &&
-    patternMemory[pattern].numberWeight &&
-    patternMemory[pattern].numberWeight[number] !== undefined
-){
-    numberScore = patternMemory[pattern].numberWeight[number];
-}
-
-let score =
-(patternScore * (aiEngineWeight.pattern / 100)) +
-(bigSmallConfidence * (aiEngineWeight.bigSmall / 100)) +
-(colorConfidence * (aiEngineWeight.color / 100)) +
-(trendScore * (aiEngineWeight.trend / 100)) +
-(numberScore * 0.5);
-
-    return Math.round(score);
-
-}
-
-function getCandidatePriority(number){
-
-    let priority = 0;
-
-    let hot = getHotColdNumbers().hot;
-
-    if(number === hot){
-        priority += 15;
-    }
-
-    let candidates = getCandidateNumbers();
-
-    if(candidates.includes(number)){
-        priority += 20;
-    }
-
-    if(number === getTrendPrediction()){
-        priority += 10;
-    }
-
-    return priority;
-
-}
+    if (
+        pattern !== null &&
+        c
