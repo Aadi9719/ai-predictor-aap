@@ -23,25 +23,22 @@ document.addEventListener(
 
         const analyzeBtn =
             document.getElementById("analyzeBtn");
-        
+
         const checkBtn =
             document.getElementById("checkBtn");
 
 
-        // --------------------------------
-        // Safety check
-        // --------------------------------
+        // =================================
+        // SAFETY CHECK
+        // =================================
 
         if (!analyzeBtn) {
-
             console.error(
                 "Analyze button not found"
             );
-
         }
 
         if (!checkBtn) {
-
             console.error(
                 "Check button not found"
             );
@@ -61,6 +58,10 @@ document.addEventListener(
                         "Analyze AI started"
                     );
 
+
+                    // -----------------------------
+                    // READ 5 INPUTS
+                    // -----------------------------
 
                     const input = [
 
@@ -88,7 +89,7 @@ document.addEventListener(
 
 
                     // -----------------------------
-                    // Validate
+                    // VALIDATE
                     // -----------------------------
 
                     if (
@@ -108,17 +109,17 @@ document.addEventListener(
                     }
 
 
-                    // -----------------------------
-                    // Save exact prediction input
-                    // -----------------------------
+                    // =================================
+                    // FREEZE EXACT INPUT
+                    // =================================
 
                     pendingInput =
                         [...input];
 
 
-                    // -----------------------------
-                    // Get prediction
-                    // -----------------------------
+                    // =================================
+                    // GET AI PREDICTION
+                    // =================================
 
                     let prediction = null;
 
@@ -162,9 +163,9 @@ document.addEventListener(
                     }
 
 
-                    // -----------------------------
-                    // Validate prediction
-                    // -----------------------------
+                    // =================================
+                    // VALIDATE PREDICTION
+                    // =================================
 
                     if (
                         prediction === null ||
@@ -220,9 +221,7 @@ document.addEventListener(
                                 "Confidence error:",
                                 error
                             );
-
                         }
-
                     }
 
 
@@ -231,10 +230,20 @@ document.addEventListener(
                         "function"
                     ) {
 
-                        trendScore =
-                            Number(
-                                getTrendScore()
-                            ) || 0;
+                        try {
+
+                            trendScore =
+                                Number(
+                                    getTrendScore()
+                                ) || 0;
+
+                        } catch (error) {
+
+                            console.error(
+                                "Trend error:",
+                                error
+                            );
+                        }
                     }
 
 
@@ -256,9 +265,7 @@ document.addEventListener(
                                 "AI score error:",
                                 error
                             );
-
                         }
-
                     }
 
 
@@ -266,11 +273,13 @@ document.addEventListener(
                         pendingInput.join(",");
 
 
-                    let hotCold = {
+                    // =================================
+                    // HOT / COLD
+                    // =================================
 
+                    let hotCold = {
                         hot: null,
                         cold: null
-
                     };
 
 
@@ -290,14 +299,12 @@ document.addEventListener(
                                 "Hot/cold error:",
                                 error
                             );
-
                         }
-
                     }
 
 
                     // =================================
-                    // DISPLAY
+                    // DISPLAY RESULT
                     // =================================
 
                     const resultBox =
@@ -376,10 +383,14 @@ document.addEventListener(
                             <br><br>
 
                             Total Saved Numbers :
-                            <b>${allResults.length}</b>
-
+                            <b>
+                                ${
+                                    Array.isArray(allResults)
+                                        ? allResults.length
+                                        : 0
+                                }
+                            </b>
                         `;
-
                     }
 
 
@@ -433,27 +444,21 @@ document.addEventListener(
                         typeof updateStats ===
                         "function"
                     ) {
-
                         updateStats();
-
                     }
 
 
                     console.log(
                         "PREDICTION CREATED",
                         {
-
                             input:
-                                pendingInput,
+                                [...pendingInput],
 
                             prediction:
                                 pendingPrediction
-
                         }
                     );
-
                 };
-
         }
 
 
@@ -471,9 +476,9 @@ document.addEventListener(
                     );
 
 
-                    // -----------------------------
-                    // Prediction check
-                    // -----------------------------
+                    // =================================
+                    // CHECK PENDING PREDICTION
+                    // =================================
 
                     if (
                         pendingPrediction === null ||
@@ -489,7 +494,7 @@ document.addEventListener(
 
 
                     if (
-                        !pendingInput ||
+                        !Array.isArray(pendingInput) ||
                         pendingInput.length !== 5
                     ) {
 
@@ -501,9 +506,9 @@ document.addEventListener(
                     }
 
 
-                    // -----------------------------
-                    // Actual result
-                    // -----------------------------
+                    // =================================
+                    // GET ACTUAL RESULT
+                    // =================================
 
                     const input =
                         prompt(
@@ -547,6 +552,7 @@ document.addEventListener(
                             pendingPrediction
                         );
 
+
                     const predictionInput =
                         [...pendingInput];
 
@@ -563,6 +569,16 @@ document.addEventListener(
                     // SAVE ACTUAL RESULT
                     // =================================
 
+                    if (
+                        typeof allResults ===
+                        "undefined" ||
+                        !Array.isArray(allResults)
+                    ) {
+
+                        allResults = [];
+                    }
+
+
                     allResults.unshift(
                         actualResult
                     );
@@ -573,21 +589,47 @@ document.addEventListener(
                     ) {
 
                         allResults.pop();
-
                     }
 
 
-                    saveMemory(
-                        "allResults",
-                        allResults
-                    );
+                    if (
+                        typeof saveMemory ===
+                        "function"
+                    ) {
+
+                        saveMemory(
+                            "allResults",
+                            allResults
+                        );
+
+                    } else {
+
+                        localStorage.setItem(
+                            "allResults",
+                            JSON.stringify(
+                                allResults
+                            )
+                        );
+                    }
 
 
                     // =================================
-                    // RESTORE PREDICTION INPUT
-                    // FOR LEARNING
+                    // LEARNING
+                    // IMPORTANT:
+                    // Use frozen prediction input.
                     // =================================
 
+                    const oldValues = [
+                        document.getElementById("n1")?.value,
+                        document.getElementById("n2")?.value,
+                        document.getElementById("n3")?.value,
+                        document.getElementById("n4")?.value,
+                        document.getElementById("n5")?.value
+                    ];
+
+
+                    // Temporarily restore exact
+                    // prediction input for learning.
                     document.getElementById(
                         "n1"
                     ).value =
@@ -635,9 +677,7 @@ document.addEventListener(
                                 "Pattern learning error:",
                                 error
                             );
-
                         }
-
                     }
 
 
@@ -662,9 +702,7 @@ document.addEventListener(
                                 "Big/Small learning error:",
                                 error
                             );
-
                         }
-
                     }
 
 
@@ -679,7 +717,7 @@ document.addEventListener(
 
                         try {
 
-                            updateColorMemory(
+                    updateColorMemory(
                                 actualResult
                             );
 
@@ -689,9 +727,7 @@ document.addEventListener(
                                 "Color learning error:",
                                 error
                             );
-
                         }
-
                     }
 
 
@@ -704,11 +740,20 @@ document.addEventListener(
                         "function"
                     ) {
 
-                        savePredictionHistory(
-                            prediction,
-                            actualResult
-                        );
+                        try {
 
+                            savePredictionHistory(
+                                prediction,
+                                actualResult
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "Prediction history error:",
+                                error
+                            );
+                        }
                     }
 
 
@@ -719,6 +764,7 @@ document.addEventListener(
                     if (isWin) {
 
                         aiWins++;
+
 
                         localStorage.setItem(
                             "aiWins",
@@ -731,11 +777,20 @@ document.addEventListener(
                             "function"
                         ) {
 
-                            updateRewardPenalty(
-                                currentPattern,
-                                true
-                            );
+                            try {
 
+                                updateRewardPenalty(
+                                    currentPattern,
+                                    true
+                                );
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Reward update error:",
+                                    error
+                                );
+                            }
                         }
 
 
@@ -744,20 +799,35 @@ document.addEventListener(
                             "function"
                         ) {
 
-                            selfLearning(
-                                currentPattern,
-                                true
-                            );
+                            try {
 
+                                selfLearning(
+                                    currentPattern,
+                                    true
+                                );
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Self learning error:",
+                                    error
+                                );
+                            }
                         }
 
 
-                    addHistory(
-                            "✅ AI WON | Prediction : " +
-                            prediction +
-                            " | Result : " +
-                            actualResult
-                        );
+                        if (
+                            typeof addHistory ===
+                            "function"
+                        ) {
+
+                            addHistory(
+                                "✅ AI WON | Prediction : " +
+                                prediction +
+                                " | Result : " +
+                                actualResult
+                            );
+                        }
 
 
                         alert(
@@ -773,6 +843,7 @@ document.addEventListener(
 
                         aiLosses++;
 
+
                         localStorage.setItem(
                             "aiLosses",
                             String(aiLosses)
@@ -784,11 +855,20 @@ document.addEventListener(
                             "function"
                         ) {
 
-                            updateRewardPenalty(
-                                currentPattern,
-                                false
-                            );
+                            try {
 
+                                updateRewardPenalty(
+                                    currentPattern,
+                                    false
+                                );
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Penalty update error:",
+                                    error
+                                );
+                            }
                         }
 
 
@@ -797,20 +877,35 @@ document.addEventListener(
                             "function"
                         ) {
 
-                            selfLearning(
-                                currentPattern,
-                                false
-                            );
+                            try {
 
+                                selfLearning(
+                                    currentPattern,
+                                    false
+                                );
+
+                            } catch (error) {
+
+                                console.error(
+                                    "Self learning error:",
+                                    error
+                                );
+                            }
                         }
 
 
-                        addHistory(
-                            "❌ AI LOST | Prediction : " +
-                            prediction +
-                            " | Result : " +
-                            actualResult
-                        );
+                        if (
+                            typeof addHistory ===
+                            "function"
+                        ) {
+
+                            addHistory(
+                                "❌ AI LOST | Prediction : " +
+                                prediction +
+                                " | Result : " +
+                                actualResult
+                            );
+                        }
 
 
                         alert(
@@ -820,56 +915,84 @@ document.addEventListener(
                             "\nActual Result = " +
                             actualResult
                         );
-
                     }
 
-function shiftInputsAfterResult(actualResult) {
 
-    const inputIds = ["n1", "n2", "n3", "n4", "n5"];
+                    // =================================
+                    // ⭐ FIXED AUTO INPUT SHIFT ⭐
+                    // =================================
+                    //
+                    // Example:
+                    //
+                    // Before:
+                    // 3 | 7 | 2 | 8 | 5
+                    //
+                    // Actual result:
+                    // 9
+                    //
+                    // After:
+                    // 9 | 3 | 7 | 2 | 8
+                    //
+                    // =================================
 
-    const currentValues = inputIds.map(id => {
-        const el = document.getElementById(id);
-        return el ? Number(el.value) : NaN;
-    });
+                    const newInputValues = [
 
-    if (
-        !Number.isInteger(Number(actualResult)) ||
-        actualResult < 0 ||
-        actualResult > 9
-    ) {
-        console.warn("Invalid actual result:", actualResult);
-        return false;
-    }
+                        actualResult,
 
-    // IMPORTANT:
-    // Purane 5 inputs ko ek saath copy karke shift karo.
-    // Isse assignment-order ki wajah se koi value overwrite nahi hogi.
-    const newValues = [
-        Number(actualResult),
-        currentValues[0],
-        currentValues[1],
-        currentValues[2],
-        currentValues[3]
-    ];
+                        predictionInput[0],
 
-    inputIds.forEach((id, index) => {
-        const el = document.getElementById(id);
+                        predictionInput[1],
 
-        if (el) {
-            el.value = newValues[index];
-        }
-    });
+                        predictionInput[2],
 
-    console.log(
-        "INPUT SHIFT:",
-        currentValues,
-        "=>",
-        newValues
-    );
+                        predictionInput[3]
 
-    return true;
-}
-                    
+                    ];
+
+
+                    const inputIds = [
+                        "n1",
+                        "n2",
+                        "n3",
+                        "n4",
+                        "n5"
+                    ];
+
+
+                    inputIds.forEach(
+                        function (id, index) {
+
+                            const element =
+                                document.getElementById(
+                                    id
+                                );
+
+                            if (element) {
+
+                                element.value =
+                                    newInputValues[
+                                        index
+                                    ];
+                            }
+                        }
+                    );
+
+
+                    console.log(
+                        "INPUT SHIFTED",
+                        {
+                            oldInput:
+                                predictionInput,
+
+                            actual:
+                                actualResult,
+
+                            newInput:
+                                newInputValues
+                        }
+                    );
+
+
                     // =================================
                     // RESET PENDING
                     // =================================
@@ -900,11 +1023,14 @@ function shiftInputsAfterResult(actualResult) {
 
 
                     if (debugSource) {
+
                         debugSource.innerText =
                             "RESULT SAVED";
                     }
 
+
                     if (debugMemory) {
+
                         debugMemory.innerText =
                             "UPDATED";
                     }
@@ -920,7 +1046,6 @@ function shiftInputsAfterResult(actualResult) {
                     ) {
 
                         updateStats();
-
                     }
 
 
@@ -934,14 +1059,12 @@ function shiftInputsAfterResult(actualResult) {
                     ) {
 
                         updatePredictionHistoryTable();
-
                     }
 
 
                     console.log(
                         "RESULT SAVED",
                         {
-
                             prediction:
                                 prediction,
 
@@ -959,12 +1082,9 @@ function shiftInputsAfterResult(actualResult) {
 
                             aiLosses:
                                 aiLosses
-
                         }
                     );
-
                 };
-
         }
 
 
@@ -978,7 +1098,6 @@ function shiftInputsAfterResult(actualResult) {
         ) {
 
             updateStats();
-
         }
 
 
@@ -988,8 +1107,8 @@ function shiftInputsAfterResult(actualResult) {
         ) {
 
             updatePredictionHistoryTable();
-
         }
 
     }
 );
+
