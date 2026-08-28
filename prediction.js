@@ -32,11 +32,9 @@ function getBigSmallPrediction(number) {
 
     number = Number(number);
 
-    if (number >= 5) {
-        return "🔵 BIG";
-    }
-
-    return "🟡 SMALL";
+    return number >= 5
+        ? "🔵 BIG"
+        : "🟡 SMALL";
 }
 
 
@@ -50,9 +48,7 @@ function getTrendPrediction() {
         return null;
     }
 
-    // allResults[0] = latest result
     const recent = allResults.slice(0, 20);
-
     const count = {};
 
     for (let i = 1; i <= 9; i++) {
@@ -70,7 +66,6 @@ function getTrendPrediction() {
         ) {
             count[n]++;
         }
-
     });
 
     let best = null;
@@ -79,12 +74,9 @@ function getTrendPrediction() {
     for (let i = 1; i <= 9; i++) {
 
         if (count[i] > max) {
-
             max = count[i];
             best = i;
-
         }
-
     }
 
     return best;
@@ -102,7 +94,6 @@ function getTrendScore() {
     }
 
     const recent = allResults.slice(0, 20);
-
     const count = {};
 
     for (let i = 1; i <= 9; i++) {
@@ -120,7 +111,6 @@ function getTrendScore() {
         ) {
             count[n]++;
         }
-
     });
 
     let maxFrequency = 0;
@@ -130,23 +120,13 @@ function getTrendScore() {
         if (count[i] > maxFrequency) {
             maxFrequency = count[i];
         }
-
     }
 
-    /*
-       20 results mein maximum frequency
-       ko trend strength maana ja raha hai.
-
-       Example:
-       4/20 = 20%
-       6/20 = 30%
-    */
-
-    const score =
-        (maxFrequency / 20) * 100;
-
     return Math.round(
-        Math.min(100, score)
+        Math.min(
+            100,
+            (maxFrequency / 20) * 100
+        )
     );
 }
 
@@ -163,11 +143,9 @@ function getHotColdNumbers() {
             hot: null,
             cold: null
         };
-
     }
 
     const recent = allResults.slice(0, 20);
-
     const count = {};
 
     for (let i = 1; i <= 9; i++) {
@@ -185,7 +163,6 @@ function getHotColdNumbers() {
         ) {
             count[n]++;
         }
-
     });
 
     let hot = null;
@@ -197,25 +174,120 @@ function getHotColdNumbers() {
     for (let i = 1; i <= 9; i++) {
 
         if (count[i] > hotCount) {
-
             hotCount = count[i];
             hot = i;
-
         }
 
         if (count[i] < coldCount) {
-
             coldCount = count[i];
             cold = i;
-
         }
-
     }
 
     return {
         hot: hot,
         cold: cold
     };
+}
+
+
+// ========================================
+// REAL AI MODEL PREDICTION
+// ========================================
+// Optional signal only.
+// Does NOT guarantee the future result.
+// ========================================
+
+async function getRealAIPrediction(input) {
+
+    try {
+
+        if (
+            typeof tf === "undefined" ||
+            typeof realAIModel === "undefined" ||
+            !realAIModel
+        ) {
+            return null;
+        }
+
+        if (
+            !Array.isArray(input) ||
+            input.length !== 5
+        ) {
+            return null;
+        }
+
+        const values = input.map(Number);
+
+        if (
+            values.some(
+                n =>
+                    !Number.isInteger(n) ||
+                    n < 0 ||
+                    n > 9
+            )
+        ) {
+            return null;
+        }
+
+        const tensor =
+            tf.tensor2d(
+                [values],
+                [1, 5]
+            );
+
+        const output =
+            realAIModel.predict(tensor);
+
+        const probabilities =
+            await output.data();
+
+        let bestIndex = 0;
+        let bestProbability = -Infinity;
+
+        for (
+            let i = 0;
+            i < probabilities.length;
+            i++
+        ) {
+
+            if (
+                probabilities[i] >
+                bestProbability
+            ) {
+
+                bestProbability =
+                    probabilities[i];
+
+                bestIndex = i;
+            }
+        }
+
+        tensor.dispose();
+
+        if (
+            output &&
+            typeof output.dispose === "function"
+        ) {
+            output.dispose();
+        }
+
+        return {
+            number: bestIndex,
+            confidence: Math.round(
+                bestProbability * 100
+            )
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Real AI prediction error:",
+            error
+        );
+
+        return null;
+    }
 }
 
 
@@ -229,14 +301,20 @@ function getFinalPrediction() {
     let trend = null;
     let hot = null;
 
-    // -----------------------------
-    // Memory
-    // -----------------------------
+    // ------------------------------------
+    // Pattern Memory
+    // ------------------------------------
 
-    if (typeof getPatternPrediction === "function") {
+    if (
+        typeof getPatternPrediction ===
+        "function"
+    ) {
 
         try {
-            memory = getPatternPrediction();
+
+            memory =
+                getPatternPrediction();
+
         } catch (error) {
 
             console.error(
@@ -246,108 +324,112 @@ function getFinalPrediction() {
 
             memory = null;
         }
-
     }
 
 
-    // -----------------------------
+    // ------------------------------------
     // Trend
-    // -----------------------------
+    // ------------------------------------
 
-    trend = getTrendPrediction();
+    trend =
+        getTrendPrediction();
 
 
-    // -----------------------------
+    // ------------------------------------
     // Hot
-    // -----------------------------
+    // ------------------------------------
 
-    const hotCold = getHotColdNumbers();
+    const hotCold =
+        getHotColdNumbers();
 
-    hot = hotCold.hot;
+    hot =
+        hotCold.hot;
 
 
-    // -----------------------------
+    // ------------------------------------
     // Memory + Trend agreement
-    // -----------------------------
+    // ------------------------------------
 
     if (
         memory !== null &&
         trend !== null &&
-        memory === trend
+        Number(memory) === Number(trend)
     ) {
 
-        return memory;
-
+        return Number(memory);
     }
 
 
-    // -----------------------------
+    // ------------------------------------
     // Strong pattern memory
-    // -----------------------------
+    // ------------------------------------
 
     if (
         memory !== null &&
-        typeof getPatternScore === "function"
+        typeof getPatternScore ===
+        "function"
     ) {
 
         let patternScore = 0;
 
         try {
-            patternScore = getPatternScore();
+
+            patternScore =
+                Number(
+                    getPatternScore()
+                ) || 0;
+
         } catch (error) {
 
             console.error(
                 "Pattern score error:",
                 error
             );
-
         }
 
         if (patternScore >= 70) {
-            return memory;
+            return Number(memory);
         }
-
     }
 
 
-    // -----------------------------
+    // ------------------------------------
     // Strong trend
-    // -----------------------------
+    // ------------------------------------
 
     if (
         trend !== null &&
         getTrendScore() >= 70
     ) {
 
-        return trend;
-
+        return Number(trend);
     }
 
 
-    // -----------------------------
+    // ------------------------------------
     // Hot fallback
-    // -----------------------------
+    // ------------------------------------
 
     if (hot !== null) {
-        return hot;
+        return Number(hot);
     }
 
 
-    // -----------------------------
+    // ------------------------------------
     // Memory fallback
-    // -----------------------------
+    // ------------------------------------
 
     if (memory !== null) {
-        return memory;
+        return Number(memory);
     }
 
 
-    // -----------------------------
+    // ------------------------------------
     // Trend fallback
-    // -----------------------------
+    // ------------------------------------
 
     if (trend !== null) {
-        return trend;
+        return Number(trend);
     }
 
 
@@ -363,12 +445,26 @@ function getFinalAIScore() {
 
     let memoryScore = 0;
     let patternScore = 0;
-    let trendScore = getTrendScore();
+
+    const trendScore =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Number(
+                    getTrendScore()
+                ) || 0
+            )
+        );
 
 
-    // Prediction confidence
+    // ------------------------------------
+    // Memory confidence
+    // ------------------------------------
+
     if (
-        typeof getPredictionConfidence === "function"
+        typeof getPredictionConfidence ===
+        "function"
     ) {
 
         try {
@@ -384,15 +480,17 @@ function getFinalAIScore() {
                 "Prediction confidence error:",
                 error
             );
-
         }
-
     }
 
 
+    // ------------------------------------
     // Pattern score
+    // ------------------------------------
+
     if (
-        typeof getPatternScore === "function"
+        typeof getPatternScore ===
+        "function"
     ) {
 
         try {
@@ -408,9 +506,7 @@ function getFinalAIScore() {
                 "Pattern score error:",
                 error
             );
-
         }
-
     }
 
 
@@ -423,23 +519,12 @@ function getFinalAIScore() {
             )
         );
 
-
     patternScore =
         Math.max(
             0,
             Math.min(
                 100,
                 patternScore
-            )
-        );
-
-
-    trendScore =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                trendScore
             )
         );
 
@@ -456,4 +541,4 @@ function getFinalAIScore() {
             finalScore
         )
     );
-}
+        }
