@@ -485,6 +485,53 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 });
 
+async function getTensorFlowDemoPrediction(input) {
+
+    if (
+        typeof phase3MModel === "undefined" ||
+        !phase3MModel
+    ) {
+        console.warn("TensorFlow model is not ready.");
+        return null;
+    }
+
+    if (!Array.isArray(input) || input.length !== 5) {
+        console.warn("Demo input must contain 5 values.");
+        return null;
+    }
+
+    const normalized = input.map(function (value) {
+        return Number(value) / 9;
+    });
+
+    const tensor = tf.tensor2d(
+        [normalized],
+        [1, 5],
+        "float32"
+    );
+
+    try {
+
+        const output =
+            phase3MModel.predict(tensor);
+
+        const probabilities =
+            await output.array();
+
+        console.log(
+            "TensorFlow demo output:",
+            probabilities[0]
+        );
+
+        return probabilities[0];
+
+    } finally {
+
+        tensor.dispose();
+
+    }
+}
+
 // ========================================
 // FINAL NUMBER PREDICTION
 // ========================================
