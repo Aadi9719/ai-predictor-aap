@@ -1247,6 +1247,63 @@ async function createPhase3MModel() {
     return model;
 }
 
+// ========================================
+// PHASE 3 — TENSORFLOW DEMO PREDICTION
+// ========================================
+
+async function runTensorFlowDemo(input) {
+
+    if (typeof tf === "undefined") {
+        console.error("TensorFlow.js not loaded.");
+        return null;
+    }
+
+    if (!phase3MModel) {
+        console.warn("Phase 3M model is not trained.");
+        return null;
+    }
+
+    if (!Array.isArray(input) || input.length !== 5) {
+        console.warn("Exactly 5 input values required.");
+        return null;
+    }
+
+    const normalizedInput = input.map(function (value) {
+        return Number(value) / 9;
+    });
+
+    const inputTensor = tf.tensor2d(
+        [normalizedInput],
+        [1, 5],
+        "float32"
+    );
+
+    let outputTensor = null;
+
+    try {
+
+        outputTensor =
+            phase3MModel.predict(inputTensor);
+
+        const probabilities =
+            await outputTensor.array();
+
+        console.log(
+            "TensorFlow Demo Output:",
+            probabilities[0]
+        );
+
+        return probabilities[0];
+
+    } finally {
+
+        inputTensor.dispose();
+
+        if (outputTensor) {
+            outputTensor.dispose();
+        }
+    }
+}
 
 window.trainPhase3M = async function () {
 
