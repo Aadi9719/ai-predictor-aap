@@ -378,6 +378,39 @@ async function trainAIModel(inputs, targets) {
 }
 
 // ========================================
+// PHASE 3 — AUTOMATIC RETRAINING
+// ========================================
+
+async function retrainAIModel() {
+
+    const dataset = buildMLDataset();
+
+    if (
+        !dataset ||
+        !dataset.inputs ||
+        dataset.inputs.length < 20
+    ) {
+        console.warn(
+            "Retraining skipped: not enough data."
+        );
+        return false;
+    }
+
+    const success = await trainAIModel(
+        dataset.inputs,
+        dataset.targets
+    );
+
+    if (success) {
+        console.log(
+            "AI model weights updated successfully."
+        );
+    }
+
+    return success;
+}
+
+// ========================================
 // FINAL NUMBER PREDICTION
 // ========================================
 
