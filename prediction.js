@@ -470,6 +470,22 @@ async function loadAIModel() {
 }
 
 // ========================================
+// PHASE 3 — AUTO LOAD MODEL
+// ========================================
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+    const loaded = await loadAIModel();
+
+    if (loaded) {
+        console.log("Saved AI model restored ✅");
+    } else {
+        console.log("No saved AI model found.");
+    }
+
+});
+
+// ========================================
 // FINAL NUMBER PREDICTION
 // ========================================
 
