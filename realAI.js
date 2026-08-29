@@ -251,6 +251,66 @@ async function trainRealAIModel() {
 }
 
 // ========================================
+// PHASE 3 — TENSORFLOW DEMO PREDICTION
+// ========================================
+
+async function demoTensorFlowPrediction(input) {
+
+    if (typeof tf === "undefined") {
+        console.error("TensorFlow.js NOT LOADED");
+        return null;
+    }
+
+    if (!realAIModel) {
+        console.error("REAL AI MODEL NOT READY");
+        return null;
+    }
+
+    if (!Array.isArray(input) || input.length !== 5) {
+        console.error("Demo input must contain 5 numbers");
+        return null;
+    }
+
+    const normalizedInput =
+        normalizeRealAIInput(input);
+
+    const inputTensor =
+        tf.tensor2d(
+            [normalizedInput],
+            [1, 5],
+            "float32"
+        );
+
+    let outputTensor = null;
+
+    try {
+
+        outputTensor =
+            realAIModel.predict(inputTensor);
+
+        const probabilities =
+            await outputTensor.array();
+
+        const result = probabilities[0];
+
+        console.log(
+            "TensorFlow probabilities:",
+            result
+        );
+
+        return result;
+
+    } finally {
+
+        inputTensor.dispose();
+
+        if (outputTensor) {
+            outputTensor.dispose();
+        }
+    }
+}
+
+// ========================================
 // REAL AI — PHASE 3E
 // PREDICTION DISTRIBUTION TEST
 // ========================================
