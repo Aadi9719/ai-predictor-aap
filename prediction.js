@@ -518,6 +518,21 @@ async function getTensorFlowDemoPrediction(input) {
         const probabilities =
             await output.array();
 
+console.log(
+    "TensorFlow probabilities:",
+    probabilities[0]
+);
+
+const bestClass =
+    probabilities[0].indexOf(
+        Math.max(...probabilities[0])
+    );
+
+console.log(
+    "TensorFlow demo class:",
+    bestClass
+);
+        
         console.log(
             "TensorFlow demo output:",
             probabilities[0]
