@@ -290,6 +290,92 @@ async function getRealAIPrediction(input) {
     }
 }
 
+// ========================================
+// PHASE 3 — NEURAL NETWORK TRAINING
+// Educational ML / forecasting demo
+// ========================================
+
+let aiModel = null;
+
+async function trainAIModel(inputs, targets) {
+
+    if (
+        !Array.isArray(inputs) ||
+        !Array.isArray(targets) ||
+        inputs.length < 20 ||
+        inputs.length !== targets.length
+    ) {
+        console.warn("Not enough training data.");
+        return false;
+    }
+
+    if (typeof tf === "undefined") {
+        console.error("TensorFlow.js load nahi hua.");
+        return false;
+    }
+
+    // Purana model hatao
+    if (aiModel) {
+        aiModel.dispose();
+    }
+
+    aiModel = tf.sequential();
+
+    aiModel.add(
+        tf.layers.dense({
+            inputShape: [5],
+            units: 32,
+            activation: "relu"
+        })
+    );
+
+    aiModel.add(
+        tf.layers.dense({
+            units: 16,
+            activation: "relu"
+        })
+    );
+
+    aiModel.add(
+        tf.layers.dense({
+            units: 1
+        })
+    );
+
+    aiModel.compile({
+        optimizer: tf.train.adam(0.001),
+        loss: "meanSquaredError"
+    });
+
+    const xs = tf.tensor2d(inputs);
+    const ys = tf.tensor2d(
+        targets.map(value => [Number(value)])
+    );
+
+    try {
+
+        await aiModel.fit(xs, ys, {
+            epochs: 30,
+            batchSize: 16,
+            shuffle: true,
+            verbose: 0
+        });
+
+        console.log(
+            "Phase 3 AI training complete:",
+            inputs.length,
+            "samples"
+        );
+
+        return true;
+
+    } finally {
+
+        xs.dispose();
+        ys.dispose();
+
+    }
+}
 
 // ========================================
 // FINAL NUMBER PREDICTION
