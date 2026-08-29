@@ -411,6 +411,65 @@ async function retrainAIModel() {
 }
 
 // ========================================
+// PHASE 3 — MODEL SAVE / LOAD
+// ========================================
+
+async function saveAIModel() {
+
+    if (!aiModel) {
+        console.warn("AI model available nahi hai.");
+        return false;
+    }
+
+    try {
+
+        await aiModel.save(
+            "localstorage://phase3-ai-model"
+        );
+
+        console.log("AI model saved successfully.");
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "AI model save error:",
+            error
+        );
+
+        return false;
+    }
+}
+
+
+async function loadAIModel() {
+
+    if (typeof tf === "undefined") {
+        console.error("TensorFlow.js load nahi hua.");
+        return false;
+    }
+
+    try {
+
+        aiModel = await tf.loadLayersModel(
+            "localstorage://phase3-ai-model"
+        );
+
+        console.log("AI model loaded successfully.");
+        return true;
+
+    } catch (error) {
+
+        console.warn(
+            "Saved AI model nahi mila."
+        );
+
+        aiModel = null;
+        return false;
+    }
+}
+
+// ========================================
 // FINAL NUMBER PREDICTION
 // ========================================
 
