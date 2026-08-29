@@ -1305,6 +1305,137 @@ async function runTensorFlowDemo(input) {
     }
 }
 
+function testTensorFlowDemo() {
+
+    if (typeof tf === "undefined") {
+        alert("❌ TensorFlow.js load nahi hua.");
+        return;
+    }
+
+    if (!phase3MModel) {
+        alert(
+            "❌ Phase 3M model ready nahi hai.\n\n" +
+            "Pehle model training complete karo."
+        );
+        return;
+    }
+
+    const testInput = [1, 2, 3, 4, 5];
+
+    runTensorFlowDemo(testInput)
+        .then(function (probabilities) {
+
+            if (!probabilities) {
+                alert("❌ Model output nahi mila.");
+                return;
+            }
+
+            const highest =
+                Math.max(...probabilities);
+
+            const classIndex =
+                probabilities.indexOf(highest);
+
+            alert(
+                "TENSORFLOW DEMO TEST ✅\n\n" +
+                "Input: " +
+                testInput.join(", ") +
+                "\n\n" +
+                "Output Classes: " +
+                probabilities.length +
+                "\n\n" +
+                "Highest Probability: " +
+                Math.round(highest * 100) +
+                "%\n\n" +
+                "Highest Class: " +
+                classIndex
+            );
+
+        })
+        .catch(function (error) {
+
+            console.error(
+                "TensorFlow demo test error:",
+                error
+            );
+
+            alert(
+                "❌ TensorFlow test failed.\n\n" +
+                error.message
+            );
+        });
+}
+
+function showTensorFlowTest() {
+
+    const resultBox =
+        document.getElementById("result");
+
+    if (!resultBox) {
+        alert("Result box nahi mila.");
+        return;
+    }
+
+    resultBox.innerHTML =
+        "<h3>🧠 TensorFlow AI Test</h3>" +
+        "<p>Model check ho raha hai...</p>";
+
+    if (typeof tf === "undefined") {
+
+        resultBox.innerHTML =
+            "<h3>❌ TensorFlow.js</h3>" +
+            "<p>TensorFlow.js load nahi hua.</p>";
+
+        return;
+    }
+
+    if (!phase3MModel) {
+
+        resultBox.innerHTML =
+            "<h3>⚠️ Model Ready Nahi Hai</h3>" +
+            "<p>Pehle Phase 3M training complete karo.</p>";
+
+        return;
+    }
+
+    runTensorFlowDemo([1, 2, 3, 4, 5])
+        .then(function (probabilities) {
+
+            if (!probabilities) {
+                return;
+            }
+
+            const highest =
+                Math.max(...probabilities);
+
+            const classIndex =
+                probabilities.indexOf(highest);
+
+            resultBox.innerHTML =
+                "<h3>✅ TensorFlow Model Working</h3>" +
+                "<p>Output Classes: " +
+                probabilities.length +
+                "</p>" +
+                "<p>Highest Class: <b>" +
+                classIndex +
+                "</b></p>" +
+                "<p>Highest Probability: <b>" +
+                Math.round(highest * 100) +
+                "%</b></p>";
+
+        })
+        .catch(function (error) {
+
+            console.error(error);
+
+            resultBox.innerHTML =
+                "<h3>❌ TensorFlow Test Failed</h3>" +
+                "<p>" +
+                error.message +
+                "</p>";
+        });
+}
+
 window.trainPhase3M = async function () {
 
     if (phase3MTrainingRunning) {
