@@ -1438,6 +1438,9 @@ function showTensorFlowTest() {
 
 window.trainPhase3M = async function () {
 
+    alert("PHASE 3M BUTTON WORKING");
+    console.log("PHASE 3M BUTTON CLICKED");
+    
     if (phase3MTrainingRunning) {
 
         alert(
