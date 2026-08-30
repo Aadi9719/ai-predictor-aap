@@ -1454,6 +1454,20 @@ window.trainPhase3M = async function () {
     const split =
         buildMLTrainValidationSet();
 
+alert(
+    "PHASE 3M DATASET CHECK\n\n" +
+    "Ready = " +
+    (split && split.ready ? "YES ✅" : "NO ❌") +
+    "\n\nTrain Samples = " +
+    (split && split.trainSamples !== undefined
+        ? split.trainSamples
+        : 0) +
+    "\n\nValidation Samples = " +
+    (split && split.validationSamples !== undefined
+        ? split.validationSamples
+        : 0)
+);
+    
     if (!split || !split.ready) {
 
         alert(
