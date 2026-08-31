@@ -1298,6 +1298,321 @@ function buildMLTrainValidationSet() {
     };
 }
 
+window.auditPhase3MLData = function () {
+
+    console.log("PHASE 3 DATA AUDIT STARTED");
+
+    let split;
+
+    try {
+        split = buildMLTrainValidationSet();
+    } catch (error) {
+
+        console.error(
+            "PHASE 3 DATA AUDIT ERROR:",
+            error
+        );
+
+        alert(
+            "PHASE 3 DATA AUDIT ERROR ❌\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+    if (!split || !split.ready) {
+
+        alert(
+            "PHASE 3 DATA AUDIT ❌\n\n" +
+            "Dataset is not ready.\n\n" +
+            (split?.message || "")
+        );
+
+        return;
+    }
+
+    const trainInputs =
+        Array.isArray(split.trainInputs)
+            ? split.trainInputs
+            : [];
+
+    const trainTargets =
+        Array.isArray(split.trainTargets)
+            ? split.trainTargets
+            : [];
+
+    const validationInputs =
+        Array.isArray(split.validationInputs)
+            ? split.validationInputs
+            : [];
+
+    const validationTargets =
+        Array.isArray(split.validationTargets)
+            ? split.validationTargets
+            : [];
+
+    let problems = [];
+
+    // --------------------------------
+    // SAMPLE COUNT CHECK
+    // --------------------------------
+
+    if (trainInputs.length !== trainTargets.length) {
+        problems.push(
+            "Training input/target count mismatch"
+        );
+    }
+
+    if (
+        validationInputs.length !==
+        validationTargets.length
+    ) {
+        problems.push(
+            "Validation input/target count mismatch"
+        );
+    }
+
+    // --------------------------------
+    // INPUT SHAPE CHECK
+    // --------------------------------
+
+    let badTrainInputs = 0;
+    let badValidationInputs = 0;
+
+    for (const row of trainInputs) {
+
+        if (
+            !Array.isArray(row) ||
+            row.length !== 5 ||
+            row.some(
+                n => !Number.isFinite(Number(n))
+            )
+        ) {
+            badTrainInputs++;
+        }
+    }
+
+    for (const row of validationInputs) {
+
+        if (
+            !Array.isArray(row) ||
+            row.length !== 5 ||
+            row.some(
+                n => !Number.isFinite(Number(n))
+            )
+        ) {
+            badValidationInputs++;
+        }
+    }
+
+    if (badTrainInputs > 0) {
+        problems.push(
+            badTrainInputs +
+            " invalid training input rows"
+        );
+    }
+
+    if (badValidationInputs > 0) {
+        problems.push(
+            badValidationInputs +
+            " invalid validation input rows"
+        );
+    }
+
+    // --------------------------------
+    // TARGET CHECK
+    // --------------------------------
+
+    const badTrainTargets =
+        trainTargets.filter(
+            n => !Number.isFinite(Number(n))
+        ).length;
+
+    const badValidationTargets =
+        validationTargets.filter(
+            n => !Number.isFinite(Number(n))
+        ).length;
+
+    if (badTrainTargets > 0) {
+        problems.push(
+            badTrainTargets +
+            " invalid training targets"
+        );
+    }
+
+    if (badValidationTargets > 0) {
+        problems.push(
+            badValidationTargets +
+            " invalid validation targets"
+        );
+    }
+
+    // --------------------------------
+    // CLASS DISTRIBUTION
+    // --------------------------------
+
+    const trainClassCounts =
+        Array(10).fill(0);
+
+    const validationClassCounts =
+        Array(10).fill(0);
+
+    for (const target of trainTargets) {
+
+        const value = Number(target);
+
+        if (
+            Number.isInteger(value) &&
+            value >= 0 &&
+            value <= 9
+        ) {
+            trainClassCounts[value]++;
+        }
+    }
+
+    for (const target of validationTargets) {
+
+        const value = Number(target);
+
+        if (
+            Number.isInteger(value) &&
+            value >= 0 &&
+            value <= 9
+        ) {
+            validationClassCounts[value]++;
+        }
+    }
+
+    // --------------------------------
+    // OVERLAP CHECK
+    // --------------------------------
+
+    const trainKeys =
+        new Set(
+            trainInputs.map(
+                row => JSON.stringify(row)
+            )
+        );
+
+    let validationOverlap = 0;
+
+    for (const row of validationInputs) {
+
+        if (
+            trainKeys.has(
+                JSON.stringify(row)
+            )
+        ) {
+            validationOverlap++;
+        }
+    }
+
+    if (validationOverlap > 0) {
+        problems.push(
+            validationOverlap +
+            " validation inputs overlap training inputs"
+        );
+    }
+
+    // --------------------------------
+    // REPORT
+    // --------------------------------
+
+    let report =
+        "PHASE 3 ML DATA AUDIT\n\n" +
+
+        "TRAINING SAMPLES = " +
+        trainInputs.length +
+
+        "\nTRAINING TARGETS = " +
+        trainTargets.length +
+
+        "\nVALIDATION SAMPLES = " +
+        validationInputs.length +
+
+        "\nVALIDATION TARGETS = " +
+        validationTargets.length +
+
+        "\n\nINVALID TRAIN INPUTS = " +
+        badTrainInputs +
+
+        "\nINVALID TRAIN TARGETS = " +
+        badTrainTargets +
+
+        "\nINVALID VALIDATION INPUTS = " +
+        badValidationInputs +
+
+        "\nINVALID VALIDATION TARGETS = " +
+        badValidationTargets +
+
+        "\n\nVALIDATION/TRAIN INPUT OVERLAP = " +
+        validationOverlap +
+
+        "\n\nTRAIN CLASS COUNTS:\n";
+
+    for (let i = 0; i < 10; i++) {
+
+        report +=
+            i +
+            " = " +
+            trainClassCounts[i] +
+            "\n";
+    }
+
+    report +=
+        "\nVALIDATION CLASS COUNTS:\n";
+
+    for (let i = 0; i < 10; i++) {
+
+        report +=
+            i +
+            " = " +
+            validationClassCounts[i] +
+            "\n";
+    }
+
+    report +=
+        "\n\nSTATUS = " +
+        (
+            problems.length === 0
+                ? "DATA STRUCTURE OK ✅"
+                : "PROBLEMS FOUND ⚠️"
+        );
+
+    if (problems.length > 0) {
+
+        report +=
+            "\n\nPROBLEMS:\n" +
+            problems
+                .map(
+                    (p, i) =>
+                        (i + 1) +
+                        ". " +
+                        p
+                )
+                .join("\n");
+    }
+
+    console.log(
+        "PHASE 3 ML AUDIT:",
+        {
+            trainSamples: trainInputs.length,
+            trainTargets: trainTargets.length,
+            validationSamples:
+                validationInputs.length,
+            validationTargets:
+                validationTargets.length,
+            validationOverlap,
+            trainClassCounts,
+            validationClassCounts,
+            problems
+        }
+    );
+
+    alert(report);
+};
+
 // ========================================
 // REAL AI — PHASE 3M
 // NORMALIZED MODEL TRAINING
