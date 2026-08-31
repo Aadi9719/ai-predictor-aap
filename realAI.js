@@ -2298,6 +2298,124 @@ window.testTensorFlowDemoPrediction = async function () {
     }
 };
 
+window.testTensorFlowPredictionDistribution = async function () {
+
+    if (!phase3MModel) {
+        alert(
+            "TF DISTRIBUTION ❌\n\n" +
+            "Phase 3M model not ready.\n\n" +
+            "First run Phase 3M."
+        );
+        return;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert(
+            "TF DISTRIBUTION ❌\n\n" +
+            "Dataset not ready."
+        );
+        return;
+    }
+
+    const normalized =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let xTensor = null;
+    let predictionTensor = null;
+
+    try {
+
+        xTensor = tf.tensor2d(
+            normalized,
+            [normalized.length, 5],
+            "float32"
+        );
+
+        predictionTensor =
+            phase3MModel.predict(xTensor);
+
+        const predictions =
+            await predictionTensor.array();
+
+        const counts =
+            Array(10).fill(0);
+
+        for (const row of predictions) {
+
+            const predicted =
+                row.indexOf(
+                    Math.max(...row)
+                );
+
+            if (
+                predicted >= 0 &&
+                predicted <= 9
+            ) {
+                counts[predicted]++;
+            }
+        }
+
+        let report =
+            "TENSORFLOW PREDICTION DISTRIBUTION\n\n" +
+            "Validation Samples = " +
+            predictions.length +
+            "\n\n";
+
+        for (let i = 0; i < 10; i++) {
+
+            const percentage =
+                predictions.length > 0
+                    ? (
+                        counts[i] /
+                        predictions.length
+                    ) * 100
+                    : 0;
+
+            report +=
+                "Class " +
+                i +
+                " = " +
+                counts[i] +
+                " (" +
+                percentage.toFixed(2) +
+                "%)\n";
+        }
+
+        console.log(
+            "TF PREDICTION DISTRIBUTION:",
+            counts
+        );
+
+        alert(report);
+
+    } catch (error) {
+
+        console.error(
+            "TF DISTRIBUTION ERROR:",
+            error
+        );
+
+        alert(
+            "TF DISTRIBUTION ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+    }
+};
+
 // ========================================
 // REAL AI — PHASE 3O
 // FIXED TRAIN / VALIDATION SNAPSHOT
