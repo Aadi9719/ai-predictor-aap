@@ -2198,6 +2198,106 @@ window.runPhase3N = async function () {
     }
 };
 
+window.testTensorFlowDemoPrediction = async function () {
+
+    if (!phase3MModel) {
+        alert(
+            "TENSORFLOW DEMO ❌\n\n" +
+            "Phase 3M model not ready.\n\n" +
+            "First run Phase 3M."
+        );
+        return;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert(
+            "TENSORFLOW DEMO ❌\n\n" +
+            "Dataset not ready."
+        );
+        return;
+    }
+
+    const normalized =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let xTensor = null;
+    let predictionTensor = null;
+
+    try {
+
+        xTensor = tf.tensor2d(
+            normalized,
+            [normalized.length, 5],
+            "float32"
+        );
+
+        predictionTensor =
+            phase3MModel.predict(xTensor);
+
+        const predictions =
+            await predictionTensor.array();
+
+        let report =
+            "TENSORFLOW DEMO PREDICTION\n\n" +
+            "Validation Samples = " +
+            predictions.length +
+            "\n\nFIRST 10 MODEL OUTPUTS:\n";
+
+        for (
+            let i = 0;
+            i < Math.min(10, predictions.length);
+            i++
+        ) {
+
+            const row = predictions[i];
+
+            const predicted =
+                row.indexOf(
+                    Math.max(...row)
+                );
+
+            report +=
+                (i + 1) +
+                ". Predicted Class = " +
+                predicted +
+                "\n";
+        }
+
+        console.log(
+            "TENSORFLOW DEMO PREDICTIONS:",
+            predictions.slice(0, 10)
+        );
+
+        alert(report);
+
+    } catch (error) {
+
+        console.error(
+            "TENSORFLOW DEMO ERROR:",
+            error
+        );
+
+        alert(
+            "TENSORFLOW DEMO ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+    }
+};
+
 // ========================================
 // REAL AI — PHASE 3O
 // FIXED TRAIN / VALIDATION SNAPSHOT
