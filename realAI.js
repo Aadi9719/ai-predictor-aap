@@ -1210,6 +1210,94 @@ window.testPhase3LNormalization = function() {
     alert(report);
 };
 
+function buildMLDataset() {
+
+    let history = Array.isArray(allResults)
+        ? allResults
+        : [];
+
+    if (history.length < 20) {
+        return {
+            samples: 0,
+            message: "Not enough historical data"
+        };
+    }
+
+    let X = [];
+    let Y = [];
+
+    let data = [...history].reverse();
+
+    for (let i = 5; i < data.length; i++) {
+
+        let input = [
+            data[i - 5],
+            data[i - 4],
+            data[i - 3],
+            data[i - 2],
+            data[i - 1]
+        ];
+
+        let target = data[i];
+
+        if (
+            input.some(n => !Number.isFinite(n)) ||
+            !Number.isFinite(target)
+        ) {
+            continue;
+        }
+
+        X.push(input);
+        Y.push(target);
+    }
+
+    return {
+        samples: X.length,
+        inputs: X,
+        targets: Y
+    };
+}
+
+function buildMLTrainValidationSet() {
+
+    let dataset = buildMLDataset();
+
+    if (!dataset.inputs || dataset.inputs.length < 20) {
+        return {
+            ready: false,
+            message: "Not enough samples"
+        };
+    }
+
+    let total = dataset.inputs.length;
+
+    let validationSize = Math.max(
+        1,
+        Math.floor(total * 0.20)
+    );
+
+    let trainSize = total - validationSize;
+
+    return {
+        ready: true,
+
+        trainInputs:
+            dataset.inputs.slice(0, trainSize),
+
+        trainTargets:
+            dataset.targets.slice(0, trainSize),
+
+        validationInputs:
+            dataset.inputs.slice(trainSize),
+
+        validationTargets:
+            dataset.targets.slice(trainSize),
+
+        trainSamples: trainSize,
+        validationSamples: validationSize
+    };
+}
+
 // ========================================
 // REAL AI — PHASE 3M
 // NORMALIZED MODEL TRAINING
