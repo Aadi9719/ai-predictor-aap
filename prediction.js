@@ -692,6 +692,61 @@ function getFinalPrediction() {
     return null;
 }
 
+window.auditPredictionSource = function () {
+
+    let memory = null;
+    let trend = null;
+    let hot = null;
+    let final = null;
+
+    try {
+        memory = getPatternPrediction();
+    } catch (e) {
+        console.error("Pattern error:", e);
+    }
+
+    try {
+        trend = getTrendPrediction();
+    } catch (e) {
+        console.error("Trend error:", e);
+    }
+
+    try {
+        const hc = getHotColdNumbers();
+        hot = hc ? hc.hot : null;
+    } catch (e) {
+        console.error("Hot/Cold error:", e);
+    }
+
+    try {
+        final = getFinalPrediction();
+    } catch (e) {
+        console.error("Final prediction error:", e);
+    }
+
+    const report =
+        "PREDICTION SOURCE AUDIT\n\n" +
+
+        "Pattern Engine = " + memory +
+        "\nTrend Engine = " + trend +
+        "\nHot Number = " + hot +
+        "\nFinal Prediction = " + final +
+
+        "\n\nTensorFlow connection:\n" +
+        "getFinalPrediction() → NO DIRECT TF CALL\n" +
+
+        "\n\nConclusion:\n" +
+        "Current final output is coming from the legacy rule path.";
+
+    console.log("PREDICTION SOURCE AUDIT", {
+        memory,
+        trend,
+        hot,
+        final
+    });
+
+    alert(report);
+};
 
 // ========================================
 // FINAL AI SCORE
