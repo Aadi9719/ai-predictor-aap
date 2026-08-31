@@ -2416,6 +2416,141 @@ window.testTensorFlowPredictionDistribution = async function () {
     }
 };
 
+window.testTFActualVsPredicted = async function () {
+
+    if (!phase3MModel) {
+        alert(
+            "TF AUDIT ❌\n\n" +
+            "Phase 3M model not ready."
+        );
+        return;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert("TF AUDIT ❌\n\nDataset not ready.");
+        return;
+    }
+
+    const normalized =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let xTensor = null;
+    let predictionTensor = null;
+
+    try {
+
+        xTensor = tf.tensor2d(
+            normalized,
+            [normalized.length, 5],
+            "float32"
+        );
+
+        predictionTensor =
+            phase3MModel.predict(xTensor);
+
+        const predictions =
+            await predictionTensor.array();
+
+        const matrix =
+            Array.from(
+                { length: 10 },
+                () => Array(10).fill(0)
+            );
+
+        for (
+            let i = 0;
+            i < predictions.length;
+            i++
+        ) {
+
+            const actual =
+                Number(
+                    split.validationTargets[i]
+                );
+
+            const predicted =
+                predictions[i].indexOf(
+                    Math.max(...predictions[i])
+                );
+
+            if (
+                Number.isInteger(actual) &&
+                actual >= 0 &&
+                actual <= 9 &&
+                predicted >= 0 &&
+                predicted <= 9
+            ) {
+                matrix[actual][predicted]++;
+            }
+        }
+
+        let report =
+            "TF ACTUAL vs PREDICTED\n\n" +
+            "Validation Samples = " +
+            predictions.length +
+            "\n\n" +
+            "Rows = ACTUAL\n" +
+            "Columns = PREDICTED\n\n";
+
+        report +=
+            "      0 1 2 3 4 5 6 7 8 9\n";
+
+        for (let actual = 0; actual < 10; actual++) {
+
+            report +=
+                actual + " : ";
+
+            for (
+                let predicted = 0;
+                predicted < 10;
+                predicted++
+            ) {
+
+                report +=
+                    String(
+                        matrix[actual][predicted]
+                    ).padStart(2, " ") +
+                    " ";
+            }
+
+            report += "\n";
+        }
+
+        console.log(
+            "TF ACTUAL VS PREDICTED:",
+            matrix
+        );
+
+        alert(report);
+
+    } catch (error) {
+
+        console.error(
+            "TF ACTUAL VS PREDICTED ERROR:",
+            error
+        );
+
+        alert(
+            "TF AUDIT ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+    }
+};
+
 // ========================================
 // REAL AI — PHASE 3O
 // FIXED TRAIN / VALIDATION SNAPSHOT
