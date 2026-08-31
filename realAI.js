@@ -1451,8 +1451,20 @@ window.trainPhase3M = async function () {
         return;
     }
 
-    const split =
-        buildMLTrainValidationSet();
+    let split;
+
+try {
+    split = buildMLTrainValidationSet();
+} catch (error) {
+    console.error("PHASE 3M DATASET ERROR:", error);
+
+    alert(
+        "PHASE 3M DATASET ERROR ❌\n\n" +
+        error.message
+    );
+
+    return;
+}
 
 alert(
     "3M DATASET CHECK\n\n" +
@@ -1463,32 +1475,15 @@ alert(
     "\nValidation: " +
     (split?.validationSamples || 0)
 );
-    
+
 if (!split || !split.ready) {
     alert(
         "PHASE 3M DATASET NOT READY ❌\n\n" +
         (split?.message || "Unknown dataset error")
     );
+
     return;
 }
-
-alert(
-    "PHASE 3M DATASET READY ✅\n\n" +
-    "Training Samples: " +
-    split.trainSamples +
-    "\nValidation Samples: " +
-    split.validationSamples
-);
-    
-    if (!split || !split.ready) {
-
-        alert(
-            "PHASE 3M ❌\n\n" +
-            "Dataset not ready."
-        );
-
-        return;
-    }
 
     phase3MTrainingRunning = true;
 
