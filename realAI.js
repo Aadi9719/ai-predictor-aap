@@ -2682,26 +2682,14 @@ await tf.ready();
         }
 
         report +=
-            "\nPREDICTED DISTRIBUTION:\n";
+    "\nPREDICTED DISTRIBUTION:\n";
 
-        for (let i = 0; i < 10; i++) {
-
-            const percentage =
-                total > 0
-                    ? (
-                        predictedCounts[i] /
-                        total
-                    ) * 100
-                    : 0;
-
-            report +=
-                i +
-                " = " +
-                predictedCounts[i] +
-                " (" +
-                percentage.toFixed(2) +
-                "%)\n";
-        }
+for (let i = 0; i < 10; i++) {
+    report +=
+        "Class " + i +
+        " = " + predictedCounts[i] +
+        "\n";
+}
 
         report +=
             "\nCONFUSION MATRIX\n" +
