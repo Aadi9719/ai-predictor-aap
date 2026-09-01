@@ -2551,6 +2551,218 @@ window.testTFActualVsPredicted = async function () {
     }
 };
 
+window.runTFSingleSourceAudit = async function () {
+
+    if (!phase3MModel) {
+        alert(
+            "TF SINGLE-SOURCE AUDIT ❌\n\n" +
+            "Phase 3M model not ready.\n" +
+            "First run Phase 3M."
+        );
+        return;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert(
+            "TF SINGLE-SOURCE AUDIT ❌\n\n" +
+            "Dataset not ready."
+        );
+        return;
+    }
+
+    const normalized =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let xTensor = null;
+    let predictionTensor = null;
+
+    try {
+
+        // ONE prediction run only
+        xTensor = tf.tensor2d(
+            normalized,
+            [normalized.length, 5],
+            "float32"
+        );
+
+        predictionTensor =
+            phase3MModel.predict(xTensor);
+
+        const predictions =
+            await predictionTensor.array();
+
+        const actualCounts =
+            Array(10).fill(0);
+
+        const predictedCounts =
+            Array(10).fill(0);
+
+        const matrix =
+            Array.from(
+                { length: 10 },
+                () => Array(10).fill(0)
+            );
+
+        let correct = 0;
+
+        for (
+            let i = 0;
+            i < predictions.length;
+            i++
+        ) {
+
+            const actual =
+                Number(
+                    split.validationTargets[i]
+                );
+
+            const predicted =
+                predictions[i].indexOf(
+                    Math.max(...predictions[i])
+                );
+
+            if (
+                actual >= 0 &&
+                actual <= 9 &&
+                predicted >= 0 &&
+                predicted <= 9
+            ) {
+
+                actualCounts[actual]++;
+                predictedCounts[predicted]++;
+
+                matrix[actual][predicted]++;
+
+                if (actual === predicted) {
+                    correct++;
+                }
+            }
+        }
+
+        const total =
+            predictions.length;
+
+        const accuracy =
+            total > 0
+                ? (correct / total) * 100
+                : 0;
+
+        let report =
+            "TF SINGLE-SOURCE AUDIT\n\n" +
+
+            "Validation Samples = " +
+            total +
+
+            "\nCorrect = " +
+            correct +
+
+            "\nAccuracy = " +
+            accuracy.toFixed(2) +
+            "%\n\n" +
+
+            "ACTUAL DISTRIBUTION:\n";
+
+        for (let i = 0; i < 10; i++) {
+
+            report +=
+                i +
+                " = " +
+                actualCounts[i] +
+                "\n";
+        }
+
+        report +=
+            "\nPREDICTED DISTRIBUTION:\n";
+
+        for (let i = 0; i < 10; i++) {
+
+            const percentage =
+                total > 0
+                    ? (
+                        predictedCounts[i] /
+                        total
+                    ) * 100
+                    : 0;
+
+            report +=
+                i +
+                " = " +
+                predictedCounts[i] +
+                " (" +
+                percentage.toFixed(2) +
+                "%)\n";
+        }
+
+        report +=
+            "\nCONFUSION MATRIX\n" +
+            "Rows = ACTUAL\n" +
+            "Columns = PREDICTED\n\n" +
+            "    0  1  2  3  4  5  6  7  8  9\n";
+
+        for (let actual = 0; actual < 10; actual++) {
+
+            report +=
+                actual +
+                " : ";
+
+            for (
+                let predicted = 0;
+                predicted < 10;
+                predicted++
+            ) {
+
+                report +=
+                    String(
+                        matrix[actual][predicted]
+                    ).padStart(2, " ") +
+                    " ";
+            }
+
+            report += "\n";
+        }
+
+        console.log(
+            "TF SINGLE-SOURCE AUDIT",
+            {
+                total,
+                correct,
+                accuracy,
+                actualCounts,
+                predictedCounts,
+                matrix
+            }
+        );
+
+        alert(report);
+
+    } catch (error) {
+
+        console.error(
+            "TF SINGLE-SOURCE AUDIT ERROR:",
+            error
+        );
+
+        alert(
+            "TF SINGLE-SOURCE AUDIT ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (predictionTensor) {
+            predictionTensor.dispose();
+        }
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+    }
+};
+
 // ========================================
 // REAL AI — PHASE 3O
 // FIXED TRAIN / VALIDATION SNAPSHOT
