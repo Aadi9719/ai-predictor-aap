@@ -2757,6 +2757,135 @@ for (let i = 0; i < 10; i++) {
     }
 };
 
+window.testTFPredictionStability = async function () {
+
+    if (!phase3MModel) {
+        alert(
+            "TF STABILITY TEST ❌\n\n" +
+            "Phase 3M model not ready.\n" +
+            "First run Phase 3M."
+        );
+        return;
+    }
+
+    const split = buildMLTrainValidationSet();
+
+    if (!split || !split.ready) {
+        alert("TF STABILITY TEST ❌\n\nDataset not ready.");
+        return;
+    }
+
+    const normalized =
+        normalizeRealAIInputs(
+            split.validationInputs
+        );
+
+    let xTensor = null;
+
+    try {
+
+        xTensor = tf.tensor2d(
+            normalized,
+            [normalized.length, 5],
+            "float32"
+        );
+
+        // Run prediction twice on the SAME model
+        const p1 = await phase3MModel
+            .predict(xTensor)
+            .array();
+
+        const p2 = await phase3MModel
+            .predict(xTensor)
+            .array();
+
+        let same = 0;
+        let different = 0;
+
+        const pred1 = [];
+        const pred2 = [];
+
+        for (let i = 0; i < p1.length; i++) {
+
+            const a =
+                p1[i].indexOf(
+                    Math.max(...p1[i])
+                );
+
+            const b =
+                p2[i].indexOf(
+                    Math.max(...p2[i])
+                );
+
+            pred1.push(a);
+            pred2.push(b);
+
+            if (a === b) {
+                same++;
+            } else {
+                different++;
+            }
+        }
+
+        const report =
+            "TF PREDICTION STABILITY\n\n" +
+
+            "Validation Samples = " +
+            p1.length +
+
+            "\nSame Predictions = " +
+            same +
+
+            "\nDifferent Predictions = " +
+            different +
+
+            "\n\nSTATUS = " +
+            (
+                different === 0
+                    ? "STABLE ✅"
+                    : "UNSTABLE ⚠️"
+            ) +
+
+            "\n\nFIRST 10:\n" +
+
+            pred1.slice(0, 10).join(", ") +
+
+            "\n\nSECOND 10:\n" +
+
+            pred2.slice(0, 10).join(", ");
+
+        console.log(
+            "TF STABILITY:",
+            {
+                same,
+                different,
+                pred1: pred1.slice(0, 10),
+                pred2: pred2.slice(0, 10)
+            }
+        );
+
+        alert(report);
+
+    } catch (error) {
+
+        console.error(
+            "TF STABILITY ERROR:",
+            error
+        );
+
+        alert(
+            "TF STABILITY ERROR ❌\n\n" +
+            error.message
+        );
+
+    } finally {
+
+        if (xTensor) {
+            xTensor.dispose();
+        }
+    }
+};
+
 // ========================================
 // REAL AI — PHASE 3O
 // FIXED TRAIN / VALIDATION SNAPSHOT
