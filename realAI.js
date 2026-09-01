@@ -2200,6 +2200,9 @@ window.runPhase3N = async function () {
 
 window.testTensorFlowDemoPrediction = async function () {
 
+    await tf.setBackend("cpu");
+await tf.ready();
+    
     if (!phase3MModel) {
         alert(
             "TENSORFLOW DEMO ❌\n\n" +
@@ -2553,6 +2556,9 @@ window.testTFActualVsPredicted = async function () {
 
 window.runTFSingleSourceAudit = async function () {
 
+await tf.setBackend("cpu");
+await tf.ready();
+    
     if (!phase3MModel) {
         alert(
             "TF SINGLE-SOURCE AUDIT ❌\n\n" +
