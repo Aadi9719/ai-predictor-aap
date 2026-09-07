@@ -337,15 +337,17 @@ async function trainAIModel(inputs, targets) {
     );
 
     aiModel.add(
-        tf.layers.dense({
-            units: 1
-        })
-    );
+    tf.layers.dense({
+        units: 9,
+        activation: "softmax"
+    })
+);
 
-    aiModel.compile({
-        optimizer: tf.train.adam(0.001),
-        loss: "meanSquaredError"
-    });
+aiModel.compile({
+    optimizer: tf.train.adam(0.001),
+    loss: "sparseCategoricalCrossentropy",
+    metrics: ["accuracy"]
+});
 
     const xs = tf.tensor2d(inputs);
     const ys = tf.tensor2d(
