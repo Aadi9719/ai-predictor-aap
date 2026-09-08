@@ -1238,18 +1238,20 @@ function buildMLDataset() {
             data[i - 1]
         ];
 
-        let target = data[i];
+       let target = Number(data[i]);
 
-        if (
-            input.some(n => !Number.isFinite(n)) ||
-            !Number.isFinite(target)
-        ) {
-            continue;
-        }
+// Sirf valid results 1–9
+if (
+    input.some(n => !Number.isFinite(Number(n))) ||
+    !Number.isInteger(target) ||
+    target < 1 ||
+    target > 9
+) {
+    continue;
+}
 
-        X.push(input);
-        Y.push(target);
-    }
+X.push(input);
+Y.push(target - 1); 
 
     return {
         samples: X.length,
