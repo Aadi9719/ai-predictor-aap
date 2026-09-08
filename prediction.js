@@ -202,12 +202,8 @@ async function getRealAIPrediction(input) {
 
     try {
 
-        if (
-            typeof tf === "undefined" ||
-            typeof realAIModel === "undefined" ||
-            !realAIModel
-        ) {
-            return null;
+        if (typeof aiModel === "undefined" || !aiModel) {
+    return null;
         }
 
         if (
@@ -236,8 +232,7 @@ async function getRealAIPrediction(input) {
                 [1, 5]
             );
 
-        const output =
-            realAIModel.predict(tensor);
+        const prediction = aiModel.predict(inputTensor);
 
         const probabilities =
             await output.data();
@@ -272,12 +267,10 @@ async function getRealAIPrediction(input) {
             output.dispose();
         }
 
-        return {
-            number: bestIndex,
-            confidence: Math.round(
-                bestProbability * 100
-            )
-        };
+    return {
+    number: bestIndex + 1,
+    confidence: Math.round(bestProbability * 100)
+};
 
     } catch (error) {
 
