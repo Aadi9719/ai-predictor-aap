@@ -215,16 +215,20 @@ async function getRealAIPrediction(input) {
 
         const values = input.map(Number);
 
-        if (
-            values.some(
-                n =>
-                    !Number.isInteger(n) ||
-                    n < 0 ||
-                    n > 9
-            )
-        ) {
-            return null;
-        }
+if (
+    values.some(
+        n =>
+            !Number.isInteger(n) ||
+            n < 1 ||
+            n > 9
+    )
+) {
+    console.error(
+        "AI input contains invalid number:",
+        values
+    );
+    return null;
+}
 
         const tensor =
             tf.tensor2d(
