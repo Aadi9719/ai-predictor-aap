@@ -551,6 +551,31 @@ console.log(
 
 function getFinalPrediction() {
 
+    // STEP 5: Trained TensorFlow AI prediction
+    if (typeof aiModel !== "undefined" && aiModel) {
+        try {
+            const aiResult = getRealAIPrediction();
+
+            if (
+                aiResult &&
+                Number.isInteger(Number(aiResult.number)) &&
+                Number(aiResult.number) >= 1 &&
+                Number(aiResult.number) <= 9
+            ) {
+                console.log(
+                    "FINAL AI MODEL PREDICTION:",
+                    aiResult.number,
+                    "Confidence:",
+                    aiResult.confidence + "%"
+                );
+
+                return Number(aiResult.number);
+            }
+        } catch (error) {
+            console.error("AI model prediction error:", error);
+        }
+    }
+    
     let memory = null;
     let trend = null;
     let hot = null;
