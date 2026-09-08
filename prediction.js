@@ -530,9 +530,12 @@ const bestClass =
         Math.max(...probabilities[0])
     );
 
+// Model class 0–8 ko actual number 1–9 mein convert karo
+const predictedNumber = bestClass + 1;
+
 console.log(
-    "TensorFlow demo class:",
-    bestClass
+    "TensorFlow predicted number:",
+    predictedNumber
 );
         
         console.log(
