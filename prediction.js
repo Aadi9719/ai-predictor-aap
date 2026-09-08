@@ -500,8 +500,8 @@ async function getTensorFlowDemoPrediction(input) {
     }
 
     const normalized = input.map(function (value) {
-        return Number(value) / 9;
-    });
+    return Number(value);
+});
 
     const tensor = tf.tensor2d(
         [normalized],
