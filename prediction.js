@@ -423,8 +423,8 @@ async function saveAIModel() {
     try {
 
         await aiModel.save(
-            "localstorage://phase3-ai-model"
-        );
+            "localstorage://phase3-ai-model-v2"
+);
 
         console.log("AI model saved successfully.");
         return true;
