@@ -52,7 +52,7 @@ document.addEventListener(
         if (analyzeBtn) {
 
             analyzeBtn.onclick =
-                function () {
+              async function () {
 
                     console.log(
                         "Analyze AI started"
