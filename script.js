@@ -132,7 +132,7 @@ document.addEventListener(
                         try {
 
                             prediction =
-                               await getFinalPrediction();
+                               await getFinalPrediction(input);
 
                         } catch (error) {
 
