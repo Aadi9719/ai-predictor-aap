@@ -451,8 +451,8 @@ async function loadAIModel() {
     try {
 
         aiModel = await tf.loadLayersModel(
-            "localstorage://phase3-ai-model"
-        );
+            "localstorage://phase3-ai-model-v2"
+);
 
         console.log("AI model loaded successfully.");
         return true;
