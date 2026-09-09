@@ -553,7 +553,7 @@ console.log(
 // FINAL NUMBER PREDICTION
 // ========================================
 
-function getFinalPrediction() {
+async function getFinalPrediction() {
 
     // STEP 5: Trained TensorFlow AI prediction
     if (typeof aiModel !== "undefined" && aiModel) {
