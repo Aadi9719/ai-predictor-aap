@@ -549,6 +549,8 @@ console.log(
     }
 }
 
+let latestAIConfidence = 0;
+
 // ========================================
 // FINAL NUMBER PREDICTION
 // ========================================
