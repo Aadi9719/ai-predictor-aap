@@ -202,28 +202,7 @@ document.addEventListener(
                     let trendScore = 0;
                     let aiScore = 0;
 
-
-                    if (
-                        typeof getPredictionConfidence ===
-                        "function"
-                    ) {
-
-                        try {
-
-                            confidence =
-                                Number(
-                                    getPredictionConfidence()
-                                ) || 0;
-
-                        } catch (error) {
-
-                            console.error(
-                                "Confidence error:",
-                                error
-                            );
-                        }
-                    }
-
+confidence = latestAIConfidence;
 
                     if (
                         typeof getTrendScore ===
