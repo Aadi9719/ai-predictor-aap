@@ -566,6 +566,8 @@ async function getFinalPrediction(input) {
     aiResult && Number.isFinite(Number(aiResult.confidence))
         ? Number(aiResult.confidence)
         : 0;
+
+            latestAIConfidence = aiConfidence;
             
             if (
                 aiResult &&
@@ -791,6 +793,8 @@ function getFinalAIScore() {
     let memoryScore = 0;
     let patternScore = 0;
 
+    memoryScore = latestAIConfidence;
+    
     const trendScore =
         Math.max(
             0,
@@ -801,33 +805,6 @@ function getFinalAIScore() {
                 ) || 0
             )
         );
-
-
-    // ------------------------------------
-    // Memory confidence
-    // ------------------------------------
-
-    if (
-        typeof getPredictionConfidence ===
-        "function"
-    ) {
-
-        try {
-
-            memoryScore =
-                Number(
-                    getPredictionConfidence()
-                ) || 0;
-
-        } catch (error) {
-
-            console.error(
-                "Prediction confidence error:",
-                error
-            );
-        }
-    }
-
 
     // ------------------------------------
     // Pattern score
