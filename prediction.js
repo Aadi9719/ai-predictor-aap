@@ -560,6 +560,11 @@ async function getFinalPrediction(input) {
         try {
             const aiResult = await getRealAIPrediction(input);
 
+            const aiConfidence =
+    aiResult && Number.isFinite(Number(aiResult.confidence))
+        ? Number(aiResult.confidence)
+        : 0;
+            
             if (
                 aiResult &&
                 Number.isInteger(Number(aiResult.number)) &&
