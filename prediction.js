@@ -347,16 +347,17 @@ aiModel.compile({
 });
 
     const xs = tf.tensor2d(inputs);
-    const ys = tf.tensor2d(
-        targets.map(value => [Number(value)])
-    );
+    const ys = tf.tensor1d(
+    targets.map(value => Number(value)),
+    "int32"
+);
 
     try {
 
         await aiModel.fit(xs, ys, {
             epochs: 30,
             batchSize: 16,
-            shuffle: true,
+            shuffle: false,
             verbose: 0
         });
 
