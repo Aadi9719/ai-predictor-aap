@@ -1263,43 +1263,46 @@ function buildMLDataset() {
     };
 }
 
-function buildMLTrainValidationSet() {
+function buildMLTrainValidationTestSet() {
 
-    let dataset = buildMLDataset();
+    const dataset = buildMLDataset();
 
-    if (!dataset.inputs || dataset.inputs.length < 20) {
+    if (
+        !dataset ||
+        !Array.isArray(dataset.inputs) ||
+        !Array.isArray(dataset.targets) ||
+        dataset.inputs.length < 20
+    ) {
         return {
             ready: false,
             message: "Not enough samples"
         };
     }
 
-    let total = dataset.inputs.length;
+    const total = dataset.inputs.length;
 
-    let validationSize = Math.max(
-        1,
-        Math.floor(total * 0.20)
-    );
+    // Time-based split:
+    // 70% Training, 15% Validation, 15% Test
 
-    let trainSize = total - validationSize;
+    const trainSize = Math.floor(total * 0.70);
+    const validationSize = Math.floor(total * 0.15);
+    const testStart = trainSize + validationSize;
 
     return {
         ready: true,
 
-        trainInputs:
-            dataset.inputs.slice(0, trainSize),
+        trainInputs: dataset.inputs.slice(0, trainSize),
+        trainTargets: dataset.targets.slice(0, trainSize),
 
-        trainTargets:
-            dataset.targets.slice(0, trainSize),
+        validationInputs: dataset.inputs.slice(trainSize, testStart),
+        validationTargets: dataset.targets.slice(trainSize, testStart),
 
-        validationInputs:
-            dataset.inputs.slice(trainSize),
-
-        validationTargets:
-            dataset.targets.slice(trainSize),
+        testInputs: dataset.inputs.slice(testStart),
+        testTargets: dataset.targets.slice(testStart),
 
         trainSamples: trainSize,
-        validationSamples: validationSize
+        validationSamples: validationSize,
+        testSamples: total - testStart
     };
 }
 
