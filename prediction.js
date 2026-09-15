@@ -699,6 +699,12 @@ async function getFinalPrediction(input) {
                     aiResult.confidence + "%"
                 );
 
+                console.log(
+    "PRIMARY AI PREDICTION PROTECTED:",
+    aiResult.number,
+    "| Secondary evidence will NOT override AI."
+);
+                
                 return Number(aiResult.number);
             }
         } catch (error) {
@@ -826,6 +832,33 @@ console.log(
     secondaryEvidenceScore
 );
 
+    // ------------------------------------
+// STEP 8E: Combined Evidence Score
+// ------------------------------------
+
+const combinedEvidenceScore =
+    Math.round(
+        (Number(latestAIConfidence) * 0.70) +
+        (Number(secondaryEvidenceScore) * 0.30)
+    );
+
+console.log(
+    "COMBINED EVIDENCE SCORE:",
+    combinedEvidenceScore
+);
+
+    // ------------------------------------
+// STEP 8F: Store Secondary Evidence
+// ------------------------------------
+
+latestCombinedEvidenceScore =
+    combinedEvidenceScore;
+
+console.log(
+    "AI PRIMARY + SECONDARY EVIDENCE:",
+    latestCombinedEvidenceScore
+);
+    
     // ------------------------------------
     // Strong trend
     // ------------------------------------
