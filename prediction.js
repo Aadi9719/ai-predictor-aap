@@ -298,7 +298,9 @@ async function trainAIModel(
     inputs,
     targets,
     validationInputs = null,
-    validationTargets = null
+    validationTargets = null,
+    testInputs = null,
+    testTargets = null
 ) {
 
     if (
@@ -376,6 +378,25 @@ if (
     );
 }
 
+    let testXs = null;
+let testYs = null;
+
+if (
+    Array.isArray(testInputs) &&
+    Array.isArray(testTargets) &&
+    testInputs.length > 0 &&
+    testInputs.length === testTargets.length
+) {
+    testXs = tf.tensor2d(testInputs);
+
+    testYs = tf.tensor1d(
+        testTargets.map(
+            value => Number(value)
+        ),
+        "int32"
+    );
+}
+
     try {
 
         await aiModel.fit(xs, ys, {
@@ -389,6 +410,39 @@ if (
     verbose: 0
 });
 
+        if (testXs && testYs) {
+
+    const testResult =
+        await aiModel.evaluate(
+            testXs,
+            testYs,
+            {
+                batchSize: 16,
+                verbose: 0
+            }
+        );
+
+    const testLoss =
+        await testResult[0].data();
+
+    const testAccuracy =
+        await testResult[1].data();
+
+    console.log(
+        "TEST LOSS:",
+        testLoss[0]
+    );
+
+    console.log(
+        "TEST ACCURACY:",
+        (testAccuracy[0] * 100).toFixed(2) + "%"
+    );
+
+    testResult.forEach(
+        tensor => tensor.dispose()
+    );
+        }
+        
         console.log(
             "Phase 3 AI training complete:",
             inputs.length,
@@ -410,8 +464,15 @@ if (validationYs) {
     validationYs.dispose();
     
 }
+ if (testXs) {
+    testXs.dispose();
+}
 
-
+if (testYs) {
+    testYs.dispose();
+  }
+}
+    
 // ========================================
 // PHASE 3 — AUTOMATIC RETRAINING
 // ========================================
@@ -436,7 +497,9 @@ async function retrainAIModel() {
     dataset.trainInputs,
     dataset.trainTargets,
     dataset.validationInputs,
-    dataset.validationTargets
+    dataset.validationTargets,
+    dataset.testInputs,
+    dataset.testTargets
 );
 
     if (success) {
