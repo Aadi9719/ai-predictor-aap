@@ -379,11 +379,15 @@ if (
     try {
 
         await aiModel.fit(xs, ys, {
-            epochs: 30,
-            batchSize: 16,
-            shuffle: false,
-            verbose: 0
-        });
+    epochs: 30,
+    batchSize: 16,
+    shuffle: false,
+    validationData:
+        validationXs && validationYs
+            ? [validationXs, validationYs]
+            : undefined,
+    verbose: 0
+});
 
         console.log(
             "Phase 3 AI training complete:",
@@ -398,8 +402,15 @@ if (
         xs.dispose();
         ys.dispose();
 
-    }
+        if (validationXs) {
+    validationXs.dispose();
 }
+
+if (validationYs) {
+    validationYs.dispose();
+    
+}
+
 
 // ========================================
 // PHASE 3 — AUTOMATIC RETRAINING
