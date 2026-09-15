@@ -859,46 +859,6 @@ console.log(
     "AI PRIMARY + SECONDARY EVIDENCE:",
     latestCombinedEvidenceScore
 );
-    
-    // ------------------------------------
-    // Strong trend
-    // ------------------------------------
-
-    if (
-        trend !== null &&
-        getTrendScore() >= 70
-    ) {
-
-        return Number(trend);
-    }
-
-
-    // ------------------------------------
-    // Hot fallback
-    // ------------------------------------
-
-    if (hot !== null) {
-        return Number(hot);
-    }
-
-
-    // ------------------------------------
-    // Memory fallback
-    // ------------------------------------
-
-    if (memory !== null) {
-        return Number(memory);
-    }
-
-
-    // ------------------------------------
-    // Trend fallback
-    // ------------------------------------
-
-    if (trend !== null) {
-        return Number(trend);
-    }
-
 
     return null;
 }
