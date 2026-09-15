@@ -294,7 +294,12 @@ if (
 
 let aiModel = null;
 
-async function trainAIModel(inputs, targets) {
+async function trainAIModel(
+    inputs,
+    targets,
+    validationInputs = null,
+    validationTargets = null
+) {
 
     if (
         !Array.isArray(inputs) ||
@@ -352,6 +357,25 @@ aiModel.compile({
     "int32"
 );
 
+    let validationXs = null;
+let validationYs = null;
+
+if (
+    Array.isArray(validationInputs) &&
+    Array.isArray(validationTargets) &&
+    validationInputs.length > 0 &&
+    validationInputs.length === validationTargets.length
+) {
+    validationXs = tf.tensor2d(validationInputs);
+
+    validationYs = tf.tensor1d(
+        validationTargets.map(
+            value => Number(value)
+        ),
+        "int32"
+    );
+}
+
     try {
 
         await aiModel.fit(xs, ys, {
@@ -398,9 +422,11 @@ async function retrainAIModel() {
     }
 
     const success = await trainAIModel(
-        dataset.trainInputs,
-        dataset.trainTargets
-    );
+    dataset.trainInputs,
+    dataset.trainTargets,
+    dataset.validationInputs,
+    dataset.validationTargets
+);
 
     if (success) {
         console.log(
