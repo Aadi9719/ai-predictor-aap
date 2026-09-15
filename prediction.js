@@ -383,12 +383,13 @@ aiModel.compile({
 
 async function retrainAIModel() {
 
-    const dataset = buildMLDataset();
+    const dataset =
+        buildMLTrainValidationTestSet();
 
     if (
         !dataset ||
-        !dataset.inputs ||
-        dataset.inputs.length < 20
+        !dataset.ready ||
+        dataset.trainInputs.length < 20
     ) {
         console.warn(
             "Retraining skipped: not enough data."
@@ -397,13 +398,28 @@ async function retrainAIModel() {
     }
 
     const success = await trainAIModel(
-        dataset.inputs,
-        dataset.targets
+        dataset.trainInputs,
+        dataset.trainTargets
     );
 
     if (success) {
         console.log(
             "AI model weights updated successfully."
+        );
+
+        console.log(
+            "Training samples:",
+            dataset.trainSamples
+        );
+
+        console.log(
+            "Validation samples:",
+            dataset.validationSamples
+        );
+
+        console.log(
+            "Test samples:",
+            dataset.testSamples
         );
     }
 
