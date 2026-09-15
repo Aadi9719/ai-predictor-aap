@@ -693,6 +693,18 @@ async function getFinalPrediction(input) {
                 Number(aiResult.number) >= 1 &&
                 Number(aiResult.number) <= 9
             ) {
+
+                const MIN_AI_CONFIDENCE = 60;
+
+if (aiConfidence < MIN_AI_CONFIDENCE) {
+    console.warn(
+        "LOW AI CONFIDENCE:",
+        aiConfidence + "%",
+        "| NO PREDICTION"
+    );
+    return null;
+}
+                
                 console.log(
                     "FINAL AI MODEL PREDICTION:",
                     aiResult.number,
