@@ -754,53 +754,77 @@ async function getFinalPrediction(input) {
     hot =
         hotCold.hot;
 
-
     // ------------------------------------
-    // Memory + Trend agreement
-    // ------------------------------------
+// STEP 8C: Secondary Evidence
+// ------------------------------------
 
-    if (
-        memory !== null &&
-        trend !== null &&
-        Number(memory) === Number(trend)
-    ) {
+let secondaryEvidenceScore = 0;
 
-        return Number(memory);
+// Pattern evidence
+if (
+    typeof getPatternScore === "function"
+) {
+    try {
+        secondaryEvidenceScore +=
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    Number(getPatternScore()) || 0
+                )
+            ) * 0.40;
+    } catch (error) {
+        console.error(
+            "Secondary pattern error:",
+            error
+        );
     }
+}
 
-
-    // ------------------------------------
-    // Strong pattern memory
-    // ------------------------------------
-
-    if (
-        memory !== null &&
-        typeof getPatternScore ===
-        "function"
-    ) {
-
-        let patternScore = 0;
-
-        try {
-
-            patternScore =
-                Number(
-                    getPatternScore()
-                ) || 0;
-
-        } catch (error) {
-
-            console.error(
-                "Pattern score error:",
-                error
-            );
-        }
-
-        if (patternScore >= 70) {
-            return Number(memory);
-        }
+// Trend evidence
+if (
+    typeof getTrendScore === "function"
+) {
+    try {
+        secondaryEvidenceScore +=
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    Number(getTrendScore()) || 0
+                )
+            ) * 0.35;
+    } catch (error) {
+        console.error(
+            "Secondary trend error:",
+            error
+        );
     }
+}
 
+// Hot evidence
+if (
+    hot !== null &&
+    hot !== undefined
+) {
+    secondaryEvidenceScore += 25;
+}
+
+secondaryEvidenceScore =
+    Math.round(
+        Math.max(
+            0,
+            Math.min(
+                100,
+                secondaryEvidenceScore
+            )
+        )
+    );
+
+console.log(
+    "SECONDARY EVIDENCE SCORE:",
+    secondaryEvidenceScore
+);
 
     // ------------------------------------
     // Strong trend
