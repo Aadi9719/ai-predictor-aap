@@ -696,6 +696,7 @@ async function getFinalPrediction(input) {
 
                 const MIN_AI_CONFIDENCE = 60;
 
+                console.log("AI CONFIDENCE CHECK:", aiConfidence);
 if (aiConfidence < MIN_AI_CONFIDENCE) {
     console.warn(
         "LOW AI CONFIDENCE:",
