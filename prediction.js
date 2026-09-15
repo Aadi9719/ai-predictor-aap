@@ -667,7 +667,8 @@ console.log(
 }
 
 let latestAIConfidence = 0;
-
+let latestCombinedEvidenceScore = 0;
+    
 // ========================================
 // FINAL NUMBER PREDICTION
 // ========================================
