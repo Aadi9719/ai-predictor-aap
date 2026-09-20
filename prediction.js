@@ -236,7 +236,7 @@ if (
                 [1, 5]
             );
 
-        const prediction = aiModel.predict(Tensor);
+        const output = aiModel.predict(tensor);
 
         const probabilities =
             await output.data();
