@@ -633,56 +633,6 @@ function getHotColdNumbers() {
     };
 }
 
-
-// ========================================
-// FINAL NUMBER PREDICTION
-// ========================================
-
-function getFinalPrediction() {
-
-    const memory =
-        getPatternPrediction();
-
-    const trend =
-        getTrendPrediction();
-
-    const hotCold =
-        getHotColdNumbers();
-
-    const hot =
-        hotCold.hot;
-
-    /*
-       1. Strong exact pattern
-    */
-
-    if (memory !== null) {
-
-        return memory;
-    }
-
-    /*
-       2. Trend
-    */
-
-    if (trend !== null) {
-
-        return trend;
-    }
-
-    /*
-       3. Hot number
-    */
-
-    if (hot !== null) {
-
-        return hot;
-    }
-
-    return null;
-}
-
-
 // ========================================
 // BIG / SMALL
 // ========================================
@@ -924,34 +874,6 @@ function getFinalBigSmallPrediction() {
 
     return recent;
 }
-
-
-// ========================================
-// COLOR
-// ========================================
-
-function getColorPrediction(number) {
-
-    number =
-        Number(number);
-
-    if (
-        [1, 3, 7, 9]
-            .includes(number)
-    ) {
-        return "GREEN";
-    }
-
-    if (
-        [2, 4, 6, 8]
-            .includes(number)
-    ) {
-        return "RED";
-    }
-
-    return "VIOLET";
-}
-
 
 function getColorPatternPrediction() {
 
