@@ -96,13 +96,13 @@ document.addEventListener(
                         input.some(
                             n =>
                                 !Number.isInteger(n) ||
-                                n < 0 ||
+                                n < 1 ||
                                 n > 9
                         )
                     ) {
 
                         alert(
-                            "Please enter all 5 numbers between 0 and 9."
+                            "Please enter all 5 numbers between 1 and 9."
                         );
 
                         return;
