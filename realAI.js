@@ -427,8 +427,8 @@ function getTargetDistribution() {
         return;
     }
 
-    let trainCounts = [0,0,0,0,0,0,0,0,0,0];
-    let validationCounts = [0,0,0,0,0,0,0,0,0,0];
+    let trainCounts = [0,0,0,0,0,0,0,0,0];
+    let validationCounts = [0,0,0,0,0,0,0,0,0];
 
     split.trainTargets.forEach(function(value) {
 
@@ -1645,7 +1645,7 @@ async function createPhase3MModel() {
     }));
 
     model.add(tf.layers.dense({
-        units: 10,
+        units: 9,
         activation: "softmax"
     }));
 
