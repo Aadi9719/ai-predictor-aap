@@ -29,10 +29,10 @@ async function createRealAIModel() {
         })
     );
 
-    // 10 classes: results 0–9
+    // 9 classes: results 0–8
     realAIModel.add(
         tf.layers.dense({
-            units: 10,
+            units: 9,
             activation: "softmax"
         })
     );
@@ -71,7 +71,7 @@ async function testRealAIModel() {
         "REAL AI MODEL CREATED ✅\n\n" +
         "TensorFlow.js = LOADED\n" +
         "Neural Network = READY\n" +
-        "Output Classes = 10"
+        "Output Classes = 9"
     );
 }
 
@@ -343,7 +343,7 @@ async function testRealAIDistribution() {
             await predictions.array();
 
         let counts = [
-            0,0,0,0,0,0,0,0,0,0
+            0,0,0,0,0,0,0,0,0
         ];
 
         let correct = 0;
