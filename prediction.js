@@ -876,7 +876,7 @@ console.log(
     return null;
 }
 
-window.auditPredictionSource = function () {
+window.auditPredictionSource = async function (input) {
 
     let memory = null;
     let trend = null;
@@ -903,7 +903,7 @@ window.auditPredictionSource = function () {
     }
 
     try {
-        final = getFinalPrediction();
+        final = await getFinalPrediction(input);
     } catch (e) {
         console.error("Final prediction error:", e);
     }
