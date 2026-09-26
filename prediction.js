@@ -603,11 +603,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loaded = await loadAIModel();
 
     if (loaded) {
+
         console.log("Saved AI model restored ✅");
+
     } else {
-        
+
         console.log("No saved AI model found.");
-        await retrainAIModel();
+
+        const trained = await retrainAIModel();
+
+        if (trained) {
+            await saveAIModel();
+            console.log("AI model trained and saved ✅");
+        } else {
+            console.warn("AI model training failed.");
+        }
     }
 
 });
