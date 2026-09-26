@@ -605,7 +605,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (loaded) {
         console.log("Saved AI model restored ✅");
     } else {
+        
         console.log("No saved AI model found.");
+        await retrainAIModel();
     }
 
 });
