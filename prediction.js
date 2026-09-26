@@ -505,6 +505,13 @@ async function retrainAIModel() {
 );
 
     if (success) {
+
+        const saved = await saveAIModel();
+
+if (!saved) {
+    console.warn("AI model save nahi hua.");
+}
+        
         console.log(
             "AI model weights updated successfully."
         );
