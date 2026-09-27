@@ -287,55 +287,6 @@ if (
     }
 }
 
-function buildMLTrainValidationTestSet() {
-
-    const dataset = buildMLDataset();
-
-    if (
-        !dataset ||
-        !Array.isArray(dataset.inputs) ||
-        !Array.isArray(dataset.targets) ||
-        dataset.inputs.length < 20
-    ) {
-        return {
-            ready: false,
-            message: "Not enough samples"
-        };
-    }
-
-    const total = dataset.inputs.length;
-
-    // Time-based split:
-    // 70% Training, 15% Validation, 15% Test
-
-    const trainSize = Math.floor(total * 0.70);
-    const validationSize = Math.floor(total * 0.15);
-    const testStart = trainSize + validationSize;
-
-    return {
-        ready: true,
-
-        trainInputs: dataset.inputs.slice(0, trainSize),
-        trainTargets: dataset.targets.slice(0, trainSize),
-
-        validationInputs:
-            dataset.inputs.slice(trainSize, testStart),
-
-        validationTargets:
-            dataset.targets.slice(trainSize, testStart),
-
-        testInputs:
-            dataset.inputs.slice(testStart),
-
-        testTargets:
-            dataset.targets.slice(testStart),
-
-        trainSamples: trainSize,
-        validationSamples: validationSize,
-        testSamples: total - testStart
-    };
-}
-
 // ========================================
 // PHASE 3 — NEURAL NETWORK TRAINING
 // Educational ML / forecasting demo
