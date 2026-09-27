@@ -698,7 +698,17 @@ async function getFinalPrediction(input) {
 
     // STEP 5: Trained TensorFlow AI prediction
     
-    if (typeof aiModel !== "undefined" && aiModel) {
+    alert("getFinalPrediction START");
+
+alert(
+    "BEFORE AI CHECK | aiModel = " +
+    (typeof aiModel === "undefined"
+        ? "UNDEFINED"
+        : aiModel ? "EXISTS" : "NULL")
+);
+
+if (typeof aiModel !== "undefined" && aiModel) {
+    
          try {
             const aiResult = await getRealAIPrediction(input);
 
