@@ -712,6 +712,11 @@ if (typeof aiModel !== "undefined" && aiModel) {
          try {
             const aiResult = await getRealAIPrediction(input);
 
+             alert(
+    "AI RESULT = " +
+    JSON.stringify(aiResult)
+);
+             
             const aiConfidence =
     aiResult && Number.isFinite(Number(aiResult.confidence))
         ? Number(aiResult.confidence)
