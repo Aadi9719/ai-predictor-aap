@@ -239,7 +239,7 @@ if (
         const prediction = aiModel.predict(tensor);
 
         const probabilities =
-            await prediction.data();
+            await output.data();
 
         let bestIndex = 0;
         let bestProbability = -Infinity;
@@ -265,10 +265,10 @@ if (
         tensor.dispose();
 
         if (
-            prediction &&
-            typeof prediction.dispose === "function"
+            output &&
+            typeof output.dispose === "function"
         ) {
-            prediction.dispose();
+            output.dispose();
         }
 
     return {
