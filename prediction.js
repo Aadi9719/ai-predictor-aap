@@ -697,14 +697,9 @@ let latestCombinedEvidenceScore = 0;
 async function getFinalPrediction(input) {
 
     // STEP 5: Trained TensorFlow AI prediction
-
-    alert("getFinalPrediction START");
     
     if (typeof aiModel !== "undefined" && aiModel) {
-       
-        alert("aiModel FOUND");
-        
-        try {
+         try {
             const aiResult = await getRealAIPrediction(input);
 
             const aiConfidence =
@@ -724,8 +719,6 @@ async function getFinalPrediction(input) {
                 const MIN_AI_CONFIDENCE = 60;
 
   console.log("AI CONFIDENCE CHECK:", aiConfidence);
-
-                alert("AI CONFIDENCE = " + aiConfidence + "%");
                 
                 if (aiConfidence < MIN_AI_CONFIDENCE) {
     console.warn(
@@ -735,7 +728,6 @@ async function getFinalPrediction(input) {
     );
     return null;
 }
-       alert("aiModel NOT FOUND");
                 
                 console.log(
                     "FINAL AI MODEL PREDICTION:",
