@@ -746,7 +746,13 @@ let latestCombinedEvidenceScore = 0;
 async function getFinalPrediction(input) {
 
     // STEP 5: Trained TensorFlow AI prediction
+
+    alert("getFinalPrediction START");
+    
     if (typeof aiModel !== "undefined" && aiModel) {
+       
+        alert("aiModel FOUND");
+        
         try {
             const aiResult = await getRealAIPrediction(input);
 
@@ -778,6 +784,7 @@ async function getFinalPrediction(input) {
     );
     return null;
 }
+       alert("aiModel NOT FOUND");
                 
                 console.log(
                     "FINAL AI MODEL PREDICTION:",
