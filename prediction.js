@@ -733,6 +733,13 @@ if (typeof aiModel !== "undefined" && aiModel) {
 
                 const MIN_AI_CONFIDENCE = 60;
 
+                alert(
+    "CONFIDENCE CHECK: " +
+    aiConfidence +
+    "% < MIN " +
+    MIN_AI_CONFIDENCE
+);
+                
   console.log("AI CONFIDENCE CHECK:", aiConfidence);
                 
                 if (aiConfidence < MIN_AI_CONFIDENCE) {
