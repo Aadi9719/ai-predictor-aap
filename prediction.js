@@ -731,7 +731,7 @@ if (typeof aiModel !== "undefined" && aiModel) {
                 Number(aiResult.number) <= 9
             ) {
 
-                const MIN_AI_CONFIDENCE = 60;
+                const MIN_AI_CONFIDENCE = 0;
 
                 alert(
     "CONFIDENCE VALUE = " +
@@ -748,7 +748,7 @@ if (typeof aiModel !== "undefined" && aiModel) {
     console.warn(
         "LOW AI CONFIDENCE:",
         aiConfidence + "%",
-        "| NO PREDICTION"
+        "| NO PREDICTION"hai 
     );
     return null;
 }
