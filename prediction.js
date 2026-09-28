@@ -734,10 +734,12 @@ if (typeof aiModel !== "undefined" && aiModel) {
                 const MIN_AI_CONFIDENCE = 60;
 
                 alert(
-    "CONFIDENCE CHECK: " +
+    "CONFIDENCE VALUE = " +
     aiConfidence +
-    "% < MIN " +
-    MIN_AI_CONFIDENCE
+    "\nMIN VALUE = " +
+    MIN_AI_CONFIDENCE +
+    "\nCONDITION = " +
+    (aiConfidence < MIN_AI_CONFIDENCE)
 );
                 
   console.log("AI CONFIDENCE CHECK:", aiConfidence);
