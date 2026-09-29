@@ -1246,14 +1246,14 @@ function buildMLDataset() {
                 n => !Number.isFinite(Number(n))
             ) ||
             !Number.isInteger(target) ||
-            target < 1 ||
+            target < 0 ||
             target > 9
         ) {
             continue;
         }
 
         X.push(input);
-        Y.push(target - 1);
+        Y.push(target);
     }
 
     return {
