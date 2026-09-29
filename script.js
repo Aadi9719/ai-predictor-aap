@@ -96,7 +96,7 @@ document.addEventListener(
                         input.some(
                             n =>
                                 !Number.isInteger(n) ||
-                                n < 1 ||
+                                n < 0 ||
                                 n > 9
                         )
                     ) {
