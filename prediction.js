@@ -272,7 +272,7 @@ if (
         }
 
     return {
-    number: bestIndex + 1,
+    number: bestIndex,
     confidence: Math.round(bestProbability * 100)
 };
 
@@ -342,7 +342,7 @@ async function trainAIModel(
 
     aiModel.add(
     tf.layers.dense({
-        units: 9,
+        units: 10,
         activation: "softmax"
     })
 );
