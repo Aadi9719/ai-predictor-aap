@@ -727,7 +727,7 @@ if (typeof aiModel !== "undefined" && aiModel) {
             if (
                 aiResult &&
                 Number.isInteger(Number(aiResult.number)) &&
-                Number(aiResult.number) >= 1 &&
+                Number(aiResult.number) >= 0 &&
                 Number(aiResult.number) <= 9
             ) {
 
