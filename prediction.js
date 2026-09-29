@@ -748,7 +748,7 @@ if (typeof aiModel !== "undefined" && aiModel) {
     console.warn(
         "LOW AI CONFIDENCE:",
         aiConfidence + "%",
-        "| NO PREDICTION"hai 
+        "| NO PREDICTION"
     );
     return null;
 }
