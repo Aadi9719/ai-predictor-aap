@@ -549,7 +549,7 @@ async function saveAIModel() {
     try {
 
         await aiModel.save(
-            "localstorage://phase3-ai-model-v2"
+            "localstorage://phase3-ai-model-v3"
 );
 
         console.log("AI model saved successfully.");
@@ -577,7 +577,7 @@ async function loadAIModel() {
     try {
 
         aiModel = await tf.loadLayersModel(
-            "localstorage://phase3-ai-model-v2"
+            "localstorage://phase3-ai-model-v3"
 );
 
         console.log("AI model loaded successfully.");
