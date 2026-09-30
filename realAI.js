@@ -32,7 +32,7 @@ async function createRealAIModel() {
     // 9 classes: results 0–8
     realAIModel.add(
         tf.layers.dense({
-            units: 9,
+            units: 10,
             activation: "softmax"
         })
     );
