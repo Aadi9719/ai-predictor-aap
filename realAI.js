@@ -1240,7 +1240,7 @@ function buildMLDataset() {
 
         let target = Number(data[i]);
 
-        // Sirf valid results 1–9
+        // Sirf valid results 0–9
         if (
             input.some(
                 n => !Number.isFinite(Number(n))
