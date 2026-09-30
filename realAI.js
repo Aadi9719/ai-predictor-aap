@@ -1645,7 +1645,7 @@ async function createPhase3MModel() {
     }));
 
     model.add(tf.layers.dense({
-        units: 9,
+        units: 10,
         activation: "softmax"
     }));
 
