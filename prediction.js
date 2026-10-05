@@ -61,7 +61,7 @@ function getTrendPrediction() {
 
         if (
             Number.isInteger(n) &&
-            n >= 1 &&
+            n >= 0 &&
             n <= 9
         ) {
             count[n]++;
