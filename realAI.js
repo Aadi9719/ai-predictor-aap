@@ -1256,6 +1256,30 @@ function buildMLDataset() {
         Y.push(target);
     }
 
+let distribution = {};
+
+for (let i = 0; i <= 9; i++) {
+    distribution[i] = 0;
+}
+
+Y.forEach(value => {
+    distribution[value]++;
+});
+
+alert(
+    "AI Training Data Distribution:\n\n" +
+    "0 = " + distribution[0] + "\n" +
+    "1 = " + distribution[1] + "\n" +
+    "2 = " + distribution[2] + "\n" +
+    "3 = " + distribution[3] + "\n" +
+    "4 = " + distribution[4] + "\n" +
+    "5 = " + distribution[5] + "\n" +
+    "6 = " + distribution[6] + "\n" +
+    "7 = " + distribution[7] + "\n" +
+    "8 = " + distribution[8] + "\n" +
+    "9 = " + distribution[9]
+);
+    
     return {
         samples: X.length,
         inputs: X,
