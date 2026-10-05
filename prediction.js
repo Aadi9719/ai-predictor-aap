@@ -97,7 +97,7 @@ function getTrendScore() {
     const recent = allResults.slice(0, 20);
     const count = {};
 
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
         count[i] = 0;
     }
 
@@ -107,7 +107,7 @@ function getTrendScore() {
 
         if (
             Number.isInteger(n) &&
-            n >= 1 &&
+            n >= 0 &&
             n <= 9
         ) {
             count[n]++;
@@ -116,7 +116,7 @@ function getTrendScore() {
 
     let maxFrequency = 0;
 
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
 
         if (count[i] > maxFrequency) {
             maxFrequency = count[i];
@@ -149,7 +149,7 @@ function getHotColdNumbers() {
     const recent = allResults.slice(0, 20);
     const count = {};
 
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
         count[i] = 0;
     }
 
@@ -159,7 +159,7 @@ function getHotColdNumbers() {
 
         if (
             Number.isInteger(n) &&
-            n >= 1 &&
+            n >= 0 &&
             n <= 9
         ) {
             count[n]++;
@@ -172,7 +172,7 @@ function getHotColdNumbers() {
     let hotCount = -1;
     let coldCount = Infinity;
 
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
 
         if (count[i] > hotCount) {
             hotCount = count[i];
