@@ -52,7 +52,7 @@ function getTrendPrediction() {
     const recent = allResults.slice(0, 20);
     const count = {};
 
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
         count[i] = 0;
     }
 
@@ -72,7 +72,7 @@ function getTrendPrediction() {
     let best = null;
     let max = -1;
 
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
 
         if (count[i] > max) {
             max = count[i];
