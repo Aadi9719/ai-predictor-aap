@@ -416,6 +416,15 @@ if (
     verbose: 0
 });
 
+        alert(
+    "TEST DATA CHECK\n\n" +
+    "Test Inputs = " +
+    (Array.isArray(testInputs) ? testInputs.length : "NOT ARRAY") +
+    "\n" +
+    "Test Targets = " +
+    (Array.isArray(testTargets) ? testTargets.length : "NOT ARRAY")
+);
+        
         if (testXs && testYs) {
 
     const testResult =
