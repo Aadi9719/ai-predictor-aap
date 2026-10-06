@@ -241,6 +241,13 @@ if (
         const probabilities =
             await prediction.data();
 
+        alert(
+    "AI Probabilities:\n\n" +
+    probabilities.map(
+        (p, i) => i + " = " + (p * 100).toFixed(2) + "%"
+    ).join("\n")
+);
+        
         let bestIndex = 0;
         let bestProbability = -Infinity;
 
