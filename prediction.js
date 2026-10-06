@@ -23,8 +23,6 @@ function getColorPrediction(number) {
     return "🟣 VIOLET";
 }
 
-}
-
 // ========================================
 // BIG / SMALL
 // ========================================
