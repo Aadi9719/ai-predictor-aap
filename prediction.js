@@ -499,6 +499,27 @@ async function retrainAIModel() {
     const dataset =
         buildMLTrainValidationTestSet();
 
+    alert(
+    "DATASET CHECK\n\n" +
+    "ready = " +
+    (dataset ? dataset.ready : "NO DATASET") +
+    "\n" +
+    "train = " +
+    (dataset && dataset.trainInputs
+        ? dataset.trainInputs.length
+        : "N/A") +
+    "\n" +
+    "validation = " +
+    (dataset && dataset.validationInputs
+        ? dataset.validationInputs.length
+        : "N/A") +
+    "\n" +
+    "test = " +
+    (dataset && dataset.testInputs
+        ? dataset.testInputs.length
+        : "N/A")
+);
+    
     if (
         !dataset ||
         !dataset.ready ||
