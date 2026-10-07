@@ -531,6 +531,13 @@ async function retrainAIModel() {
         return false;
     }
 
+    alert(
+    "SENDING TO TRAIN MODEL\n\n" +
+    "Train = " + dataset.trainInputs.length + "\n" +
+    "Validation = " + dataset.validationInputs.length + "\n" +
+    "Test = " + dataset.testInputs.length
+);
+    
     const success = await trainAIModel(
     dataset.trainInputs,
     dataset.trainTargets,
