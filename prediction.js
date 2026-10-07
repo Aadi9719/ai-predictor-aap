@@ -630,6 +630,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         console.log("No saved AI model found.");
 
+        alert("RETRAINING START");
+        
         const trained = await retrainAIModel();
 
         if (trained) {
