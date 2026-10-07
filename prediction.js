@@ -617,6 +617,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const loaded = await loadAIModel();
 
+    alert(
+    "MODEL LOAD RESULT:\n\n" +
+    "loaded = " + loaded
+);
+    
     if (loaded) {
 
         console.log("Saved AI model restored ✅");
