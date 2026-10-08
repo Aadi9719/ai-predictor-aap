@@ -301,6 +301,9 @@ if (
 let aiModel = null;
 
 async function trainAIModel(
+
+    alert("TRAIN AI MODEL START");
+
     inputs,
     targets,
     validationInputs = null,
@@ -405,6 +408,8 @@ if (
 
     try {
 
+        alert("MODEL FIT START");
+        
         await aiModel.fit(xs, ys, {
     epochs: 30,
     batchSize: 16,
