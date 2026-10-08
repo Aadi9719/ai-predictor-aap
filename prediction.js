@@ -7,6 +7,7 @@
 // ========================================
 // COLOR
 // ========================================
+alert("PREDICTION.JS LOADED");
 
 function getColorPrediction(number) {
 
