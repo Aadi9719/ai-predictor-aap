@@ -21,7 +21,10 @@ function getColorPrediction(number) {
         return "🔴 RED";
     }
 
+    if ([0,5].includes(number)) {
     return "🟣 VIOLET";
+}
+
 }
 
 // ========================================
