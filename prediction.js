@@ -306,8 +306,6 @@ let aiModel = null;
 
 async function trainAIModel(
 
-    alert("TRAIN AI MODEL START");
-
     inputs,
     targets,
     validationInputs = null,
@@ -316,6 +314,8 @@ async function trainAIModel(
     testTargets = null
 ) {
 
+    alert("TRAIN AI MODEL START");
+    
     if (
         !Array.isArray(inputs) ||
         !Array.isArray(targets) ||
