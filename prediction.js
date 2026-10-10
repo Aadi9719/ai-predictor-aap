@@ -372,6 +372,13 @@ aiModel.compile({
     "int32"
 );
 
+    alert(
+    "INPUT FINITE = " +
+    Array.from(xs.dataSync()).every(Number.isFinite) +
+    "\nTARGET FINITE = " +
+    Array.from(ys.dataSync()).every(Number.isFinite)
+);
+    
     let validationXs = null;
 let validationYs = null;
 
