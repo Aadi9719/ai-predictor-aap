@@ -494,6 +494,19 @@ alert("MODEL WEIGHTS FINITE = " + weightsFinite);
             "samples"
         );
 
+        const weights = aiModel.getWeights();
+
+let weightsFinite = true;
+
+for (const weight of weights) {
+    if (!Array.from(weight.dataSync()).every(Number.isFinite)) {
+        weightsFinite = false;
+        break;
+    }
+}
+
+alert("MODEL WEIGHTS FINITE = " + weightsFinite);
+        
         return true;
 
     } finally {
