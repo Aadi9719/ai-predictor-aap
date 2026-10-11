@@ -494,6 +494,8 @@ alert("MODEL WEIGHTS FINITE = " + weightsFinite);
             "samples"
         );
 
+        alert("TRAINING COMPLETE LINE REACHED");
+        
         const modelWeightsCheck = aiModel.getWeights();
 
 let modelWeightsFiniteCheck = true;
