@@ -496,16 +496,16 @@ alert("MODEL WEIGHTS FINITE = " + weightsFinite);
 
         const modelWeightsCheck = aiModel.getWeights();
 
-let weightsFinite = true;
+let modelWeightsFiniteCheck = true;
 
 for (const weight of modelWeightsCheck) {
     if (!Array.from(weight.dataSync()).every(Number.isFinite)) {
-        weightsFinite = false;
+        modelWeightsFiniteCheck = false;
         break;
     }
 }
 
-alert("MODEL WEIGHTS FINITE = " + weightsFinite);
+alert("MODEL WEIGHTS FINITE = " + modelWeightsFiniteCheck);
         
         return true;
 
