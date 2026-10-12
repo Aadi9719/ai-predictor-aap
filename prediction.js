@@ -417,11 +417,10 @@ if (
     );
 }
 
-    try {
-
-        alert("MODEL FIT START");
+    alert("MODEL FIT START");
         
-        await aiModel.fit(xs, ys, {
+    try {
+    await aiModel.fit(xs, ys, {
     epochs: 30,
     batchSize: 16,
     shuffle: false,
@@ -429,9 +428,17 @@ if (
         validationXs && validationYs
             ? [validationXs, validationYs]
             : undefined,
-    verbose: 0
+    verbose: 1
 });
 
+        alert("MODEL FIT FINISHED");
+
+} catch (error) {
+    alert("MODEL FIT ERROR: " + error.message);
+    console.error("MODEL FIT ERROR:", error);
+    throw error;
+    }
+    
         const weights = aiModel.getWeights();
 
 let weightsFinite = true;
