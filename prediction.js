@@ -417,6 +417,7 @@ if (
     );
 }
 
+    try {
     alert("MODEL FIT START");
         
     try {
