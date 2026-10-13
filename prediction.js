@@ -416,26 +416,38 @@ if (
 
     try {
     alert("MODEL FIT START");
-        
-    try {
+
+        try {
     await aiModel.fit(xs, ys, {
-    epochs: 30,
-    batchSize: 16,
-    shuffle: false,
-    validationData:
-        validationXs && validationYs
-            ? [validationXs, validationYs]
-            : undefined,
-    verbose: 1
-});
+        epochs: 30,
+        batchSize: 16,
+        shuffle: false,
+        validationData:
+            validationXs && validationYs
+                ? [validationXs, validationYs]
+                : undefined,
+        verbose: 0,
+        callbacks: {
+            onEpochBegin: async function (epoch) {
+                alert("EPOCH STARTED: " + (epoch + 1));
+            },
+            onEpochEnd: async function (epoch, logs) {
+                console.log(
+                    "EPOCH:",
+                    epoch + 1,
+                    "LOSS:",
+                    logs.loss
+                );
+            }
+        }
+    });
 
-        alert("MODEL FIT FINISHED");
-
+    alert("MODEL FIT FINISHED");
 } catch (error) {
     alert("MODEL FIT ERROR: " + error.message);
     console.error("MODEL FIT ERROR:", error);
     throw error;
-    }
+        }
     
         const weights = aiModel.getWeights();
 
