@@ -241,8 +241,12 @@ if (
 
         const prediction = aiModel.predict(tensor);
 
-        const probabilities =
-            await prediction.data();
+        alert(
+    "PREDICTION PROBABILITIES FINITE = " +
+    Array.from(probabilities).every(Number.isFinite) +
+    "\nPROBABILITIES = " +
+    Array.from(probabilities).join(", ")
+);
 
         alert(
     "AI Probabilities:\n\n" +
