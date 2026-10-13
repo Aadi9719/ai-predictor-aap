@@ -368,8 +368,7 @@ aiModel.compile({
 
     const xs = tf.tensor2d(inputs);
     const ys = tf.tensor1d(
-    targets.map(value => Number(value)),
-    "int32"
+    targets.map(value => Number(value))
 );
 
     alert(
@@ -391,11 +390,10 @@ if (
     validationXs = tf.tensor2d(validationInputs);
 
     validationYs = tf.tensor1d(
-        validationTargets.map(
-            value => Number(value)
-        ),
-        "int32"
-    );
+    validationTargets.map(
+        value => Number(value)
+    )
+);
 }
 
     let testXs = null;
@@ -410,11 +408,10 @@ if (
     testXs = tf.tensor2d(testInputs);
 
     testYs = tf.tensor1d(
-        testTargets.map(
-            value => Number(value)
-        ),
-        "int32"
-    );
+    testTargets.map(
+        value => Number(value)
+    )
+);
 }
 
     try {
