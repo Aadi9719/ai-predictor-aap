@@ -468,7 +468,7 @@ alert("MODEL WEIGHTS FINITE = " + weightsFinite);
             testYs,
             {
                 batchSize: 16,
-                verbose: 0
+                verbose: 1
             }
         );
 
