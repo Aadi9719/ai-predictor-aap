@@ -468,7 +468,15 @@ alert("MODEL WEIGHTS FINITE = " + weightsFinite);
             testYs,
             {
                 batchSize: 16,
-                verbose: 1
+                verbose: 0,
+callbacks: {
+    onEpochBegin: async function (epoch) {
+        alert("EPOCH STARTED: " + (epoch + 1));
+    },
+    onEpochEnd: async function (epoch, logs) {
+        console.log("EPOCH:", epoch + 1, "LOSS:", logs.loss);
+    }
+}
             }
         );
 
