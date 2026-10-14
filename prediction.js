@@ -240,9 +240,6 @@ if (
             );
 
         const prediction = aiModel.predict(tensor);
-
-        const probabilities =
-            await prediction.data();
         
         alert(
     "PREDICTION PROBABILITIES FINITE = " +
