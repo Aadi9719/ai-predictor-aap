@@ -420,6 +420,8 @@ if (
 );
 }
 
+    alert("BEFORE MODEL FIT");
+    
     try {
     alert("MODEL FIT START");
 
