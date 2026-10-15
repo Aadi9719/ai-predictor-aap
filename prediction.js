@@ -240,6 +240,12 @@ if (
             );
 
         const prediction = aiModel.predict(tensor);
+
+        alert(
+    "PREDICT OUTPUT SHAPE = " +
+    JSON.stringify(prediction.shape)
+);
+        
         const probabilities =
             await prediction.data();
 
