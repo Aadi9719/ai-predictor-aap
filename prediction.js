@@ -264,7 +264,7 @@ alert(
         
         alert(
     "AI Probabilities:\n\n" +
-    probabilities.map(
+    Array.from(probabilities).map(
         (p, i) => i + " = " + (p * 100).toFixed(2) + "%"
     ).join("\n")
 );
