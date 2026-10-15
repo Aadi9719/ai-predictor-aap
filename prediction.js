@@ -729,8 +729,6 @@ for (const weight of weights) {
 }
 
 alert("LOADED MODEL WEIGHTS FINITE = " + weightsFinite);
-
-weights.forEach(weight => weight.dispose());
         
         console.log("AI model loaded successfully.");
         return true;
