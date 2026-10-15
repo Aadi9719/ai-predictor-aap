@@ -239,6 +239,8 @@ if (
                 [1, 5]
             );
 
+        alert("REACHED BEFORE aiModel.predict");
+        
         const prediction = aiModel.predict(tensor);
 
         alert(
@@ -304,6 +306,8 @@ alert(
 
     } catch (error) {
 
+        alert("REAL AI ERROR: " + error.message);
+        
         console.error(
             "Real AI prediction error:",
             error
