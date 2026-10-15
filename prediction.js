@@ -243,6 +243,17 @@ if (
         const probabilities =
             await prediction.data();
 
+        const probabilityValues = Array.from(probabilities);
+
+alert(
+    "PREDICTION OUTPUT CHECK\n\n" +
+    "Length = " + probabilityValues.length +
+    "\nAll Finite = " +
+    probabilityValues.every(Number.isFinite) +
+    "\nValues = " +
+    probabilityValues.join(", ")
+);
+        
         alert(
     "AI Probabilities:\n\n" +
     probabilities.map(
