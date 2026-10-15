@@ -694,6 +694,23 @@ async function loadAIModel() {
             "localstorage://phase3-ai-model-v3"
 );
 
+        const weights = aiModel.getWeights();
+
+let weightsFinite = true;
+
+for (const weight of weights) {
+    const values = weight.dataSync();
+
+    if (!Array.from(values).every(Number.isFinite)) {
+        weightsFinite = false;
+        break;
+    }
+}
+
+alert("LOADED MODEL WEIGHTS FINITE = " + weightsFinite);
+
+weights.forEach(weight => weight.dispose());
+        
         console.log("AI model loaded successfully.");
         return true;
 
