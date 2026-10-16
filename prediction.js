@@ -251,6 +251,8 @@ if (
         const probabilities =
             await prediction.data();
 
+        alert("PROBABILITIES DATA READ SUCCESS");
+
         const probabilityValues = Array.from(probabilities);
 
 alert(
