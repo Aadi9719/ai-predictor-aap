@@ -353,14 +353,11 @@ async function trainAIModel(
         return false;
     }
 
-    // Purana model hatao
-    if (aiModel) {
-        aiModel.dispose();
-    }
+    // Create a separate candidate model.
+// Keep the existing aiModel untouched.
+let candidateModel = tf.sequential();
 
-    aiModel = tf.sequential();
-
-    aiModel.add(
+    candidateModel.add(
         tf.layers.dense({
             inputShape: [5],
             units: 32,
@@ -368,21 +365,21 @@ async function trainAIModel(
         })
     );
 
-    aiModel.add(
+    candidateModel.add(
         tf.layers.dense({
             units: 16,
             activation: "relu"
         })
     );
 
-    aiModel.add(
+    candidateModel.add(
     tf.layers.dense({
         units: 10,
         activation: "softmax"
     })
 );
 
-aiModel.compile({
+candidateModel.compile({
     optimizer: tf.train.adam(0.001),
     loss: "sparseCategoricalCrossentropy",
     metrics: ["accuracy"]
