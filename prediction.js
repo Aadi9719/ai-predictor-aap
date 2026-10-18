@@ -470,7 +470,7 @@ if (
     throw error;
         }
     
-        const weights = aiModel.getWeights();
+        const weights = candidateModel.getWeights();
 
 let weightsFinite = true;
 
@@ -496,7 +496,7 @@ alert("MODEL WEIGHTS FINITE = " + weightsFinite);
         if (testXs && testYs) {
 
     const testResult =
-        await aiModel.evaluate(
+        await candidateModel.evaluate(
             testXs,
             testYs,
             {
