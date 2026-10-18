@@ -352,9 +352,11 @@ async function trainAIModel(
         console.error("TensorFlow.js load nahi hua.");
         return false;
     }
-
+    
     // Create a separate candidate model.
 // Keep the existing aiModel untouched.
+
+    let oldModel = aiModel;
 let candidateModel = tf.sequential();
 
     candidateModel.add(
