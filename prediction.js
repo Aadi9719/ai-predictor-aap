@@ -541,8 +541,25 @@ callbacks: {
         );
 
         alert("TRAINING COMPLETE LINE REACHED");
+
+        // Check candidate model weights
+const candidateWeightsCheck = candidateModel.getWeights();
+
+let candidateWeightsFinite = true;
+
+for (const weight of candidateWeightsCheck) {
+    if (!Array.from(weight.dataSync()).every(Number.isFinite)) {
+        candidateWeightsFinite = false;
+        break;
+    }
+}
+
+if (!candidateWeightsFinite) {
+    console.error("Candidate model has invalid weights.");
+    return false;
+}
         
-        const modelWeightsCheck = aiModel.getWeights();
+        const modelWeightsCheck = candidateModel.getWeights();
 
 let modelWeightsFiniteCheck = true;
 
