@@ -439,7 +439,7 @@ if (
     alert("MODEL FIT START");
 
         try {
-    await aiModel.fit(xs, ys, {
+    await candidateModel.fit(xs, ys, {
         epochs: 30,
         batchSize: 16,
         shuffle: false,
