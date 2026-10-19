@@ -352,252 +352,175 @@ async function trainAIModel(
         console.error("TensorFlow.js load nahi hua.");
         return false;
     }
-    
-    // Create a separate candidate model.
-// Keep the existing aiModel untouched.
 
-    let oldModel = aiModel;
-let candidateModel = tf.sequential();
-
-    candidateModel.add(
-        tf.layers.dense({
-            inputShape: [5],
-            units: 32,
-            activation: "relu"
-        })
-    );
-
-    candidateModel.add(
-        tf.layers.dense({
-            units: 16,
-            activation: "relu"
-        })
-    );
-
-    candidateModel.add(
-    tf.layers.dense({
-        units: 10,
-        activation: "softmax"
-    })
-);
-
-candidateModel.compile({
-    optimizer: tf.train.adam(0.001),
-    loss: "sparseCategoricalCrossentropy",
-    metrics: ["accuracy"]
-});
-
-    const xs = tf.tensor2d(inputs);
-    const ys = tf.tensor1d(
-    targets.map(value => Number(value))
-);
-
-    alert(
-    "INPUT FINITE = " +
-    Array.from(xs.dataSync()).every(Number.isFinite) +
-    "\nTARGET FINITE = " +
-    Array.from(ys.dataSync()).every(Number.isFinite)
-);
-    
+    // Keep the currently working model alive while training a candidate.
+    const previousModel = aiModel;
+    let candidateModel = null;
+    let xs = null;
+    let ys = null;
     let validationXs = null;
-let validationYs = null;
-
-if (
-    Array.isArray(validationInputs) &&
-    Array.isArray(validationTargets) &&
-    validationInputs.length > 0 &&
-    validationInputs.length === validationTargets.length
-) {
-    validationXs = tf.tensor2d(validationInputs);
-
-    validationYs = tf.tensor1d(
-    validationTargets.map(
-        value => Number(value)
-    )
-);
-}
-
+    let validationYs = null;
     let testXs = null;
-let testYs = null;
+    let testYs = null;
+    let accepted = false;
 
-if (
-    Array.isArray(testInputs) &&
-    Array.isArray(testTargets) &&
-    testInputs.length > 0 &&
-    testInputs.length === testTargets.length
-) {
-    testXs = tf.tensor2d(testInputs);
-
-    testYs = tf.tensor1d(
-    testTargets.map(
-        value => Number(value)
-    )
-);
-}
-
-    alert("BEFORE MODEL FIT");
-    
     try {
-    alert("MODEL FIT START");
 
-        try {
-    await candidateModel.fit(xs, ys, {
-        epochs: 30,
-        batchSize: 16,
-        shuffle: false,
-        validationData:
-            validationXs && validationYs
-                ? [validationXs, validationYs]
-                : undefined,
-        verbose: 0,
-        callbacks: {
-            onEpochBegin: async function (epoch) {
-                alert("EPOCH STARTED: " + (epoch + 1));
-            },
-            onEpochEnd: async function (epoch, logs) {
-                console.log(
-                    "EPOCH:",
-                    epoch + 1,
-                    "LOSS:",
-                    logs.loss
-                );
-            }
-        }
-    });
-
-    alert("MODEL FIT FINISHED");
-} catch (error) {
-    alert("MODEL FIT ERROR: " + error.message);
-    console.error("MODEL FIT ERROR:", error);
-    throw error;
-        }
-    
-        const weights = candidateModel.getWeights();
-
-let weightsFinite = true;
-
-for (const weight of weights) {
-    if (!Array.from(weight.dataSync()).every(Number.isFinite)) {
-        weightsFinite = false;
-        break;
-    }
-}
-
-alert("MODEL WEIGHTS FINITE = " + weightsFinite);
-        
-
-        alert(
-    "TEST DATA CHECK\n\n" +
-    "Test Inputs = " +
-    (Array.isArray(testInputs) ? testInputs.length : "NOT ARRAY") +
-    "\n" +
-    "Test Targets = " +
-    (Array.isArray(testTargets) ? testTargets.length : "NOT ARRAY")
-);
-        
-        if (testXs && testYs) {
-
-    const testResult =
-        await candidateModel.evaluate(
-            testXs,
-            testYs,
-            {
-                batchSize: 16,
-                verbose: 0,
-callbacks: {
-    onEpochBegin: async function (epoch) {
-        alert("EPOCH STARTED: " + (epoch + 1));
-    },
-    onEpochEnd: async function (epoch, logs) {
-        console.log("EPOCH:", epoch + 1, "LOSS:", logs.loss);
-    }
-}
-            }
+        const validInputs = inputs.every(row =>
+            Array.isArray(row) && row.length === 5 &&
+            row.every(value => Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 9)
+        );
+        const validTargets = targets.every(value =>
+            Number.isInteger(Number(value)) && Number(value) >= 0 && Number(value) <= 9
         );
 
-    const testLoss =
-        await testResult[0].data();
-
-    const testAccuracy =
-        await testResult[1].data();
-
-    console.log(
-        "TEST LOSS:",
-        testLoss[0]
-    );
-
-    console.log(
-        "TEST ACCURACY:",
-        (testAccuracy[0] * 100).toFixed(2) + "%"
-    );
-
-    testResult.forEach(
-        tensor => tensor.dispose()
-    );
+        if (!validInputs || !validTargets) {
+            console.error("Candidate training skipped: invalid input/target values.");
+            return false;
         }
-        
-        console.log(
-            "Phase 3 AI training complete:",
-            inputs.length,
-            "samples"
+
+        if (
+            !Array.isArray(testInputs) ||
+            !Array.isArray(testTargets) ||
+            testInputs.length === 0 ||
+            testInputs.length !== testTargets.length
+        ) {
+            console.error("Candidate training skipped: a separate test set is required.");
+            return false;
+        }
+
+        const validTest = testInputs.every(row =>
+            Array.isArray(row) && row.length === 5 &&
+            row.every(value => Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 9)
+        ) && testTargets.every(value =>
+            Number.isInteger(Number(value)) && Number(value) >= 0 && Number(value) <= 9
         );
 
-        alert("TRAINING COMPLETE LINE REACHED");
+        if (!validTest) {
+            console.error("Candidate training skipped: invalid test data.");
+            return false;
+        }
 
-        // Check candidate model weights
-const candidateWeightsCheck = candidateModel.getWeights();
+candidateModel = tf.sequential();
+        candidateModel.add(tf.layers.dense({ inputShape: [5], units: 32, activation: "relu" }));
+        candidateModel.add(tf.layers.dense({ units: 16, activation: "relu" }));
+        candidateModel.add(tf.layers.dense({ units: 10, activation: "softmax" }));
+        candidateModel.compile({
+            optimizer: tf.train.adam(0.001),
+            loss: "sparseCategoricalCrossentropy",
+            metrics: ["accuracy"]
+        });
 
-let candidateWeightsFinite = true;
+        xs = tf.tensor2d(inputs.map(row => row.map(Number)));
+        ys = tf.tensor1d(targets.map(Number));
+        testXs = tf.tensor2d(testInputs.map(row => row.map(Number)));
+        testYs = tf.tensor1d(testTargets.map(Number));
 
-for (const weight of candidateWeightsCheck) {
-    if (!Array.from(weight.dataSync()).every(Number.isFinite)) {
-        candidateWeightsFinite = false;
-        break;
-    }
-}
+        if (
+            Array.isArray(validationInputs) &&
+            Array.isArray(validationTargets) &&
+            validationInputs.length > 0 &&
+            validationInputs.length === validationTargets.length
+        ) {
+            validationXs = tf.tensor2d(validationInputs.map(row => row.map(Number)));
+            validationYs = tf.tensor1d(validationTargets.map(Number));
+        }
 
-if (!candidateWeightsFinite) {
-    console.error("Candidate model has invalid weights.");
-    return false;
-}
-        
-        const modelWeightsCheck = candidateModel.getWeights();
+        const finiteInput = Array.from(xs.dataSync()).every(Number.isFinite);
+        const finiteTargets = Array.from(ys.dataSync()).every(Number.isFinite);
+        alert("INPUT FINITE = " + finiteInput + "\nTARGET FINITE = " + finiteTargets);
+        if (!finiteInput || !finiteTargets) {
+            throw new Error("Training tensors contain non-finite values.");
+        }
 
-let modelWeightsFiniteCheck = true;
+        alert("CANDIDATE MODEL FIT START");
+        await candidateModel.fit(xs, ys, {
+            epochs: 30,
+            batchSize: 16,
+            shuffle: false,
+            validationData: validationXs && validationYs ? [validationXs, validationYs] : undefined,
+            verbose: 0,
+            callbacks: {
+                onEpochEnd: async function (epoch, logs) {
+                    console.log("CANDIDATE EPOCH:", epoch + 1, "LOSS:", logs.loss);
+                }
+            }
+        });
 
-for (const weight of modelWeightsCheck) {
-    if (!Array.from(weight.dataSync()).every(Number.isFinite)) {
-        modelWeightsFiniteCheck = false;
-        break;
-    }
-}
+        const candidateWeights = candidateModel.getWeights();
+        const candidateWeightsFinite = candidateWeights.every(weight =>
+            Array.from(weight.dataSync()).every(Number.isFinite)
+        );
+        alert("CANDIDATE WEIGHTS FINITE = " + candidateWeightsFinite);
+        if (!candidateWeightsFinite) {
+            throw new Error("Candidate model has non-finite weights.");
+        }
 
-alert("MODEL WEIGHTS FINITE = " + modelWeightsFiniteCheck);
-        
+        // Compare both models on exactly the same held-out test data.
+        const candidateEval = candidateModel.evaluate(testXs, testYs, { batchSize: 16, verbose: 0 });
+        const candidateEvalTensors = Array.isArray(candidateEval) ? candidateEval : [candidateEval];
+        const candidateLoss = (await candidateEvalTensors[0].data())[0];
+        const candidateAccuracy = candidateEvalTensors[1]
+            ? (await candidateEvalTensors[1].data())[0]
+            : NaN;
+        candidateEvalTensors.forEach(t => t.dispose());
+
+        console.log("CANDIDATE TEST LOSS:", candidateLoss);
+        console.log("CANDIDATE TEST ACCURACY:", (candidateAccuracy * 100).toFixed(2) + "%");
+
+        if (!Number.isFinite(candidateLoss) || !Number.isFinite(candidateAccuracy)) {
+            throw new Error("Candidate test metrics are not finite.");
+        }
+
+        if (previousModel) {
+            const previousEval = previousModel.evaluate(testXs, testYs, { batchSize: 16, verbose: 0 });
+            const previousEvalTensors = Array.isArray(previousEval) ? previousEval : [previousEval];
+            const previousLoss = (await previousEvalTensors[0].data())[0];
+            const previousAccuracy = previousEvalTensors[1]
+                ? (await previousEvalTensors[1].data())[0]
+                : NaN;
+            previousEvalTensors.forEach(t => t.dispose());
+
+            console.log("PREVIOUS TEST LOSS:", previousLoss);
+            console.log("PREVIOUS TEST ACCURACY:", (previousAccuracy * 100).toFixed(2) + "%");
+
+            // Conservative acceptance rule: candidate must not regress either metric.
+            if (
+                !Number.isFinite(previousLoss) ||
+                !Number.isFinite(previousAccuracy) ||
+                candidateAccuracy < previousAccuracy ||
+                candidateLoss > previousLoss
+            ) {
+                console.warn("Candidate rejected; previous model kept.");
+                alert("CANDIDATE REJECTED\n\nPurana model safe hai.\nNaya model test mein better nahi tha.");
+                return false;
+            }
+        }
+
+        // Do not dispose the previous model here. Save step must succeed first.
+        aiModel = candidateModel;
+        accepted = true;
+        candidateModel = null;
+        window.__previousAIModelForRollback = previousModel;
+        window.__candidateAIModelNeedsSave = true;
+
+        alert("CANDIDATE PASSED TEST\n\nAb save step hoga.");
         return true;
-
+    } catch (error) {
+        console.error("Candidate AI training failed:", error);
+        alert("CANDIDATE TRAINING ERROR: " + error.message);
+        return false;
     } finally {
-
-        xs.dispose();
-        ys.dispose();
-
-        if (validationXs) {
-    validationXs.dispose();
-}
-
-if (validationYs) {
-    validationYs.dispose();
-    
-}
- if (testXs) {
-    testXs.dispose();
-}
-
-if (testYs) {
-    testYs.dispose();
-  }
-}
-    
+        if (xs) xs.dispose();
+        if (ys) ys.dispose();
+        if (validationXs) validationXs.dispose();
+        if (validationYs) validationYs.dispose();
+        if (testXs) testXs.dispose();
+        if (testYs) testYs.dispose();
+        if (candidateModel) candidateModel.dispose();
+        // If not accepted, aiModel was never changed and the old model remains active.
+        if (!accepted) aiModel = previousModel;
+    }
 }
 
 // ========================================
@@ -693,32 +616,54 @@ if (!saved) {
 // ========================================
 
 async function saveAIModel() {
-
     if (!aiModel) {
         console.warn("AI model available nahi hai.");
         return false;
     }
 
-    try {
+    const previousModel = window.__previousAIModelForRollback || null;
+    const needsPromotion = window.__candidateAIModelNeedsSave === true;
 
-        await aiModel.save(
-            "localstorage://phase3-ai-model-v3"
-);
+    try {
+        // Keep a backup of the current saved model before replacing its storage key.
+        // The backup key is intentionally separate from the production model key.
+        if (needsPromotion && previousModel) {
+            await previousModel.save("localstorage://phase3-ai-model-v3-backup");
+        }
+
+        await aiModel.save("localstorage://phase3-ai-model-v3");
 
         console.log("AI model saved successfully.");
+        window.__candidateAIModelNeedsSave = false;
+        window.__previousAIModelForRollback = null;
+        if (previousModel && previousModel !== aiModel) previousModel.dispose();
         return true;
-
     } catch (error) {
+        console.error("AI model save error:", error);
 
-        console.error(
-            "AI model save error:",
-            error
-        );
+        // Restore the previous in-memory model if candidate saving fails.
+        if (needsPromotion && previousModel) {
+            const rejectedCandidate = aiModel;
+            aiModel = previousModel;
+            window.__previousAIModelForRollback = null;
+            window.__candidateAIModelNeedsSave = false;
+            if (rejectedCandidate && rejectedCandidate !== previousModel) rejectedCandidate.dispose();
 
+            // If production storage was partially changed, try restoring its backup.
+            try {
+                const backupModel = await tf.loadLayersModel(
+                    "localstorage://phase3-ai-model-v3-backup"
+                );
+                await backupModel.save("localstorage://phase3-ai-model-v3");
+                backupModel.dispose();
+                console.warn("Previous saved model restored from backup.");
+            } catch (restoreError) {
+                console.error("Could not restore saved-model backup:", restoreError);
+            }
+        }
         return false;
     }
 }
-
 
 async function loadAIModel() {
 
