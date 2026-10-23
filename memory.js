@@ -275,6 +275,9 @@ function updateLearningAge() {
         "patternMemory",
         patternMemory
     );
+
+    updateAIMemoryStats();
+    
 }
 
 
