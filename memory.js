@@ -232,6 +232,8 @@ function saveActualResult(actualResult) {
         allResults
     );
 
+    updateAIMemoryStats();
+    
     return true;
 }
 
