@@ -1241,16 +1241,22 @@ function buildMLDataset() {
         let target = Number(data[i]);
 
         // Sirf valid results 0–9
-        if (
-            input.some(
-                n => !Number.isFinite(Number(n))
-            ) ||
-            !Number.isInteger(target) ||
-            target < 0 ||
-            target > 9
-        ) {
-            continue;
-        }
+if (
+    input.some(n => {
+        const value = Number(n);
+
+        return (
+            !Number.isInteger(value) ||
+            value < 0 ||
+            value > 9
+        );
+    }) ||
+    !Number.isInteger(target) ||
+    target < 0 ||
+    target > 9
+) {
+    continue;
+}
 
         X.push(input);
         Y.push(target);
