@@ -551,3 +551,25 @@ document.addEventListener(
             };
     }
 );
+
+function updateAIMemoryStats() {
+    const resultsElement = document.getElementById("savedResultsCount");
+    const patternsElement = document.getElementById("savedPatternsCount");
+
+    const totalResults = Array.isArray(allResults) ? allResults.length : 0;
+
+    const totalPatterns =
+        patternMemory &&
+        typeof patternMemory === "object" &&
+        !Array.isArray(patternMemory)
+            ? Object.keys(patternMemory).length
+            : 0;
+
+    if (resultsElement) {
+        resultsElement.textContent = totalResults;
+    }
+
+    if (patternsElement) {
+        patternsElement.textContent = totalPatterns;
+    }
+}
