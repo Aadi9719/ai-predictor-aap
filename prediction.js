@@ -713,6 +713,10 @@ alert("LOADED MODEL WEIGHTS FINITE = " + weightsFinite);
 
 document.addEventListener("DOMContentLoaded", async function () {
 
+    if (typeof updateAIMemoryStats === "function") {
+    updateAIMemoryStats();
+    }
+    
     const loaded = await loadAIModel();
 
     alert(
