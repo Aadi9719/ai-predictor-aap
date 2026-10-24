@@ -561,14 +561,29 @@ function updateAIMemoryStats() {
     const resultsElement = document.getElementById("savedResultsCount");
     const patternsElement = document.getElementById("savedPatternsCount");
 
-    const totalResults = Array.isArray(allResults) ? allResults.length : 0;
+    const totalResults = Array.isArray(allResults)
+        ? allResults.length
+        : 0;
 
-    const totalPatterns =
-        patternMemory &&
-        typeof patternMemory === "object" &&
-        !Array.isArray(patternMemory)
-            ? Object.keys(patternMemory).length
-            : 0;
+    function countPatterns(obj) {
+        if (!obj || typeof obj !== "object") {
+            return 0;
+        }
+
+        let count = 0;
+
+        for (const key of Object.keys(obj)) {
+            count++;
+
+            if (obj[key] && typeof obj[key] === "object") {
+                count += countPatterns(obj[key]);
+            }
+        }
+
+        return count;
+    }
+
+    const totalPatterns = countPatterns(patternMemory);
 
     if (resultsElement) {
         resultsElement.textContent = totalResults;
