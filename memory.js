@@ -279,6 +279,225 @@ function updateLearningAge() {
     
 }
 
+// PATTERN LEARNING MEMORY
+
+function updateLearningMemory(actualResult) {
+    actualResult = Number(actualResult);
+
+    if (
+        !Number.isInteger(actualResult) ||
+        actualResult < 1 ||
+        actualResult > 9
+    ) {
+        console.warn("Invalid pattern result:", actualResult);
+        return false;
+    }
+
+    if (!Array.isArray(allResults) || allResults.length < 5) {
+        console.warn("Not enough history to learn pattern.");
+        return false;
+    }
+
+    // Last 5 results se pattern banao
+    const input = allResults.slice(0, 5).map(Number);
+
+    if (
+        input.length !== 5 ||
+        input.some(n => !Number.isInteger(n) || n < 1 || n > 9)
+    ) {
+        console.warn("Invalid pattern input:", input);
+        return false;
+    }
+
+    const pattern = input.join("-");
+
+    if (
+        !patternMemory[pattern] ||
+        typeof patternMemory[pattern] !== "object"
+    ) {
+        patternMemory[pattern] = {
+            nextNumbers: {},
+            total: 0,
+            wins: 0,
+            losses: 0,
+            reward: 0,
+            penalty: 0,
+            trust: 50,
+            patternWeight: 50,
+            learningAge: 0
+        };
+    }
+
+    const memory = patternMemory[pattern];
+
+    if (
+        !memory.nextNumbers ||
+        typeof memory.nextNumbers !== "object"
+    ) {
+        memory.nextNumbers = {};
+    }
+
+    memory.nextNumbers[actualResult] =
+        (Number(memory.nextNumbers[actualResult]) || 0) + 1;
+
+    memory.total = (Number(memory.total) || 0) + 1;
+
+    saveMemory("patternMemory", patternMemory);
+
+    if (typeof updateAIMemoryStats === "function") {
+        updateAIMemoryStats();
+    }
+
+    console.log("Pattern learned:", pattern, "→", actualResult);
+
+    return true;
+}
+
+// BIG / SMALL LEARNING MEMORY
+function updateBigSmallMemory(actualResult) {
+    actualResult = Number(actualResult);
+
+    if (
+        !Number.isInteger(actualResult) ||
+        actualResult < 1 ||
+        actualResult > 9
+    ) {
+        console.warn("Invalid Big/Small result:", actualResult);
+        return false;
+    }
+
+    const category = actualResult >= 5 ? "Big" : "Small";
+
+    if (
+        !bigSmallMemory ||
+        typeof bigSmallMemory !== "object" ||
+        Array.isArray(bigSmallMemory)
+    ) {
+        bigSmallMemory = {};
+    }
+
+    if (!bigSmallMemory[category]) {
+        bigSmallMemory[category] = {
+            count: 0,
+            numbers: {}
+        };
+    }
+
+    const memory = bigSmallMemory[category];
+
+    memory.count = (Number(memory.count) || 0) + 1;
+
+    if (!memory.numbers || typeof memory.numbers !== "object") {
+        memory.numbers = {};
+    }
+
+    memory.numbers[actualResult] =
+        (Number(memory.numbers[actualResult]) || 0) + 1;
+
+    saveMemory("bigSmallMemory", bigSmallMemory);
+
+    if (typeof updateAIMemoryStats === "function") {
+        updateAIMemoryStats();
+    }
+
+    console.log("Big/Small learned:", category, actualResult);
+
+    return true;
+}
+
+// COLOR LEARNING MEMORY
+function updateColorMemory(actualResult) {
+    actualResult = Number(actualResult);
+
+    if (
+        !Number.isInteger(actualResult) ||
+        actualResult < 1 ||
+        actualResult > 9
+    ) {
+        console.warn("Invalid color result:", actualResult);
+        return false;
+    }
+
+    const color = [1, 3, 7, 9].includes(actualResult)
+        ? "Green"
+        : [2, 4, 6, 8].includes(actualResult)
+        ? "Red"
+        : "Violet";
+
+    if (
+        !colorMemory ||
+        typeof colorMemory !== "object" ||
+        Array.isArray(colorMemory)
+    ) {
+        colorMemory = {};
+    }
+
+    if (!colorMemory[color]) {
+        colorMemory[color] = {
+            count: 0,
+            numbers: {}
+        };
+    }
+
+    const memory = colorMemory[color];
+
+    memory.count = (Number(memory.count) || 0) + 1;
+
+    if (!memory.numbers || typeof memory.numbers !== "object") {
+        memory.numbers = {};
+    }
+
+    memory.numbers[actualResult] =
+        (Number(memory.numbers[actualResult]) || 0) + 1;
+
+    saveMemory("colorMemory", colorMemory);
+
+    if (typeof updateAIMemoryStats === "function") {
+        updateAIMemoryStats();
+    }
+
+    console.log("Color learned:", color, actualResult);
+
+    return true;
+}
+
+// SELF LEARNING
+function selfLearning(pattern, isWin) {
+    if (
+        !pattern ||
+        !patternMemory[pattern] ||
+        typeof patternMemory[pattern] !== "object"
+    ) {
+        console.warn("Pattern not found for self-learning:", pattern);
+        return false;
+    }
+
+    const memory = patternMemory[pattern];
+
+    if (isWin) {
+        memory.wins = (Number(memory.wins) || 0) + 1;
+    } else {
+        memory.losses = (Number(memory.losses) || 0) + 1;
+    }
+
+    const wins = Number(memory.wins) || 0;
+    const losses = Number(memory.losses) || 0;
+    const total = wins + losses;
+
+    memory.winRate = total > 0
+        ? Number(((wins / total) * 100).toFixed(2))
+        : 0;
+
+    saveMemory("patternMemory", patternMemory);
+
+    if (typeof updateAIMemoryStats === "function") {
+        updateAIMemoryStats();
+    }
+
+    console.log("Self-learning updated:", pattern, isWin);
+
+    return true;
+}
 
 // ========================================
 // REWARD / PENALTY
