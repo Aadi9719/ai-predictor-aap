@@ -222,10 +222,9 @@ function saveActualResult(actualResult) {
 
     allResults.unshift(actualResult);
 
-    // Maximum history
-    if (allResults.length > 1000) {
-        allResults.pop();
-    }
+if (allResults.length > 20000) {
+    allResults.pop();
+}
 
     saveMemory(
         "allResults",
