@@ -646,9 +646,10 @@ confidence = latestAIConfidence;
 
                         try {
 
-                            updateLearningMemory(
-                                actualResult
-                            );
+         updateLearningMemory(
+         actualResult,
+         predictionInput
+);
 
                         } catch (error) {
 
