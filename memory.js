@@ -281,7 +281,7 @@ function updateLearningAge() {
 
 // PATTERN LEARNING MEMORY
 
-function updateLearningMemory(actualResult) {
+function updateLearningMemory(actualResult, predictionInput) {
     actualResult = Number(actualResult);
 
     if (
@@ -293,16 +293,14 @@ function updateLearningMemory(actualResult) {
         return false;
     }
 
-    if (!Array.isArray(allResults) || allResults.length < 5) {
-        console.warn("Not enough history to learn pattern.");
+    if (!Array.isArray(predictionInput) || predictionInput.length !== 5) {
+        console.warn("Invalid prediction input:", predictionInput);
         return false;
     }
 
-    // Last 5 results se pattern banao
-    const input = allResults.slice(0, 5).map(Number);
+    const input = predictionInput.map(Number);
 
     if (
-        input.length !== 5 ||
         input.some(n => !Number.isInteger(n) || n < 1 || n > 9)
     ) {
         console.warn("Invalid pattern input:", input);
@@ -348,12 +346,13 @@ function updateLearningMemory(actualResult) {
         updateAIMemoryStats();
     }
 
-    console.log("Pattern learned:", pattern, "→", actualResult);
+    console.log("New pattern learned:", pattern, "→", actualResult);
 
     return true;
 }
 
 // BIG / SMALL LEARNING MEMORY
+
 function updateBigSmallMemory(actualResult) {
     actualResult = Number(actualResult);
 
