@@ -222,7 +222,7 @@ function saveActualResult(actualResult) {
 
     allResults.unshift(actualResult);
 
-if (allResults.length > 20000) {
+if (allResults.length > 50000) {
     allResults.pop();
 }
 
