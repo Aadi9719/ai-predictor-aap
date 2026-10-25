@@ -635,6 +635,11 @@ confidence = latestAIConfidence;
                         predictionInput[4];
 
 
+                    // SAVE ACTUAL RESULT
+if (typeof saveActualResult === "function") {
+    saveActualResult(actualResult);
+}
+                    
                     // =================================
                     // PATTERN LEARNING
                     // =================================
