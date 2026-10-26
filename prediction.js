@@ -529,6 +529,8 @@ candidateModel = tf.sequential();
 
 async function retrainAIModel() {
 
+    alert("TEST: retrainAIModel STARTED");
+    
     const dataset =
         buildMLTrainValidationTestSet();
 
