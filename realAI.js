@@ -1212,6 +1212,8 @@ window.testPhase3LNormalization = function() {
 
 function buildMLDataset() {
 
+    alert("TEST: buildMLDataset function chala");
+    
     let history = Array.isArray(allResults)
         ? allResults
         : [];
