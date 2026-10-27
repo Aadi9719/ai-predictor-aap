@@ -465,7 +465,17 @@ candidateModel = tf.sequential();
         candidateEvalTensors.forEach(t => t.dispose());
 
         console.log("CANDIDATE TEST LOSS:", candidateLoss);
-        console.log("CANDIDATE TEST ACCURACY:", (candidateAccuracy * 100).toFixed(2) + "%");
+console.log(
+    "CANDIDATE TEST ACCURACY:",
+    (candidateAccuracy * 100).toFixed(2) + "%"
+);
+
+alert(
+    "CANDIDATE TEST RESULTS\n\n" +
+    "TEST LOSS = " + candidateLoss.toFixed(4) + "\n" +
+    "TEST ACCURACY = " +
+    (candidateAccuracy * 100).toFixed(2) + "%"
+);
 
         if (!Number.isFinite(candidateLoss) || !Number.isFinite(candidateAccuracy)) {
             throw new Error("Candidate test metrics are not finite.");
