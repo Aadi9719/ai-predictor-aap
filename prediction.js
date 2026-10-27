@@ -1184,3 +1184,9 @@ function getFinalAIScore() {
         )
     );
         }
+
+async function testRetraining() {
+    alert("Retraining start");
+    const result = await retrainAIModel();
+    alert("Retraining result: " + result);
+}
