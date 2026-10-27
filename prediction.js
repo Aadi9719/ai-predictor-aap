@@ -715,34 +715,40 @@ alert("LOADED MODEL WEIGHTS FINITE = " + weightsFinite);
 document.addEventListener("DOMContentLoaded", async function () {
 
     if (typeof updateAIMemoryStats === "function") {
-    updateAIMemoryStats();
+        updateAIMemoryStats();
     }
-    
+
     const loaded = await loadAIModel();
 
     alert(
-    "MODEL LOAD RESULT:\n\n" +
-    "loaded = " + loaded
-);
-    
+        "MODEL LOAD RESULT:\n\n" +
+        "loaded = " + loaded
+    );
+
     if (loaded) {
-
         console.log("Saved AI model restored ✅");
-
     } else {
-
         console.log("No saved AI model found.");
+    }
 
-        alert("RETRAINING START");
-        
+    // Automatically retrain whether or not a saved model loaded
+    alert("AUTOMATIC RETRAINING START");
+
+    try {
         const trained = await retrainAIModel();
 
-        if (trained) {
-            await saveAIModel();
-            console.log("AI model trained and saved ✅");
+        if (trained === true) {
+            console.log("AI model retrained and saved ✅");
         } else {
-            console.warn("AI model training failed.");
+            console.warn("AI model training failed or did not return true.");
         }
+    } catch (error) {
+        console.error("Automatic retraining error:", error);
+
+        alert(
+            "AUTOMATIC RETRAINING ERROR:\n\n" +
+            error.message
+        );
     }
 
 });
@@ -1184,9 +1190,3 @@ function getFinalAIScore() {
         )
     );
         }
-
-async function testRetraining() {
-    alert("Retraining start");
-    const result = await retrainAIModel();
-    alert("Retraining result: " + result);
-}
