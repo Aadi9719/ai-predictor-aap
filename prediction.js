@@ -435,7 +435,7 @@ candidateModel = tf.sequential();
         alert("CANDIDATE MODEL FIT START");
         
         await candidateModel.fit(xs, ys, {
-            epochs: 30,
+            epochs: 1,
             batchSize: 16,
             shuffle: false,
             validationData: validationXs && validationYs ? [validationXs, validationYs] : undefined,
