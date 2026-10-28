@@ -433,6 +433,7 @@ candidateModel = tf.sequential();
         }
 
         alert("CANDIDATE MODEL FIT START");
+        
         await candidateModel.fit(xs, ys, {
             epochs: 30,
             batchSize: 16,
@@ -446,6 +447,8 @@ candidateModel = tf.sequential();
             }
         });
 
+        alert("MODEL FIT COMPLETED");
+        
         const candidateWeights = candidateModel.getWeights();
         const candidateWeightsFinite = candidateWeights.every(weight =>
             Array.from(weight.dataSync()).every(Number.isFinite)
