@@ -484,8 +484,9 @@ alert(
             throw new Error("Candidate test metrics are not finite.");
         }
 
-        if (previousModel) {
-            const previousEval = previousModel.evaluate(testXs, testYs, { batchSize: 16, verbose: 0 });
+        if (previousModel && previousModel.optimizer) {
+    const previousEval = previousModel.evaluate(testXs, testYs, { batchSize: 16, verbose: 0 });
+            
             const previousEvalTensors = Array.isArray(previousEval) ? previousEval : [previousEval];
             const previousLoss = (await previousEvalTensors[0].data())[0];
             const previousAccuracy = previousEvalTensors[1]
