@@ -335,7 +335,7 @@ async function trainAIModel(
     testTargets = null
 ) {
 
-    alert("TRAIN AI MODEL START");
+    alert("TRAIN AI MODEL VERSION 2");
     
     if (
         !Array.isArray(inputs) ||
