@@ -654,13 +654,15 @@ async function saveAIModel() {
 
         await aiModel.save("localstorage://phase3-ai-model-v3");
 
-        console.log("AI model saved successfully.");
+        alert("SAVE SUCCESS\n\nAI model successfully save ho gaya.");
+        
         window.__candidateAIModelNeedsSave = false;
         window.__previousAIModelForRollback = null;
         if (previousModel && previousModel !== aiModel) previousModel.dispose();
         return true;
     } catch (error) {
-        console.error("AI model save error:", error);
+
+        alert("SAVE ERROR\n\n" + error.message);
 
         // Restore the previous in-memory model if candidate saving fails.
         if (needsPromotion && previousModel) {
