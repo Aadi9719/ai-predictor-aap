@@ -441,9 +441,15 @@ candidateModel = tf.sequential();
             validationData: validationXs && validationYs ? [validationXs, validationYs] : undefined,
             verbose: 0,
             callbacks: {
-                onEpochEnd: async function (epoch, logs) {
-                    console.log("CANDIDATE EPOCH:", epoch + 1, "LOSS:", logs.loss);
-                }
+    onEpochEnd: async function (epoch, logs) {
+        if (epoch === 0 || (epoch + 1) % 10 === 0 || epoch === 29) {
+            alert(
+                "TRAINING PROGRESS\n\n" +
+                "Epoch: " + (epoch + 1) + " / 30\n" +
+                "Loss: " + logs.loss
+            );
+        }
+    }
             }
         });
 
