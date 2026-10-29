@@ -473,6 +473,48 @@ candidateModel = tf.sequential();
             : NaN;
         candidateEvalTensors.forEach(t => t.dispose());
 
+        const testPredTensor = candidateModel.predict(testXs);
+const testPredData = await testPredTensor.data();
+
+const predictedCounts = Array(10).fill(0);
+const actualCounts = Array(10).fill(0);
+
+for (let i = 0; i < testPredData.length; i += 10) {
+    let bestIndex = 0;
+    let bestProbability = -Infinity;
+
+    for (let j = 0; j < 10; j++) {
+        if (testPredData[i + j] > bestProbability) {
+            bestProbability = testPredData[i + j];
+            bestIndex = j;
+        }
+    }
+
+    predictedCounts[bestIndex]++;
+}
+
+const actualTestData = await testYs.data();
+
+for (let i = 0; i < actualTestData.length; i++) {
+    const actualNumber = Number(actualTestData[i]);
+
+    if (Number.isInteger(actualNumber) &&
+        actualNumber >= 0 && actualNumber <= 9) {
+        actualCounts[actualNumber]++;
+    }
+}
+
+alert(
+    "TEST NUMBER DISTRIBUTION\n\n" +
+    "Number | Predicted | Actual\n" +
+    Array.from({ length: 10 }, (_, n) =>
+        n + " | " + predictedCounts[n] +
+        " | " + actualCounts[n]
+    ).join("\n")
+);
+
+testPredTensor.dispose();
+        
         console.log("CANDIDATE TEST LOSS:", candidateLoss);
 console.log(
     "CANDIDATE TEST ACCURACY:",
