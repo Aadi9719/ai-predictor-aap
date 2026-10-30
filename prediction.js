@@ -250,6 +250,20 @@ if (
         const probabilities =
             await prediction.data();
 
+        if (
+    !prediction ||
+    prediction.shape.length !== 2 ||
+    prediction.shape[0] !== 1 ||
+    prediction.shape[1] !== 10 ||
+    probabilities.length !== 10 ||
+    !Array.from(probabilities).every(Number.isFinite)
+) {
+    alert("AI OUTPUT INVALID: 10 valid probabilities nahi mili.");
+    tensor.dispose();
+    prediction.dispose();
+    return null;
+        }
+
         alert("PROBABILITIES DATA READ SUCCESS");
 
         const probabilityValues = Array.from(probabilities);
