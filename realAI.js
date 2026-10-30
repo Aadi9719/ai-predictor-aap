@@ -1320,6 +1320,35 @@ function buildMLTrainValidationTestSet() {
     const validationSize = Math.floor(total * 0.15);
     const testStart = trainSize + validationSize;
 
+    const countClasses = (targets) => {
+    const counts = Array(10).fill(0);
+
+    targets.forEach(value => {
+        const n = Number(value);
+        if (Number.isInteger(n) && n >= 0 && n <= 9) {
+            counts[n]++;
+        }
+    });
+
+    return counts;
+};
+
+const trainCounts = countClasses(
+    dataset.targets.slice(0, trainSize)
+);
+
+const testCounts = countClasses(
+    dataset.targets.slice(testStart)
+);
+
+alert(
+    "TRAIN vs TEST DISTRIBUTION\n\n" +
+    "Number | Train | Test\n" +
+    Array.from({ length: 10 }, (_, n) =>
+        n + " | " + trainCounts[n] + " | " + testCounts[n]
+    ).join("\n")
+);
+    
     return {
         ready: true,
 
