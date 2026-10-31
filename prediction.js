@@ -567,7 +567,48 @@ alert(
             " | " + accuracy + "%";
     }).join("\n")
 );
+       
+const confusionMatrix = Array.from(
+    { length: 10 },
+    () => Array(10).fill(0)
+);
 
+for (let i = 0; i < actualTestData.length; i++) {
+
+    let predictedNumber = 0;
+    let bestProbability = -Infinity;
+
+    for (let j = 0; j < 10; j++) {
+
+        const probability = testPredData[i * 10 + j];
+
+        if (probability > bestProbability) {
+            bestProbability = probability;
+            predictedNumber = j;
+        }
+    }
+
+    const actualNumber = Number(actualTestData[i]);
+
+    if (
+        Number.isInteger(actualNumber) &&
+        actualNumber >= 0 &&
+        actualNumber <= 9
+    ) {
+        confusionMatrix[actualNumber][predictedNumber]++;
+    }
+}
+
+alert(
+    "CONFUSION MATRIX\n\n" +
+    "Rows = Actual Number\n" +
+    "Columns = Predicted Number\n\n" +
+    "Actual | 0 1 2 3 4 5 6 7 8 9\n" +
+    confusionMatrix.map((row, n) =>
+        n + " | " + row.join(" ")
+    ).join("\n")
+);
+        
 testPredTensor.dispose();
         
         console.log("CANDIDATE TEST LOSS:", candidateLoss);
