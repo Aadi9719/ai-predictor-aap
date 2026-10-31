@@ -526,6 +526,47 @@ alert(
         " | " + actualCounts[n]
     ).join("\n")
 );
+        const correctCounts = Array(10).fill(0);
+const totalCounts = Array(10).fill(0);
+
+for (let i = 0; i < actualTestData.length; i++) {
+
+    let predictedNumber = 0;
+    let bestProbability = -Infinity;
+
+    for (let j = 0; j < 10; j++) {
+        if (testPredData[i * 10 + j] > bestProbability) {
+            bestProbability = testPredData[i * 10 + j];
+            predictedNumber = j;
+        }
+    }
+
+    const actualNumber = Number(actualTestData[i]);
+
+    if (Number.isInteger(actualNumber) &&
+        actualNumber >= 0 && actualNumber <= 9) {
+
+        totalCounts[actualNumber]++;
+
+        if (predictedNumber === actualNumber) {
+            correctCounts[actualNumber]++;
+        }
+    }
+}
+
+alert(
+    "NUMBER-WISE TEST ACCURACY\n\n" +
+    "Number | Correct | Total | Accuracy\n" +
+    Array.from({ length: 10 }, (_, n) => {
+        const accuracy = totalCounts[n] > 0
+            ? (correctCounts[n] / totalCounts[n] * 100).toFixed(1)
+            : "N/A";
+
+        return n + " | " + correctCounts[n] +
+            " | " + totalCounts[n] +
+            " | " + accuracy + "%";
+    }).join("\n")
+);
 
 testPredTensor.dispose();
         
