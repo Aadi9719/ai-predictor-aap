@@ -459,8 +459,9 @@ candidateModel = tf.sequential();
         if (epoch === 0 || (epoch + 1) % 10 === 0 || epoch === 29) {
             alert(
                 "TRAINING PROGRESS\n\n" +
-                "Epoch: " + (epoch + 1) + " / 30\n" +
-                "Loss: " + logs.loss
+                "Epoch: " + (epoch + 1) + " / 30\n\n" +
+                "Training Logs:\n" +
+                JSON.stringify(logs, null, 2)
             );
         }
     }
