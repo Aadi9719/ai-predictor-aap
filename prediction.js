@@ -605,7 +605,7 @@ alert(
     "Columns = Predicted Number\n\n" +
     "Actual | 0 1 2 3 4 5 6 7 8 9\n" +
     confusionMatrix.map((row, n) =>
-        n + " | " + row.join(" ")
+        n + " | " + row.map(value => String(value).padStart(3, " ")).join(" ")
     ).join("\n")
 );
         
