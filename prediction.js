@@ -746,6 +746,14 @@ async function retrainAIModel() {
 
 if (!saved) {
     console.warn("AI model save nahi hua.");
+
+    alert(
+        "TRAINING SUCCESS\n" +
+        "BUT SAVE FAILED\n\n" +
+        "Naya model permanently save nahi hua."
+    );
+
+    return false;
 }
         
         console.log(
