@@ -848,6 +848,18 @@ async function loadAIModel() {
             "localstorage://phase3-ai-model-v3"
 );
 
+        const outputShape = aiModel.outputs[0].shape;
+
+alert(
+    "LOADED MODEL OUTPUT CHECK\n\n" +
+    "Output Shape = " + JSON.stringify(outputShape) +
+    "\nOutput Classes = " + outputShape[outputShape.length - 1]
+);
+
+if (outputShape[outputShape.length - 1] !== 10) {
+    throw new Error("Loaded model 10-class output nahi hai.");
+}
+        
         const weights = aiModel.getWeights();
 
 let weightsFinite = true;
