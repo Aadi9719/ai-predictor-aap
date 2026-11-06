@@ -202,7 +202,13 @@ document.addEventListener(
                     let trendScore = 0;
                     let aiScore = 0;
 
-confidence = latestAIConfidence;
+confidence = Math.max(
+    0,
+    Math.min(
+        100,
+        Number(latestAIConfidence) || 0
+    )
+);
 
                     if (
                         typeof getTrendScore ===
