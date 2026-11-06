@@ -273,8 +273,17 @@ confidence = Math.max(
 
                         try {
 
-                            hotCold =
-                                getHotColdNumbers();
+    const hotColdResult = getHotColdNumbers();
+
+if (
+    hotColdResult &&
+    typeof hotColdResult === "object"
+) {
+    hotCold = {
+        hot: hotColdResult.hot ?? null,
+        cold: hotColdResult.cold ?? null
+    };
+}
 
                         } catch (error) {
 
