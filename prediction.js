@@ -204,6 +204,9 @@ async function getRealAIPrediction(input) {
 
     try {
 
+        let tensor = null;
+let prediction = null;
+
         if (typeof aiModel === "undefined" || !aiModel) {
     return null;
         }
@@ -232,15 +235,11 @@ if (
     return null;
 }
 
-        const tensor =
-            tf.tensor2d(
-                [values],
-                [1, 5]
-            );
+        tensor = tf.tensor2d([values], [1, 5]);
 
         alert("REACHED BEFORE aiModel.predict");
         
-        const prediction = aiModel.predict(tensor);
+        prediction = aiModel.predict(tensor);
 
         alert(
     "PREDICT OUTPUT SHAPE = " +
@@ -329,6 +328,16 @@ alert(
         );
 
         return null;
+    }
+
+    finally {
+    if (tensor) {
+        tensor.dispose();
+    }
+
+    if (prediction && typeof prediction.dispose === "function") {
+        prediction.dispose();
+    }
     }
 }
 
