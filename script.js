@@ -556,7 +556,16 @@ if (
                     const currentPattern =
                         predictionInput.join(",");
 
-                   
+        // SAVE ACTUAL RESULT — ONLY ONCE
+
+if (typeof saveActualResult === "function") {
+    saveActualResult(actualResult);
+} else {
+    console.error("saveActualResult function missing!");
+    alert("Actual result save nahi hua.");
+    return;
+}
+                    
         // =================================
         // LEARNING
         // IMPORTANT:
