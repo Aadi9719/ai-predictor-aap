@@ -182,20 +182,9 @@ document.addEventListener(
 
     return;
   }
-                  {
 
-                        alert(
-                            "AI Prediction available nahi hai."
-                        );
-
-                        pendingPrediction = null;
-
-                        return;
-                    }
-
-
-                    pendingPrediction =
-                        Number(prediction);
+         pendingPrediction =
+         Number(prediction);
 
 
                     // Existing global variable
