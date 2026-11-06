@@ -1046,7 +1046,7 @@ if (typeof aiModel !== "undefined" && aiModel) {
                 Number(aiResult.number) <= 9
             ) {
 
-                const MIN_AI_CONFIDENCE = 0;
+                const MIN_AI_CONFIDENCE = 60;
 
                 alert(
     "CONFIDENCE VALUE = " +
