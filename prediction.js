@@ -241,14 +241,14 @@ if (
         
         prediction = aiModel.predict(tensor);
 
-        alert(
+if (!prediction || typeof prediction.data !== "function") {
+    throw new Error("AI prediction tensor nahi mila.");
+}
+
+alert(
     "PREDICT OUTPUT SHAPE = " +
     JSON.stringify(prediction.shape)
 );
-
-        if (!prediction || typeof prediction.data !== "function") {
-    throw new Error("AI prediction tensor nahi mila.");
-        }
         
         const probabilities =
             await prediction.data();
