@@ -245,6 +245,10 @@ if (
     "PREDICT OUTPUT SHAPE = " +
     JSON.stringify(prediction.shape)
 );
+
+        if (!prediction || typeof prediction.data !== "function") {
+    throw new Error("AI prediction tensor nahi mila.");
+        }
         
         const probabilities =
             await prediction.data();
@@ -258,8 +262,7 @@ if (
     !Array.from(probabilities).every(Number.isFinite)
 ) {
     alert("AI OUTPUT INVALID: 10 valid probabilities nahi mili.");
-    tensor.dispose();
-    prediction.dispose();
+   
     return null;
         }
 
@@ -302,15 +305,6 @@ alert(
 
                 bestIndex = i;
             }
-        }
-
-        tensor.dispose();
-
-        if (
-            prediction &&
-            typeof prediction.dispose === "function"
-        ) {
-            prediction.dispose();
         }
 
     return {
