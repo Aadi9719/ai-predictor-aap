@@ -556,60 +556,12 @@ if (
                     const currentPattern =
                         predictionInput.join(",");
 
-
-                    // =================================
-                    // SAVE ACTUAL RESULT
-                    // =================================
-
-                    if (
-                        typeof allResults ===
-                        "undefined" ||
-                        !Array.isArray(allResults)
-                    ) {
-
-                        allResults = [];
-                    }
-
-
-                    allResults.unshift(
-                        actualResult
-                    );
-
-
-                    if (
-                        allResults.length > 1000
-                    ) {
-
-                        allResults.pop();
-                    }
-
-
-                    if (
-                        typeof saveMemory ===
-                        "function"
-                    ) {
-
-                        saveMemory(
-                            "allResults",
-                            allResults
-                        );
-
-                    } else {
-
-                        localStorage.setItem(
-                            "allResults",
-                            JSON.stringify(
-                                allResults
-                            )
-                        );
-                    }
-
-
-                    // =================================
-                    // LEARNING
-                    // IMPORTANT:
-                    // Use frozen prediction input.
-                    // =================================
+                   
+        // =================================
+        // LEARNING
+        // IMPORTANT:
+        // Use frozen prediction input.
+        // =================================
 
                     const oldValues = [
                         document.getElementById("n1")?.value,
