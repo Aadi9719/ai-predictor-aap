@@ -167,13 +167,22 @@ document.addEventListener(
                     // VALIDATE PREDICTION
                     // =================================
 
-                    if (
-                        prediction === null ||
-                        prediction === undefined ||
-                        !Number.isInteger(
-                            Number(prediction)
-                        )
-                    ) {
+  if (
+    prediction === null ||
+    prediction === undefined ||
+    !Number.isInteger(Number(prediction)) ||
+    Number(prediction) < 0 ||
+    Number(prediction) > 9
+) {
+    alert(
+        "AI Prediction available nahi hai."
+    );
+
+    pendingPrediction = null;
+
+    return;
+  }
+                  {
 
                         alert(
                             "AI Prediction available nahi hai."
