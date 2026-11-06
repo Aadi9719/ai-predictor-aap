@@ -1011,6 +1011,8 @@ let latestCombinedEvidenceScore = 0;
 
 async function getFinalPrediction(input) {
 
+    latestAIConfidence = 0;
+    
     // STEP 5: Trained TensorFlow AI prediction
     
     alert("getFinalPrediction START");
