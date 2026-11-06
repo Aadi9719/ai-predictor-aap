@@ -1307,16 +1307,24 @@ function getFinalAIScore() {
 
     memoryScore = latestAIConfidence;
     
-    const trendScore =
-        Math.max(
+    let trendScore = 0;
+
+if (typeof getTrendScore === "function") {
+    try {
+        trendScore = Math.max(
             0,
             Math.min(
                 100,
-                Number(
-                    getTrendScore()
-                ) || 0
+                Number(getTrendScore()) || 0
             )
         );
+    } catch (error) {
+        console.error(
+            "Trend score error:",
+            error
+        );
+    }
+}
 
     // ------------------------------------
     // Pattern score
