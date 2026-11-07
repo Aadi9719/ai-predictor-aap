@@ -592,50 +592,50 @@ function updateRewardPenalty(
 // PREDICTION HISTORY
 // ========================================
 
-function savePredictionHistory(
-    prediction,
-    actualResult
-) {
+function savePredictionHistory(prediction, actualResult) {
 
-    actualResult =
-        Number(actualResult);
+    prediction = Number(prediction);
+    actualResult = Number(actualResult);
+
+    if (
+        !Number.isInteger(prediction) ||
+        prediction < 0 ||
+        prediction > 9 ||
+        !Number.isInteger(actualResult) ||
+        actualResult < 0 ||
+        actualResult > 9
+    ) {
+        console.warn("Invalid prediction history data.");
+        return false;
+    }
 
     const status =
-        Number(prediction) === actualResult
+        prediction === actualResult
             ? "WIN"
             : "LOSS";
 
     predictionHistory.unshift({
 
-        time:
-            new Date()
-                .toLocaleTimeString(),
+        time: new Date().toLocaleTimeString(),
 
-        prediction:
-            prediction,
+        prediction: prediction,
 
-        result:
-            actualResult,
+        result: actualResult,
 
-        status:
-            status
+        status: status
     });
 
-
-    if (
-        predictionHistory.length > 100
-    ) {
-
+    if (predictionHistory.length > 100) {
         predictionHistory.pop();
     }
-
 
     saveMemory(
         "predictionHistory",
         predictionHistory
     );
-}
 
+    return true;
+}
 
 // ========================================
 // RESET MEMORY
