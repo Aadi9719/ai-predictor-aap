@@ -270,10 +270,12 @@ function updateLearningAge() {
         }
     }
 
-    saveMemory(
-        "patternMemory",
-        patternMemory
-    );
+const saved = saveMemory("patternMemory", patternMemory);
+
+if (!saved) {
+    console.error("Pattern memory save failed!");
+    return false;
+}
 
     updateAIMemoryStats();
     
