@@ -607,12 +607,6 @@ if (typeof saveActualResult === "function") {
                         "n5"
                     ).value =
                         predictionInput[4];
-
-
-                    // SAVE ACTUAL RESULT
-if (typeof saveActualResult === "function") {
-    saveActualResult(actualResult);
-}
                     
                     // =================================
                     // PATTERN LEARNING
