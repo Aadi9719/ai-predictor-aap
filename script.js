@@ -541,6 +541,15 @@ if (
                         );
 
                     if (
+    !Number.isInteger(prediction) ||
+    prediction < 0 ||
+    prediction > 9
+) {
+    alert("Invalid pending prediction!");
+    return;
+                    }
+
+                    if (
     !Array.isArray(pendingInput) ||
     pendingInput.length !== 5 ||
     pendingInput.some(n =>
