@@ -417,7 +417,7 @@ function updateColorMemory(actualResult) {
 
     if (
         !Number.isInteger(actualResult) ||
-        actualResult < 1 ||
+        actualResult < 0 ||
         actualResult > 9
     ) {
         console.warn("Invalid color result:", actualResult);
@@ -456,7 +456,12 @@ function updateColorMemory(actualResult) {
     memory.numbers[actualResult] =
         (Number(memory.numbers[actualResult]) || 0) + 1;
 
-    saveMemory("colorMemory", colorMemory);
+    const saved = saveMemory("colorMemory", colorMemory);
+
+if (!saved) {
+    console.error("Color memory save failed!");
+    return false;
+}
 
     if (typeof updateAIMemoryStats === "function") {
         updateAIMemoryStats();
