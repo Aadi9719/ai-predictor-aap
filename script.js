@@ -566,48 +566,6 @@ if (typeof saveActualResult === "function") {
     return;
 }
                     
-        // =================================
-        // LEARNING
-        // IMPORTANT:
-        // Use frozen prediction input.
-        // =================================
-
-                    const oldValues = [
-                        document.getElementById("n1")?.value,
-                        document.getElementById("n2")?.value,
-                        document.getElementById("n3")?.value,
-                        document.getElementById("n4")?.value,
-                        document.getElementById("n5")?.value
-                    ];
-
-
-                    // Temporarily restore exact
-                    // prediction input for learning.
-                    document.getElementById(
-                        "n1"
-                    ).value =
-                        predictionInput[0];
-
-                    document.getElementById(
-                        "n2"
-                    ).value =
-                        predictionInput[1];
-
-                    document.getElementById(
-                        "n3"
-                    ).value =
-                        predictionInput[2];
-
-                    document.getElementById(
-                        "n4"
-                    ).value =
-                        predictionInput[3];
-
-                    document.getElementById(
-                        "n5"
-                    ).value =
-                        predictionInput[4];
-                    
                     // =================================
                     // PATTERN LEARNING
                     // =================================
