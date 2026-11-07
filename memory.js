@@ -286,7 +286,7 @@ function updateLearningMemory(actualResult, predictionInput) {
 
     if (
         !Number.isInteger(actualResult) ||
-        actualResult < 1 ||
+        actualResult < 0 ||
         actualResult > 9
     ) {
         console.warn("Invalid pattern result:", actualResult);
@@ -301,7 +301,7 @@ function updateLearningMemory(actualResult, predictionInput) {
     const input = predictionInput.map(Number);
 
     if (
-        input.some(n => !Number.isInteger(n) || n < 1 || n > 9)
+        input.some(n => !Number.isInteger(n) || n < 0 || n > 9)
     ) {
         console.warn("Invalid pattern input:", input);
         return false;
