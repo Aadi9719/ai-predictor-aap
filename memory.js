@@ -360,7 +360,7 @@ function updateBigSmallMemory(actualResult) {
 
     if (
         !Number.isInteger(actualResult) ||
-        actualResult < 1 ||
+        actualResult < 0 ||
         actualResult > 9
     ) {
         console.warn("Invalid Big/Small result:", actualResult);
@@ -395,7 +395,12 @@ function updateBigSmallMemory(actualResult) {
     memory.numbers[actualResult] =
         (Number(memory.numbers[actualResult]) || 0) + 1;
 
-    saveMemory("bigSmallMemory", bigSmallMemory);
+    const saved = saveMemory("bigSmallMemory", bigSmallMemory);
+
+if (!saved) {
+    console.error("Big/Small memory save failed!");
+    return false;
+}
 
     if (typeof updateAIMemoryStats === "function") {
         updateAIMemoryStats();
