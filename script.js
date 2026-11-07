@@ -507,17 +507,14 @@ if (
                             "Enter Actual Result (0-9)"
                         );
 
-
                     if (input === null) {
                         return;
                     }
-
 
                     const actualResult =
                         Number(
                             input.trim()
                         );
-
 
                     if (
                         !Number.isInteger(
@@ -534,7 +531,6 @@ if (
                         return;
                     }
 
-
                     // =================================
                     // FREEZE PREDICTION DATA
                     // =================================
@@ -544,14 +540,24 @@ if (
                             pendingPrediction
                         );
 
+                    if (
+    !Array.isArray(pendingInput) ||
+    pendingInput.length !== 5 ||
+    pendingInput.some(n =>
+        !Number.isInteger(Number(n)) ||
+        Number(n) < 0 ||
+        Number(n) > 9
+    )
+) {
+    alert("Invalid frozen prediction input!");
+    return;
+                    }
 
                     const predictionInput =
                         [...pendingInput];
 
-
                     const isWin =
                         prediction === actualResult;
-
 
                     const currentPattern =
                         predictionInput.join(",");
