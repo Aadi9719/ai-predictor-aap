@@ -582,8 +582,16 @@ if (
         // SAVE ACTUAL RESULT — ONLY ONCE
 
 if (typeof saveActualResult === "function") {
-    saveActualResult(actualResult);
+
+    const saved = saveActualResult(actualResult);
+
+    if (!saved) {
+        alert("Actual result save nahi hua.");
+        return;
+    }
+
 } else {
+
     console.error("saveActualResult function missing!");
     alert("Actual result save nahi hua.");
     return;
