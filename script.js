@@ -102,7 +102,7 @@ document.addEventListener(
                     ) {
 
                         alert(
-                            "Please enter all 5 numbers between 1 and 9."
+                            "Please enter all 5 numbers between 0 and 9."
                         );
 
                         return;
