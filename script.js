@@ -608,10 +608,14 @@ if (typeof saveActualResult === "function") {
 
                         try {
 
-         updateLearningMemory(
-         actualResult,
-         predictionInput
+  const patternSaved = updateLearningMemory(
+    actualResult,
+    predictionInput
 );
+
+if (!patternSaved) {
+    console.error("Pattern learning update failed!");
+}
 
                         } catch (error) {
 
