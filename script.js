@@ -684,10 +684,14 @@ if (typeof saveActualResult === "function") {
 
                         try {
 
-                            savePredictionHistory(
-                                prediction,
-                                actualResult
-                            );
+     const historySaved = savePredictionHistory(
+    prediction,
+    actualResult
+);
+
+if (!historySaved) {
+    console.error("Prediction history save failed!");
+}
 
                         } catch (error) {
 
