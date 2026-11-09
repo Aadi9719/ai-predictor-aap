@@ -647,12 +647,18 @@ function savePredictionHistory(prediction, actualResult) {
         predictionHistory.pop();
     }
 
-    saveMemory(
-        "predictionHistory",
-        predictionHistory
-    );
+const saved = saveMemory(
+    "predictionHistory",
+    predictionHistory
+);
 
-    return true;
+if (!saved) {
+    console.error("Prediction history save failed!");
+    predictionHistory.shift();
+    return false;
+}
+
+return true;
 }
 
 // ========================================
