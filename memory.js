@@ -226,14 +226,20 @@ if (allResults.length > 50000) {
     allResults.pop();
 }
 
-    saveMemory(
-        "allResults",
-        allResults
-    );
+    const saved = saveMemory(
+    "allResults",
+    allResults
+);
 
-    updateAIMemoryStats();
-    
-    return true;
+if (!saved) {
+    console.error("Actual result save failed!");
+    allResults.shift();
+    return false;
+}
+
+updateAIMemoryStats();
+
+return true;
 }
 
 
