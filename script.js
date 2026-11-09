@@ -638,9 +638,13 @@ if (!patternSaved) {
 
                         try {
 
-                            updateBigSmallMemory(
-                                actualResult
-                            );
+    const bigSmallSaved = updateBigSmallMemory(
+    actualResult
+);
+
+if (!bigSmallSaved) {
+    console.error("Big/Small memory update failed!");
+}
 
                         } catch (error) {
 
