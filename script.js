@@ -667,9 +667,13 @@ if (!bigSmallSaved) {
 
                         try {
 
-                    updateColorMemory(
-                                actualResult
-                            );
+    const colorSaved = updateColorMemory(
+    actualResult
+);
+
+if (!colorSaved) {
+    console.error("Color memory update failed!");
+}
 
                         } catch (error) {
 
