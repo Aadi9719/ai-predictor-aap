@@ -488,10 +488,15 @@ if (
                     }
 
 
-                    if (
-                        !Array.isArray(pendingInput) ||
-                        pendingInput.length !== 5
-                    ) {
+        if (
+    !Array.isArray(pendingInput) ||
+    pendingInput.length !== 5 ||
+    pendingInput.some(n =>
+        !Number.isInteger(Number(n)) ||
+        Number(n) < 0 ||
+        Number(n) > 9
+    )
+) {
 
                         alert(
                             "Prediction input memory missing hai."
