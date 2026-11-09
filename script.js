@@ -54,6 +54,9 @@ document.addEventListener(
             analyzeBtn.onclick =
               async function () {
 
+        pendingPrediction = null;
+        pendingInput = null;
+                  
                     console.log(
                         "Analyze AI started"
                     );
