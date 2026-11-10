@@ -505,7 +505,15 @@ function selfLearning(pattern, isWin) {
         ? Number(((wins / total) * 100).toFixed(2))
         : 0;
 
-    saveMemory("patternMemory", patternMemory);
+    const saved = saveMemory(
+    "patternMemory",
+    patternMemory
+);
+
+if (!saved) {
+    console.error("Self-learning memory save failed!");
+    return false;
+}
 
     if (typeof updateAIMemoryStats === "function") {
         updateAIMemoryStats();
