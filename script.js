@@ -577,7 +577,7 @@ if (
                         prediction === actualResult;
 
                     const currentPattern =
-                        predictionInput.join(",");
+                        predictionInput.join("-");
 
         // SAVE ACTUAL RESULT — ONLY ONCE
 
