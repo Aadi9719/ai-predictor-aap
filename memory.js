@@ -559,7 +559,6 @@ function updateRewardPenalty(
         memory.patternWeight = 50;
     }
 
-
     if (isWin) {
 
         memory.reward++;
@@ -576,7 +575,6 @@ function updateRewardPenalty(
 
         memory.patternWeight -= 1;
     }
-
 
     // Safe limits
 
@@ -599,12 +597,18 @@ function updateRewardPenalty(
         );
 
 
-    saveMemory(
-        "patternMemory",
-        patternMemory
-    );
+    const saved = saveMemory(
+    "patternMemory",
+    patternMemory
+);
+
+if (!saved) {
+    console.error("Reward/Penalty memory save failed!");
+    return false;
 }
 
+return true;
+}
 
 // ========================================
 // PREDICTION HISTORY
@@ -695,7 +699,6 @@ function resetAIMemory() {
         "aiLosses"
     );
 
-
     patternMemory = {};
 
     allResults = [];
@@ -712,7 +715,6 @@ function resetAIMemory() {
 
     nextPrediction = null;
 }
-
 
 // ========================================
 // PHONE / Acode MEMORY TEST
@@ -757,7 +759,6 @@ function testMemoryStoragePhone() {
         "\n\nMEMORY CONNECTED ✅"
     );
 }
-
 
 // ========================================
 // MEMORY RESET BUTTON
