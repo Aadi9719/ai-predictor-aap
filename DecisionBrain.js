@@ -16,7 +16,7 @@ function getDecisionBrain() {
     Number(document.getElementById("n3").value),
     Number(document.getElementById("n4").value),
     Number(document.getElementById("n5").value)
-].join(",");
+].join("-");
 
 let rewardRatio = getRewardRatio(currentPattern);
     
