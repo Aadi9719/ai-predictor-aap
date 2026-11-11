@@ -185,7 +185,7 @@ function getMemoryPrediction() {
         getCurrentInput();
 
     const pattern =
-        currentInput.join(",");
+        currentInput.join("-");
 
     const memory =
         patternMemory[pattern];
@@ -195,7 +195,7 @@ function getMemoryPrediction() {
     }
 
     const numbers =
-        memory.numbers || {};
+    memory.nextNumbers || {};
 
     let bestNumber = null;
     let bestCount = -1;
@@ -208,6 +208,16 @@ function getMemoryPrediction() {
         const count =
             Number(numbers[key]) || 0;
 
+        if (
+    !Number.isInteger(number) ||
+    number < 0 ||
+    number > 9 ||
+    !Number.isFinite(count) ||
+    count <= 0
+) {
+    continue;
+        }
+        
         if (count > bestCount) {
 
             bestCount = count;
