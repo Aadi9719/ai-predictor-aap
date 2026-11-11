@@ -75,7 +75,7 @@ function getPatternPrediction() {
         const pattern =
             currentInput
                 .slice(0, len)
-                .join(",");
+                .join("-");
 
         const memory =
             patternMemory[pattern];
