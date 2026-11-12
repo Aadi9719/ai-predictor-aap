@@ -547,7 +547,7 @@ function updateRewardPenalty(
         !pattern ||
         !patternMemory[pattern]
     ) {
-        return;
+        return false;
     }
 
     const memory =
