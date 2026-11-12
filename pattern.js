@@ -449,7 +449,7 @@ function getBigSmallPatternPrediction() {
         const pattern =
             input
                 .slice(0, len)
-                .join(",");
+                .join("-");
 
         const memory =
             patternMemory[pattern];
