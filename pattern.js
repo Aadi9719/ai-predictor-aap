@@ -1102,7 +1102,7 @@ function getCurrentPattern() {
         return null;
     }
 
-    return getCurrentInput().join(",");
+    return getCurrentInput().join("-");
 }
 
 
