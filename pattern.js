@@ -241,7 +241,7 @@ function getPatternScore() {
     }
 
     const pattern =
-        getCurrentInput().join(",");
+        getCurrentInput().join("-");
 
     const memory =
         patternMemory[pattern];
