@@ -283,7 +283,12 @@ if (!saved) {
     return false;
 }
 
+if (typeof updateAIMemoryStats === "function") {
     updateAIMemoryStats();
+}
+
+return true;
+}
     
 }
 
