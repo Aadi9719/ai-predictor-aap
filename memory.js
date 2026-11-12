@@ -348,7 +348,12 @@ function updateLearningMemory(actualResult, predictionInput) {
 
     memory.total = (Number(memory.total) || 0) + 1;
 
-    saveMemory("patternMemory", patternMemory);
+    const saved = saveMemory("patternMemory", patternMemory);
+
+if (!saved) {
+    console.error("Pattern Memory Save Failed");
+    return false;
+}
 
     if (typeof updateAIMemoryStats === "function") {
         updateAIMemoryStats();
