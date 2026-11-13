@@ -260,11 +260,21 @@ function getPatternScore() {
         return 0;
     }
 
-    const total =
-        Number(memory.total) || 0;
+   const rawTotal =
+    Number(memory.total);
 
-    const confidence =
-        Number(memory.confidence) || 0;
+const total =
+    Number.isFinite(rawTotal) && rawTotal > 0
+        ? rawTotal
+        : 0;
+
+    const rawConfidence =
+    Number(memory.confidence);
+
+const confidence =
+    Number.isFinite(rawConfidence)
+        ? rawConfidence
+        : 0;
 
     const trust =
         Number(memory.trust);
@@ -274,14 +284,29 @@ function getPatternScore() {
             ? trust
             : 50;
 
-    const patternWeight =
-        Number(memory.patternWeight) || 50;
+    const rawPatternWeight =
+    Number(memory.patternWeight);
 
-    const stability =
-        Number(memory.stability) || 0;
+const patternWeight =
+    Number.isFinite(rawPatternWeight)
+        ? rawPatternWeight
+        : 50;
 
-    const colorStability =
-        Number(memory.colorStability) || 0;
+    const rawStability =
+    Number(memory.stability);
+
+const stability =
+    Number.isFinite(rawStability)
+        ? rawStability
+        : 0;
+
+    const rawColorStability =
+    Number(memory.colorStability);
+
+const colorStability =
+    Number.isFinite(rawColorStability)
+        ? rawColorStability
+        : 0;
 
     /*
        Keep score bounded.
