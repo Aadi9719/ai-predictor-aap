@@ -289,8 +289,6 @@ if (typeof updateAIMemoryStats === "function") {
 
 return true;
 }
-    
-}
 
 // PATTERN LEARNING MEMORY
 
