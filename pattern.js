@@ -130,11 +130,21 @@ function getPatternPrediction() {
                     ? trust
                     : 50;
 
-            const stability =
-                Number(memory.stability) || 0;
+            const rawStability =
+    Number(memory.stability);
 
-            const patternWeight =
-                Number(memory.patternWeight) || 50;
+const stability =
+    Number.isFinite(rawStability)
+        ? rawStability
+        : 0;
+
+        const rawPatternWeight =
+    Number(memory.patternWeight);
+
+const patternWeight =
+    Number.isFinite(rawPatternWeight)
+        ? rawPatternWeight
+        : 50;
 
             const score =
 
