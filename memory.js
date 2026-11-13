@@ -815,33 +815,26 @@ document.addEventListener(
     }
 );
 
+
 function updateAIMemoryStats() {
-    const resultsElement = document.getElementById("savedResultsCount");
-    const patternsElement = document.getElementById("savedPatternsCount");
 
-    const totalResults = Array.isArray(allResults)
-        ? allResults.length
-        : 0;
+    const resultsElement =
+        document.getElementById("savedResultsCount");
 
-    function countPatterns(obj) {
-        if (!obj || typeof obj !== "object") {
-            return 0;
-        }
+    const patternsElement =
+        document.getElementById("savedPatternsCount");
 
-        let count = 0;
+    const totalResults =
+        Array.isArray(allResults)
+            ? allResults.length
+            : 0;
 
-        for (const key of Object.keys(obj)) {
-            count++;
-
-            if (obj[key] && typeof obj[key] === "object") {
-                count += countPatterns(obj[key]);
-            }
-        }
-
-        return count;
-    }
-
-    const totalPatterns = countPatterns(patternMemory);
+    const totalPatterns =
+        patternMemory &&
+        typeof patternMemory === "object" &&
+        !Array.isArray(patternMemory)
+            ? Object.keys(patternMemory).length
+            : 0;
 
     if (resultsElement) {
         resultsElement.textContent = totalResults;
