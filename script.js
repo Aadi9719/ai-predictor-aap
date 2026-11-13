@@ -723,12 +723,11 @@ if (!historySaved) {
 
                         aiWins++;
 
+ const winsSaved = saveMemory("aiWins", aiWins);
 
-                        localStorage.setItem(
-                            "aiWins",
-                            String(aiWins)
-                        );
-
+if (!winsSaved) {
+    console.error("AI Wins save failed!");
+}
 
                         if (
                             typeof updateRewardPenalty ===
@@ -801,12 +800,11 @@ if (!historySaved) {
 
                         aiLosses++;
 
+ const lossesSaved = saveMemory("aiLosses", aiLosses);
 
-                        localStorage.setItem(
-                            "aiLosses",
-                            String(aiLosses)
-                        );
-
+if (!lossesSaved) {
+    console.error("AI Losses save failed!");
+}
 
                         if (
                             typeof updateRewardPenalty ===
