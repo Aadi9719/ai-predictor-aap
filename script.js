@@ -736,10 +736,14 @@ if (!winsSaved) {
 
                             try {
 
-                                updateRewardPenalty(
-                                    currentPattern,
-                                    true
-                                );
+  const rewardSaved = updateRewardPenalty(
+    currentPattern,
+    true
+);
+
+if (!rewardSaved) {
+    console.error("WIN Reward/Penalty update failed!");
+}
 
                             } catch (error) {
 
@@ -758,10 +762,14 @@ if (!winsSaved) {
 
                             try {
 
-                                selfLearning(
-                                    currentPattern,
-                                    true
-                                );
+    const winLearningSaved = selfLearning(
+    currentPattern,
+    true
+);
+
+if (!winLearningSaved) {
+    console.error("WIN Self Learning failed!");
+}
 
                             } catch (error) {
 
@@ -813,10 +821,14 @@ if (!lossesSaved) {
 
                             try {
 
-                                updateRewardPenalty(
-                                    currentPattern,
-                                    false
-                                );
+        const penaltySaved = updateRewardPenalty(
+    currentPattern,
+    false
+);
+
+if (!penaltySaved) {
+    console.error("LOSS Reward/Penalty update failed!");
+}
 
                             } catch (error) {
 
@@ -835,10 +847,14 @@ if (!lossesSaved) {
 
                             try {
 
-                                selfLearning(
-                                    currentPattern,
-                                    false
-                                );
+    const lossLearningSaved = selfLearning(
+    currentPattern,
+    false
+);
+
+if (!lossLearningSaved) {
+    console.error("LOSS Self Learning failed!");
+}
 
                             } catch (error) {
 
