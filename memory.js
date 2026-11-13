@@ -237,7 +237,9 @@ if (!saved) {
     return false;
 }
 
-updateAIMemoryStats();
+if (typeof updateAIMemoryStats === "function") {
+    updateAIMemoryStats();
+}
 
 return true;
 }
