@@ -335,6 +335,9 @@ function updateLearningMemory(actualResult, predictionInput) {
             penalty: 0,
             trust: 50,
             patternWeight: 50,
+            confidence: 0,
+            stability: 0,
+            colorStability: 0,
             learningAge: 0
         };
     }
