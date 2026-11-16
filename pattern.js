@@ -689,50 +689,52 @@ function getColorPatternPrediction() {
         return null;
     }
 
-    const input =
-        getCurrentInput();
+    const input = getCurrentInput();
 
-    for (
-        let len = 5;
-        len >= 2;
-        len--
-    ) {
+    for (let len = 5; len >= 2; len--) {
 
         const pattern =
-            input
-                .slice(0, len)
-                .join("-");
+            input.slice(0, len).join("-");
 
         const memory =
             patternMemory[pattern];
 
-        if (!memory) {
+        if (!memory || !memory.color) {
             continue;
         }
 
         const green =
-            Number(memory.GREEN) || 0;
+            Number(memory.color.GREEN) || 0;
 
         const red =
-            Number(memory.RED) || 0;
+            Number(memory.color.RED) || 0;
 
-        if (
-            green === 0 &&
-            red === 0
-        ) {
+        const violet =
+            Number(memory.color.VIOLET) || 0;
+
+        const total = green + red + violet;
+
+        if (total < 5) {
             continue;
         }
 
-        return (
-            green >= red
-                ? "GREEN"
-                : "RED"
-        );
+        const maxCount =
+            Math.max(green, red, violet);
+
+        if (
+            [green, red, violet]
+                .filter(count => count === maxCount).length > 1
+        ) {
+            return null;
+        }
+
+        if (maxCount === green) return "GREEN";
+        if (maxCount === red) return "RED";
+        if (maxCount === violet) return "VIOLET";
     }
 
     return null;
 }
-
 
 function getColorConfidence() {
 
