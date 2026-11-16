@@ -500,11 +500,15 @@ function updateColorMemory(actualResult) {
         return false;
     }
 
-    const color = [1, 3, 7, 9].includes(actualResult)
-        ? "Green"
-        : [2, 4, 6, 8].includes(actualResult)
-        ? "Red"
-        : "Violet";
+    let color;
+
+if ([1, 3, 7, 9].includes(actualResult)) {
+    color = "Green";
+} else if ([2, 4, 6, 8].includes(actualResult)) {
+    color = "Red";
+} else if ([0, 5].includes(actualResult)) {
+    color = "Violet";
+}
 
     if (
         !colorMemory ||
