@@ -276,23 +276,23 @@ const total =
 
 const confidence =
     Number.isFinite(rawConfidence)
-        ? rawConfidence
+        ? Math.max(0, Math.min(100, rawConfidence))
         : 0;
 
-    const trust =
-        Number(memory.trust);
+    const rawTrust =
+    Number(memory.trust);
 
-    const safeTrust =
-        Number.isFinite(trust)
-            ? trust
-            : 50;
+const safeTrust =
+    Number.isFinite(rawTrust)
+        ? Math.max(0, Math.min(100, rawTrust))
+        : 50;
 
     const rawPatternWeight =
     Number(memory.patternWeight);
 
 const patternWeight =
     Number.isFinite(rawPatternWeight)
-        ? rawPatternWeight
+        ? Math.max(0, Math.min(100, rawPatternWeight))
         : 50;
 
     const rawStability =
@@ -300,7 +300,7 @@ const patternWeight =
 
 const stability =
     Number.isFinite(rawStability)
-        ? rawStability
+        ? Math.max(0, Math.min(100, rawStability))
         : 0;
 
     const rawColorStability =
@@ -308,7 +308,7 @@ const stability =
 
 const colorStability =
     Number.isFinite(rawColorStability)
-        ? rawColorStability
+        ? Math.max(0, Math.min(100, rawColorStability))
         : 0;
 
     /*
