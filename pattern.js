@@ -519,45 +519,33 @@ function getBigSmallConfidence() {
         return 0;
     }
 
-    const input =
-        getCurrentInput();
+    const input = getCurrentInput();
 
-    for (
-        let len = 5;
-        len >= 2;
-        len--
-    ) {
+    for (let len = 5; len >= 2; len--) {
 
         const pattern =
-            input
-                .slice(0, len)
-                .join("-");
+            input.slice(0, len).join("-");
 
         const memory =
             patternMemory[pattern];
 
-        if (!memory) {
+        if (!memory || !memory.bigSmall) {
             continue;
         }
 
         const big =
-            Number(memory.BIG) || 0;
+            Number(memory.bigSmall.BIG) || 0;
 
         const small =
-            Number(memory.SMALL) || 0;
+            Number(memory.bigSmall.SMALL) || 0;
 
-        const total =
-            big + small;
+        const total = big + small;
 
-        if (total <= 0) {
+        if (total < 5) {
             continue;
         }
 
-        const best =
-            Math.max(
-                big,
-                small
-            );
+        const best = Math.max(big, small);
 
         return Math.round(
             (best / total) * 100
@@ -566,7 +554,6 @@ function getBigSmallConfidence() {
 
     return 0;
 }
-
 
 // ========================================
 // BIG / SMALL AI SCORE
