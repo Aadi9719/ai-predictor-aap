@@ -370,6 +370,35 @@ if (actualResult >= 5) {
 } else {
     memory.bigSmall.SMALL++;
 }
+
+    if (
+    !memory.color ||
+    typeof memory.color !== "object" ||
+    Array.isArray(memory.color)
+) {
+    memory.color = {
+        GREEN: 0,
+        RED: 0,
+        VIOLET: 0
+    };
+}
+
+memory.color.GREEN =
+    Number(memory.color.GREEN) || 0;
+
+memory.color.RED =
+    Number(memory.color.RED) || 0;
+
+memory.color.VIOLET =
+    Number(memory.color.VIOLET) || 0;
+
+if ([1, 3, 7, 9].includes(actualResult)) {
+    memory.color.GREEN++;
+} else if ([2, 4, 6, 8].includes(actualResult)) {
+    memory.color.RED++;
+} else if (actualResult === 0) {
+    memory.color.VIOLET++;
+}
     
     if (
         !memory.nextNumbers ||
