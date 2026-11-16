@@ -344,12 +344,26 @@ function updateLearningMemory(actualResult, predictionInput) {
 
     const memory = patternMemory[pattern];
 
-    if (!memory.bigSmall) {
+    if (
+    !memory.bigSmall ||
+    typeof memory.bigSmall !== "object" ||
+    Array.isArray(memory.bigSmall)
+) {
     memory.bigSmall = {
         BIG: 0,
         SMALL: 0
     };
 }
+
+memory.bigSmall.BIG =
+    Number.isFinite(Number(memory.bigSmall.BIG))
+        ? Math.max(0, Number(memory.bigSmall.BIG))
+        : 0;
+
+memory.bigSmall.SMALL =
+    Number.isFinite(Number(memory.bigSmall.SMALL))
+        ? Math.max(0, Number(memory.bigSmall.SMALL))
+        : 0;
 
 if (actualResult >= 5) {
     memory.bigSmall.BIG++;
