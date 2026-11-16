@@ -178,13 +178,6 @@ const patternWeight =
            Agar 5-number pattern mil gaya,
            use priority do.
         */
-
-        if (
-            len === 5 &&
-            bestNumber !== null
-        ) {
-            return bestNumber;
-        }
     }
 
     return bestNumber;
