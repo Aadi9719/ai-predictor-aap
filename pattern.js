@@ -742,43 +742,71 @@ function getColorConfidence() {
         return 0;
     }
 
-    const input =
-        getCurrentInput();
+    const input = getCurrentInput();
 
-    for (
-        let len = 5;
-        len >= 2;
-        len--
-    ) {
+    for (let len = 5; len >= 2; len--) {
 
         const pattern =
-            input
-                .slice(0, len)
-                .join("-");
+            input.slice(0, len).join("-");
 
         const memory =
             patternMemory[pattern];
 
-        if (!memory) {
+        if (
+            !memory ||
+            !memory.color ||
+            typeof memory.color !== "object"
+        ) {
             continue;
         }
 
+        const greenValue =
+            Number(memory.color.GREEN);
+
+        const redValue =
+            Number(memory.color.RED);
+
+        const violetValue =
+            Number(memory.color.VIOLET);
+
         const green =
-            Number(memory.GREEN) || 0;
+            Number.isFinite(greenValue)
+                ? Math.max(0, greenValue)
+                : 0;
 
         const red =
-            Number(memory.RED) || 0;
+            Number.isFinite(redValue)
+                ? Math.max(0, redValue)
+                : 0;
+
+        const violet =
+            Number.isFinite(violetValue)
+                ? Math.max(0, violetValue)
+                : 0;
+
+        const counts = [green, red, violet];
 
         const total =
-            green + red;
+            green + red + violet;
 
-        if (total <= 0) {
+        if (total < 5) {
             continue;
+        }
+
+        const maxCount =
+            Math.max(...counts);
+
+        const winners =
+            counts.filter(
+                count => count === maxCount
+            ).length;
+
+        if (winners > 1) {
+            return 0;
         }
 
         return Math.round(
-            (Math.max(green, red) /
-                total) * 100
+            (maxCount / total) * 100
         );
     }
 
