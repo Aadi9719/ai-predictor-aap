@@ -344,6 +344,19 @@ function updateLearningMemory(actualResult, predictionInput) {
 
     const memory = patternMemory[pattern];
 
+    if (!memory.bigSmall) {
+    memory.bigSmall = {
+        BIG: 0,
+        SMALL: 0
+    };
+}
+
+if (actualResult >= 5) {
+    memory.bigSmall.BIG++;
+} else {
+    memory.bigSmall.SMALL++;
+}
+    
     if (
         !memory.nextNumbers ||
         typeof memory.nextNumbers !== "object"
