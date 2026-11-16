@@ -838,7 +838,6 @@ function getColorConfidence() {
     return 0;
 }
 
-
 function getColorAIScore() {
 
     const confidence =
@@ -856,7 +855,6 @@ function getColorAIScore() {
     );
 }
 
-
 // ========================================
 // RECENT COLOR
 // ========================================
@@ -868,34 +866,26 @@ function getColorRatio(data) {
     let violet = 0;
 
     if (!Array.isArray(data)) {
-        return {
-            green,
-            red,
-            violet
-        };
+        return { green, red, violet };
     }
 
     data.forEach(n => {
 
-        const number =
-            Number(n);
+        const number = Number(n);
 
         if (
-            [1, 3, 7, 9]
-                .includes(number)
+            !Number.isInteger(number) ||
+            number < 0 ||
+            number > 9
         ) {
+            return;
+        }
 
+        if ([1, 3, 7, 9].includes(number)) {
             green++;
-
-        } else if (
-            [2, 4, 6, 8]
-                .includes(number)
-        ) {
-
+        } else if ([2, 4, 6, 8].includes(number)) {
             red++;
-
-        } else {
-
+        } else if ([0, 5].includes(number)) {
             violet++;
         }
     });
@@ -906,7 +896,6 @@ function getColorRatio(data) {
         violet
     };
 }
-
 
 function getRecentColorPrediction() {
 
