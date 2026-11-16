@@ -475,50 +475,39 @@ function getBigSmallPatternPrediction() {
         return null;
     }
 
-    const input =
-        getCurrentInput();
+    const input = getCurrentInput();
 
-    for (
-        let len = 5;
-        len >= 2;
-        len--
-    ) {
+    for (let len = 5; len >= 2; len--) {
 
         const pattern =
-            input
-                .slice(0, len)
-                .join("-");
+            input.slice(0, len).join("-");
 
         const memory =
             patternMemory[pattern];
 
-        if (!memory) {
+        if (!memory || !memory.bigSmall) {
             continue;
         }
 
         const big =
-            Number(memory.BIG) || 0;
+            Number(memory.bigSmall.BIG) || 0;
 
         const small =
-            Number(memory.SMALL) || 0;
+            Number(memory.bigSmall.SMALL) || 0;
 
-        if (
-            big === 0 &&
-            small === 0
-        ) {
+        const total = big + small;
+
+        if (total < 5) {
             continue;
         }
 
-        return (
-            big >= small
-                ? "BIG"
-                : "SMALL"
-        );
+        return big > small ? "BIG" :
+               small > big ? "SMALL" :
+               null;
     }
 
     return null;
 }
-
 
 // ========================================
 // BIG / SMALL CONFIDENCE
