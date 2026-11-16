@@ -371,7 +371,8 @@ if (actualResult >= 5) {
     memory.bigSmall.SMALL++;
 }
 
-    if (
+    
+if (
     !memory.color ||
     typeof memory.color !== "object" ||
     Array.isArray(memory.color)
@@ -383,23 +384,23 @@ if (actualResult >= 5) {
     };
 }
 
-memory.color.GREEN =
-    Number(memory.color.GREEN) || 0;
+for (const key of ["GREEN", "RED", "VIOLET"]) {
+    const value = Number(memory.color[key]);
 
-memory.color.RED =
-    Number(memory.color.RED) || 0;
-
-memory.color.VIOLET =
-    Number(memory.color.VIOLET) || 0;
+    memory.color[key] =
+        Number.isFinite(value)
+            ? Math.max(0, value)
+            : 0;
+}
 
 if ([1, 3, 7, 9].includes(actualResult)) {
     memory.color.GREEN++;
 } else if ([2, 4, 6, 8].includes(actualResult)) {
     memory.color.RED++;
-} else if (actualResult === 0) {
+} else if ([0, 5].includes(actualResult)) {
     memory.color.VIOLET++;
 }
-    
+     
     if (
         !memory.nextNumbers ||
         typeof memory.nextNumbers !== "object"
