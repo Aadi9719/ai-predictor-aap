@@ -699,32 +699,57 @@ function getColorPatternPrediction() {
         const memory =
             patternMemory[pattern];
 
-        if (!memory || !memory.color) {
+        if (
+            !memory ||
+            !memory.color ||
+            typeof memory.color !== "object" ||
+            Array.isArray(memory.color)
+        ) {
             continue;
         }
 
+        const greenValue =
+            Number(memory.color.GREEN);
+
+        const redValue =
+            Number(memory.color.RED);
+
+        const violetValue =
+            Number(memory.color.VIOLET);
+
         const green =
-            Number(memory.color.GREEN) || 0;
+            Number.isFinite(greenValue)
+                ? Math.max(0, greenValue)
+                : 0;
 
         const red =
-            Number(memory.color.RED) || 0;
+            Number.isFinite(redValue)
+                ? Math.max(0, redValue)
+                : 0;
 
         const violet =
-            Number(memory.color.VIOLET) || 0;
+            Number.isFinite(violetValue)
+                ? Math.max(0, violetValue)
+                : 0;
 
-        const total = green + red + violet;
+        const counts = [green, red, violet];
+
+        const total =
+            green + red + violet;
 
         if (total < 5) {
             continue;
         }
 
         const maxCount =
-            Math.max(green, red, violet);
+            Math.max(...counts);
 
-        if (
-            [green, red, violet]
-                .filter(count => count === maxCount).length > 1
-        ) {
+        const winners =
+            counts.filter(
+                count => count === maxCount
+            ).length;
+
+        if (winners > 1) {
             return null;
         }
 
