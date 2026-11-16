@@ -87,12 +87,17 @@ function getPatternPrediction() {
         const nextNumbers =
             memory.nextNumbers || {};
 
-        const total =
-            Number(memory.total) || 0;
+        const rawTotal =
+    Number(memory.total);
 
-        if (total <= 0) {
-            continue;
-        }
+const total =
+    Number.isFinite(rawTotal) && rawTotal >= 0
+        ? rawTotal
+        : 0;
+
+if (total < 5) {
+    continue;
+}
 
         for (const key of Object.keys(nextNumbers)) {
 
@@ -107,12 +112,17 @@ function getPatternPrediction() {
                 continue;
             }
 
-            const frequency =
-                Number(nextNumbers[key]) || 0;
+        const rawFrequency =
+    Number(nextNumbers[key]);
 
-            if (frequency <= 0) {
-                continue;
-            }
+const frequency =
+    Number.isFinite(rawFrequency) && rawFrequency > 0
+        ? rawFrequency
+        : 0;
+
+if (frequency <= 0) {
+    continue;
+}
 
             /*
                Simple stable score.
@@ -122,20 +132,20 @@ function getPatternPrediction() {
                Trust/stability are secondary filters.
             */
 
-            const trust =
-                Number(memory.trust);
+        const rawTrust =
+    Number(memory.trust);
 
-            const safeTrust =
-                Number.isFinite(trust)
-                    ? trust
-                    : 50;
+const safeTrust =
+    Number.isFinite(rawTrust)
+        ? Math.max(0, Math.min(100, rawTrust))
+        : 50;
 
-            const rawStability =
+        const rawStability =
     Number(memory.stability);
 
 const stability =
     Number.isFinite(rawStability)
-        ? rawStability
+        ? Math.max(0, Math.min(100, rawStability))
         : 0;
 
         const rawPatternWeight =
@@ -143,7 +153,7 @@ const stability =
 
 const patternWeight =
     Number.isFinite(rawPatternWeight)
-        ? rawPatternWeight
+        ? Math.max(0, Math.min(100, rawPatternWeight))
         : 50;
 
             const score =
