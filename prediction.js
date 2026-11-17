@@ -336,6 +336,13 @@ alert(
             }
         }
 
+        alert(
+    "FINAL AI CHECK\n" +
+    "Predicted Number = " + bestIndex +
+    "\nHighest Probability = " +
+    (bestProbability * 100).toFixed(2) + "%"
+);
+        
     return {
     number: bestIndex,
     confidence: Math.round(bestProbability * 100)
