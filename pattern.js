@@ -996,40 +996,35 @@ function getCandidateNumbers() {
     const color =
         getFinalColorPrediction();
 
-    if (
-        bs === "BIG" &&
-        color === "GREEN"
-    ) {
+    if (bs === "BIG" && color === "GREEN") {
         return [7, 9];
     }
 
-    if (
-        bs === "BIG" &&
-        color === "RED"
-    ) {
+    if (bs === "BIG" && color === "RED") {
         return [6, 8];
     }
 
-    if (
-        bs === "SMALL" &&
-        color === "GREEN"
-    ) {
+    if (bs === "SMALL" && color === "GREEN") {
         return [1, 3];
     }
 
-    if (
-        bs === "SMALL" &&
-        color === "RED"
-    ) {
+    if (bs === "SMALL" && color === "RED") {
         return [2, 4];
     }
 
+    if (bs === "BIG" && color === "VIOLET") {
+        return [5];
+    }
+
+    if (bs === "SMALL" && color === "VIOLET") {
+        return [0];
+    }
+
     return [
-        1, 2, 3, 4, 5,
-        6, 7, 8, 9
+        0, 1, 2, 3, 4,
+        5, 6, 7, 8, 9
     ];
 }
-
 
 // ========================================
 // CANDIDATE PRIORITY
