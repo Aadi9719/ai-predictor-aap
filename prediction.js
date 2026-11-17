@@ -293,6 +293,11 @@ console.log(
     "AI PROBABILITY SUM =",
     probabilitySum
 );
+
+        alert(
+    "AI PROBABILITY SUM = " +
+    probabilitySum.toFixed(6)
+);
         
 alert(
     "PREDICTION OUTPUT CHECK\n\n" +
