@@ -259,7 +259,20 @@ alert(
     prediction.shape[0] !== 1 ||
     prediction.shape[1] !== 10 ||
     probabilities.length !== 10 ||
-    !Array.from(probabilities).every(Number.isFinite)
+
+            !Array.from(probabilities).every(
+    p =>
+        Number.isFinite(p) &&
+        p >= 0 &&
+        p <= 1
+) ||
+Math.abs(
+    Array.from(probabilities).reduce(
+        (sum, p) => sum + p,
+        0
+    ) - 1
+) > 0.01
+            
 ) {
     alert("AI OUTPUT INVALID: 10 valid probabilities nahi mili.");
    
