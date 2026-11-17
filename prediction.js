@@ -517,183 +517,109 @@ candidateModel = tf.sequential();
         if (!candidateWeightsFinite) {
             throw new Error("Candidate model has non-finite weights.");
         }
+        
+// ========================================
+// VALIDATION-BASED MODEL SELECTION
+// Test data will NOT be used here.
+// ========================================
 
-        // Compare both models on exactly the same held-out test data.
-        const candidateEval = candidateModel.evaluate(testXs, testYs, { batchSize: 16, verbose: 0 });
-        const candidateEvalTensors = Array.isArray(candidateEval) ? candidateEval : [candidateEval];
-        const candidateLoss = (await candidateEvalTensors[0].data())[0];
-        const candidateAccuracy = candidateEvalTensors[1]
-            ? (await candidateEvalTensors[1].data())[0]
+if (!validationXs || !validationYs) {
+    throw new Error("Validation data is required.");
+}
+
+async function getValidationMetrics(model) {
+
+    const evaluation = model.evaluate(
+        validationXs,
+        validationYs,
+        { batchSize: 16, verbose: 0 }
+    );
+
+    const tensors = Array.isArray(evaluation)
+        ? evaluation
+        : [evaluation];
+
+    try {
+
+        const loss =
+            (await tensors[0].data())[0];
+
+        const accuracy = tensors[1]
+            ? (await tensors[1].data())[0]
             : NaN;
-        candidateEvalTensors.forEach(t => t.dispose());
 
-        const testPredTensor = candidateModel.predict(testXs);
-const testPredData = await testPredTensor.data();
+        return { loss, accuracy };
 
-const predictedCounts = Array(10).fill(0);
-const actualCounts = Array(10).fill(0);
+    } finally {
 
-for (let i = 0; i < testPredData.length; i += 10) {
-    let bestIndex = 0;
-    let bestProbability = -Infinity;
+        tensors.forEach(t => t.dispose());
 
-    for (let j = 0; j < 10; j++) {
-        if (testPredData[i + j] > bestProbability) {
-            bestProbability = testPredData[i + j];
-            bestIndex = j;
-        }
-    }
-
-    predictedCounts[bestIndex]++;
-}
-
-const actualTestData = await testYs.data();
-
-for (let i = 0; i < actualTestData.length; i++) {
-    const actualNumber = Number(actualTestData[i]);
-
-    if (Number.isInteger(actualNumber) &&
-        actualNumber >= 0 && actualNumber <= 9) {
-        actualCounts[actualNumber]++;
     }
 }
 
-alert(
-    "TEST NUMBER DISTRIBUTION\n\n" +
-    "Number | Predicted | Actual\n" +
-    Array.from({ length: 10 }, (_, n) =>
-        n + " | " + predictedCounts[n] +
-        " | " + actualCounts[n]
-    ).join("\n")
-);
-        const correctCounts = Array(10).fill(0);
-const totalCounts = Array(10).fill(0);
+const candidateValidation =
+    await getValidationMetrics(candidateModel);
 
-for (let i = 0; i < actualTestData.length; i++) {
-
-    let predictedNumber = 0;
-    let bestProbability = -Infinity;
-
-    for (let j = 0; j < 10; j++) {
-        if (testPredData[i * 10 + j] > bestProbability) {
-            bestProbability = testPredData[i * 10 + j];
-            predictedNumber = j;
-        }
-    }
-
-    const actualNumber = Number(actualTestData[i]);
-
-    if (Number.isInteger(actualNumber) &&
-        actualNumber >= 0 && actualNumber <= 9) {
-
-        totalCounts[actualNumber]++;
-
-        if (predictedNumber === actualNumber) {
-            correctCounts[actualNumber]++;
-        }
-    }
+if (
+    !Number.isFinite(candidateValidation.loss) ||
+    !Number.isFinite(candidateValidation.accuracy)
+) {
+    throw new Error("Invalid candidate validation metrics.");
 }
 
-alert(
-    "NUMBER-WISE TEST ACCURACY\n\n" +
-    "Number | Correct | Total | Accuracy\n" +
-    Array.from({ length: 10 }, (_, n) => {
-        const accuracy = totalCounts[n] > 0
-            ? (correctCounts[n] / totalCounts[n] * 100).toFixed(1)
-            : "N/A";
-
-        return n + " | " + correctCounts[n] +
-            " | " + totalCounts[n] +
-            " | " + accuracy + "%";
-    }).join("\n")
-);
-       
-const confusionMatrix = Array.from(
-    { length: 10 },
-    () => Array(10).fill(0)
+console.log(
+    "CANDIDATE VALIDATION LOSS:",
+    candidateValidation.loss
 );
 
-for (let i = 0; i < actualTestData.length; i++) {
+console.log(
+    "CANDIDATE VALIDATION ACCURACY:",
+    (candidateValidation.accuracy * 100).toFixed(2) + "%"
+);
 
-    let predictedNumber = 0;
-    let bestProbability = -Infinity;
+if (previousModel) {
 
-    for (let j = 0; j < 10; j++) {
+    const previousValidation =
+        await getValidationMetrics(previousModel);
 
-        const probability = testPredData[i * 10 + j];
+    console.log(
+        "PREVIOUS VALIDATION LOSS:",
+        previousValidation.loss
+    );
 
-        if (probability > bestProbability) {
-            bestProbability = probability;
-            predictedNumber = j;
-        }
-    }
-
-    const actualNumber = Number(actualTestData[i]);
+    console.log(
+        "PREVIOUS VALIDATION ACCURACY:",
+        (previousValidation.accuracy * 100).toFixed(2) + "%"
+    );
 
     if (
-        Number.isInteger(actualNumber) &&
-        actualNumber >= 0 &&
-        actualNumber <= 9
+        !Number.isFinite(previousValidation.loss) ||
+        candidateValidation.loss >= previousValidation.loss
     ) {
-        confusionMatrix[actualNumber][predictedNumber]++;
+
+        console.warn(
+            "Candidate rejected. Previous model kept."
+        );
+
+        alert(
+            "CANDIDATE REJECTED\n\n" +
+            "Validation loss better nahi hua.\n" +
+            "Purana model safe hai."
+        );
+
+        return false;
     }
 }
 
 alert(
-    "CONFUSION MATRIX\n\n" +
-    "Rows = Actual Number\n" +
-    "Columns = Predicted Number\n\n" +
-    "Actual | 0 1 2 3 4 5 6 7 8 9\n" +
-    confusionMatrix.map((row, n) =>
-        n + " | " + row.map(value => String(value).padStart(3, " ")).join(" ")
-    ).join("\n")
+    "CANDIDATE PASSED VALIDATION\n\n" +
+    "Validation Loss = " +
+    candidateValidation.loss.toFixed(4) +
+    "\nValidation Accuracy = " +
+    (candidateValidation.accuracy * 100).toFixed(2) +
+    "%"
 );
         
-testPredTensor.dispose();
-        
-        console.log("CANDIDATE TEST LOSS:", candidateLoss);
-console.log(
-    "CANDIDATE TEST ACCURACY:",
-    (candidateAccuracy * 100).toFixed(2) + "%"
-);
-
-alert(
-    "CANDIDATE TEST RESULTS\n\n" +
-    "TEST LOSS = " + candidateLoss.toFixed(4) + "\n" +
-    "TEST ACCURACY = " +
-    (candidateAccuracy * 100).toFixed(2) + "%"
-);
-
-        if (!Number.isFinite(candidateLoss) || !Number.isFinite(candidateAccuracy)) {
-            throw new Error("Candidate test metrics are not finite.");
-        }
-
-        if (previousModel && previousModel.optimizer) {
-    const previousEval = previousModel.evaluate(testXs, testYs, { batchSize: 16, verbose: 0 });
-            
-            const previousEvalTensors = Array.isArray(previousEval) ? previousEval : [previousEval];
-            const previousLoss = (await previousEvalTensors[0].data())[0];
-            const previousAccuracy = previousEvalTensors[1]
-                ? (await previousEvalTensors[1].data())[0]
-                : NaN;
-            previousEvalTensors.forEach(t => t.dispose());
-
-            console.log("PREVIOUS TEST LOSS:", previousLoss);
-            console.log("PREVIOUS TEST ACCURACY:", (previousAccuracy * 100).toFixed(2) + "%");
-
-            // Conservative acceptance rule: candidate must not regress either metric.
-            if (
-                !Number.isFinite(previousLoss) ||
-                !Number.isFinite(previousAccuracy) ||
-                candidateAccuracy < previousAccuracy ||
-                candidateLoss > previousLoss
-            ) {
-                console.warn("Candidate rejected; previous model kept.");
-                alert("CANDIDATE REJECTED\n\nPurana model safe hai.\nNaya model test mein better nahi tha.");
-                return false;
-            }
-        }
-
         // Do not dispose the previous model here. Save step must succeed first.
         aiModel = candidateModel;
         accepted = true;
