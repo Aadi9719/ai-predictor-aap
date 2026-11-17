@@ -283,6 +283,17 @@ Math.abs(
 
         const probabilityValues = Array.from(probabilities);
 
+        const probabilitySum =
+    probabilityValues.reduce(
+        (sum, p) => sum + p,
+        0
+    );
+
+console.log(
+    "AI PROBABILITY SUM =",
+    probabilitySum
+);
+        
 alert(
     "PREDICTION OUTPUT CHECK\n\n" +
     "Length = " + probabilityValues.length +
