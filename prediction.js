@@ -412,8 +412,6 @@ async function trainAIModel(
     let ys = null;
     let validationXs = null;
     let validationYs = null;
-    let testXs = null;
-    let testYs = null;
     let accepted = false;
 
     try {
