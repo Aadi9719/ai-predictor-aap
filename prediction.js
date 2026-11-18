@@ -463,8 +463,6 @@ candidateModel = tf.sequential();
 
         xs = tf.tensor2d(inputs.map(row => row.map(Number)));
         ys = tf.tensor1d(targets.map(Number));
-        testXs = tf.tensor2d(testInputs.map(row => row.map(Number)));
-        testYs = tf.tensor1d(testTargets.map(Number));
 
         if (
             Array.isArray(validationInputs) &&
