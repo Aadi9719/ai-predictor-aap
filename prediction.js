@@ -412,6 +412,8 @@ async function trainAIModel(
     let ys = null;
     let validationXs = null;
     let validationYs = null;
+    let testXs = null;
+    let testYs = null;
     let accepted = false;
 
     try {
@@ -472,6 +474,8 @@ candidateModel = tf.sequential();
         ) {
             validationXs = tf.tensor2d(validationInputs.map(row => row.map(Number)));
             validationYs = tf.tensor1d(validationTargets.map(Number));
+            testXs =tf.tensor2d(testInputs.map(row => row.map(Number)));
+            testYs =tf.tensor1d(testTargets.map(Number));
         }
 
         const finiteInput = Array.from(xs.dataSync()).every(Number.isFinite);
@@ -635,6 +639,9 @@ alert(
         if (validationXs) validationXs.dispose();
         if (validationYs) validationYs.dispose();
         if (candidateModel) candidateModel.dispose();
+        if (testXs) testXs.dispose();
+        if (testYs) testYs.dispose();
+        
         // If not accepted, aiModel was never changed and the old model remains active.
         if (!accepted) aiModel = previousModel;
     }
