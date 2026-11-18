@@ -634,8 +634,6 @@ alert(
         if (ys) ys.dispose();
         if (validationXs) validationXs.dispose();
         if (validationYs) validationYs.dispose();
-        if (testXs) testXs.dispose();
-        if (testYs) testYs.dispose();
         if (candidateModel) candidateModel.dispose();
         // If not accepted, aiModel was never changed and the old model remains active.
         if (!accepted) aiModel = previousModel;
