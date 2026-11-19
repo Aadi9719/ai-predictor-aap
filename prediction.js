@@ -583,7 +583,7 @@ console.log(
     (candidateValidation.accuracy * 100).toFixed(2) + "%"
 );
 
-if (previousModel) {
+if (previousModel && previousModel.optimizer) {
 
     const previousValidation =
         await getValidationMetrics(previousModel);
