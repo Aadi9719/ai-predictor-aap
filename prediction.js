@@ -529,6 +529,12 @@ if (!validationXs || !validationYs) {
 
 async function getValidationMetrics(model) {
 
+    if (!model.optimizer) {
+    throw new Error(
+        "Validation model is not compiled."
+    );
+    }
+    
     const evaluation = model.evaluate(
         validationXs,
         validationYs,
