@@ -441,18 +441,6 @@ async function trainAIModel(
             return false;
         }
 
-        const validTest = testInputs.every(row =>
-            Array.isArray(row) && row.length === 5 &&
-            row.every(value => Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 9)
-        ) && testTargets.every(value =>
-            Number.isInteger(Number(value)) && Number(value) >= 0 && Number(value) <= 9
-        );
-
-        if (!validTest) {
-            console.error("Candidate training skipped: invalid test data.");
-            return false;
-        }
-
 candidateModel = tf.sequential();
         candidateModel.add(tf.layers.dense({ inputShape: [5], units: 32, activation: "relu" }));
         candidateModel.add(tf.layers.dense({ units: 16, activation: "relu" }));
