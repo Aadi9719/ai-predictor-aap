@@ -431,16 +431,6 @@ async function trainAIModel(
             return false;
         }
 
-        if (
-            !Array.isArray(testInputs) ||
-            !Array.isArray(testTargets) ||
-            testInputs.length === 0 ||
-            testInputs.length !== testTargets.length
-        ) {
-            console.error("Candidate training skipped: a separate test set is required.");
-            return false;
-        }
-
 candidateModel = tf.sequential();
         candidateModel.add(tf.layers.dense({ inputShape: [5], units: 32, activation: "relu" }));
         candidateModel.add(tf.layers.dense({ units: 16, activation: "relu" }));
