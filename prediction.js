@@ -846,6 +846,12 @@ for (const weight of weights) {
 }
 
 alert("LOADED MODEL WEIGHTS FINITE = " + weightsFinite);
+
+        if (!weightsFinite) {
+    throw new Error(
+        "Loaded model contains invalid weights."
+    );
+        }
         
         console.log("AI model loaded successfully.");
         return true;
