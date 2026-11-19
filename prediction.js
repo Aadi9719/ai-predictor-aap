@@ -452,8 +452,6 @@ candidateModel = tf.sequential();
         ) {
             validationXs = tf.tensor2d(validationInputs.map(row => row.map(Number)));
             validationYs = tf.tensor1d(validationTargets.map(Number));
-            testXs =tf.tensor2d(testInputs.map(row => row.map(Number)));
-            testYs =tf.tensor1d(testTargets.map(Number));
         }
 
         const finiteInput = Array.from(xs.dataSync()).every(Number.isFinite);
