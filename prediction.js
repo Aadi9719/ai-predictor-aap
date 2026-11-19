@@ -474,19 +474,9 @@ const validValidationTargets =
 if (!validValidationInputs || !validValidationTargets) {
     throw new Error("Invalid validation data.");
 }
-
-validationXs = tf.tensor2d(
-    validationInputs.map(row => row.map(Number))
-);
-
-validationYs = tf.tensor1d(
-    validationTargets.map(Number)
-);
-        {
             validationXs = tf.tensor2d(validationInputs.map(row => row.map(Number)));
             validationYs = tf.tensor1d(validationTargets.map(Number));
-        }
-
+    
         const finiteInput = Array.from(xs.dataSync()).every(Number.isFinite);
         const finiteTargets = Array.from(ys.dataSync()).every(Number.isFinite);
         alert("INPUT FINITE = " + finiteInput + "\nTARGET FINITE = " + finiteTargets);
