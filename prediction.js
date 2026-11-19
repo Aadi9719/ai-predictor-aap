@@ -582,7 +582,15 @@ console.log(
     (candidateValidation.accuracy * 100).toFixed(2) + "%"
 );
 
-if (previousModel && previousModel.optimizer) {
+if (previousModel) {
+
+    if (!previousModel.optimizer) {
+        previousModel.compile({
+            optimizer: tf.train.adam(0.001),
+            loss: "sparseCategoricalCrossentropy",
+            metrics: ["accuracy"]
+        });
+    }
 
     const previousValidation =
         await getValidationMetrics(previousModel);
@@ -632,7 +640,8 @@ alert(
         window.__previousAIModelForRollback = previousModel;
         window.__candidateAIModelNeedsSave = true;
 
-        alert("CANDIDATE PASSED TEST\n\nAb save step hoga.");
+        alert("CANDIDATE PASSED VALIDATION\n\nAb save step hoga.");
+        
         return true;
     } catch (error) {
         console.error("Candidate AI training failed:", error);
