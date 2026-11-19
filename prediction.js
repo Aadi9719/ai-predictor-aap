@@ -445,11 +445,44 @@ candidateModel = tf.sequential();
         ys = tf.tensor1d(targets.map(Number));
 
         if (
-            Array.isArray(validationInputs) &&
-            Array.isArray(validationTargets) &&
-            validationInputs.length > 0 &&
-            validationInputs.length === validationTargets.length
-        ) {
+    !Array.isArray(validationInputs) ||
+    !Array.isArray(validationTargets) ||
+    validationInputs.length === 0 ||
+    validationInputs.length !== validationTargets.length
+) {
+    throw new Error("Valid validation data is required.");
+}
+
+const validValidationInputs =
+    validationInputs.every(row =>
+        Array.isArray(row) &&
+        row.length === 5 &&
+        row.every(value =>
+            Number.isInteger(Number(value)) &&
+            Number(value) >= 0 &&
+            Number(value) <= 9
+        )
+    );
+
+const validValidationTargets =
+    validationTargets.every(value =>
+        Number.isInteger(Number(value)) &&
+        Number(value) >= 0 &&
+        Number(value) <= 9
+    );
+
+if (!validValidationInputs || !validValidationTargets) {
+    throw new Error("Invalid validation data.");
+}
+
+validationXs = tf.tensor2d(
+    validationInputs.map(row => row.map(Number))
+);
+
+validationYs = tf.tensor1d(
+    validationTargets.map(Number)
+);
+        {
             validationXs = tf.tensor2d(validationInputs.map(row => row.map(Number)));
             validationYs = tf.tensor1d(validationTargets.map(Number));
         }
