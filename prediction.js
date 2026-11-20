@@ -767,6 +767,19 @@ async function saveAIModel() {
         return false;
     }
 
+    const outputShape = aiModel.outputs[0].shape;
+
+if (
+    !Array.isArray(outputShape) ||
+    outputShape.length !== 2 ||
+    outputShape[1] !== 10
+) {
+    console.error(
+        "Save rejected: Model must have 10 output classes."
+    );
+    return false;
+}
+    
     const previousModel = window.__previousAIModelForRollback || null;
     const needsPromotion = window.__candidateAIModelNeedsSave === true;
 
