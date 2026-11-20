@@ -1433,6 +1433,45 @@ async function evaluateAIModelOnTestSet(testInputs, testTargets) {
             { batchSize: 16, verbose: 0 }
         );
 
+        predictionTensor = aiModel.predict(testXs);
+
+const predictionProbabilities =
+    await predictionTensor.array();
+
+const confusionMatrix =
+    Array.from(
+        { length: 10 },
+        () => Array(10).fill(0)
+    );
+
+for (let i = 0; i < testTargets.length; i++) {
+
+    const actual = Number(testTargets[i]);
+
+    const predicted =
+        predictionProbabilities[i].indexOf(
+            Math.max(...predictionProbabilities[i])
+        );
+
+    confusionMatrix[actual][predicted]++;
+}
+
+console.log(
+    "10-CLASS CONFUSION MATRIX:",
+    confusionMatrix
+);
+
+alert(
+    "CONFUSION MATRIX\n\n" +
+    "Rows = Actual Number\n" +
+    "Columns = Predicted Number\n\n" +
+    confusionMatrix
+        .map((row, index) =>
+            index + " | " + row.join("  ")
+        )
+        .join("\n")
+);
+        
         const tensors = Array.isArray(evaluation)
             ? evaluation
             : [evaluation];
