@@ -733,6 +733,15 @@ if (!saved) {
 
     return false;
 }
+
+        const testResult = await evaluateAIModelOnTestSet(
+    dataset.testInputs,
+    dataset.testTargets
+);
+
+if (!testResult) {
+    console.warn("Model saved, but test evaluation failed.");
+}
         
         console.log(
             "AI model weights updated successfully."
