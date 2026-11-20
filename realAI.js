@@ -1408,7 +1408,8 @@ async function evaluateAIModelOnTestSet(testInputs, testTargets) {
     let testXs = null;
     let testYs = null;
     let evaluation = null;
-
+    let predictionTensor = null;
+    
     try {
         if (!aiModel.optimizer) {
             aiModel.compile({
