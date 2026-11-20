@@ -1367,6 +1367,124 @@ alert(
     };
 }
 
+async function evaluateAIModelOnTestSet(testInputs, testTargets) {
+
+    if (!aiModel) {
+        console.error("Test evaluation failed: AI model missing.");
+        return false;
+    }
+
+    if (
+        !Array.isArray(testInputs) ||
+        !Array.isArray(testTargets) ||
+        testInputs.length === 0 ||
+        testInputs.length !== testTargets.length
+    ) {
+        console.error("Invalid test dataset.");
+        return false;
+    }
+
+    const validInputs = testInputs.every(row =>
+        Array.isArray(row) &&
+        row.length === 5 &&
+        row.every(value =>
+            Number.isInteger(Number(value)) &&
+            Number(value) >= 0 &&
+            Number(value) <= 9
+        )
+    );
+
+    const validTargets = testTargets.every(value =>
+        Number.isInteger(Number(value)) &&
+        Number(value) >= 0 &&
+        Number(value) <= 9
+    );
+
+    if (!validInputs || !validTargets) {
+        console.error("Invalid test values.");
+        return false;
+    }
+
+    let testXs = null;
+    let testYs = null;
+    let evaluation = null;
+
+    try {
+        if (!aiModel.optimizer) {
+            aiModel.compile({
+                optimizer: tf.train.adam(0.001),
+                loss: "sparseCategoricalCrossentropy",
+                metrics: ["accuracy"]
+            });
+        }
+
+        testXs = tf.tensor2d(
+            testInputs.map(row => row.map(Number))
+        );
+
+        testYs = tf.tensor1d(
+            testTargets.map(Number)
+        );
+
+        evaluation = aiModel.evaluate(
+            testXs,
+            testYs,
+            { batchSize: 16, verbose: 0 }
+        );
+
+        const tensors = Array.isArray(evaluation)
+            ? evaluation
+            : [evaluation];
+
+        const loss = (await tensors[0].data())[0];
+        const accuracy = tensors[1]
+            ? (await tensors[1].data())[0]
+            : NaN;
+
+        if (
+            !Number.isFinite(loss) ||
+            !Number.isFinite(accuracy)
+        ) {
+            throw new Error("Invalid test metrics.");
+        }
+
+        const result = {
+            samples: testInputs.length,
+            loss: loss,
+            accuracy: accuracy
+        };
+
+        console.log("FINAL TEST RESULTS:", result);
+
+        alert(
+            "UNSEEN TEST RESULTS\n\n" +
+            "Samples = " + result.samples +
+            "\nTest Loss = " + loss.toFixed(4) +
+            "\nTest Accuracy = " +
+            (accuracy * 100).toFixed(2) + "%"
+        );
+
+        return result;
+
+    } catch (error) {
+        console.error("Test evaluation error:", error);
+        alert("TEST EVALUATION ERROR: " + error.message);
+        return false;
+
+    } finally {
+        if (testXs) testXs.dispose();
+        if (testYs) testYs.dispose();
+
+        if (evaluation) {
+            const tensors = Array.isArray(evaluation)
+                ? evaluation
+                : [evaluation];
+
+            tensors.forEach(t => t.dispose());
+        }
+    }
+}
+
 window.auditPhase3MLData = function () {
 
     console.log("PHASE 3 DATA AUDIT STARTED");
