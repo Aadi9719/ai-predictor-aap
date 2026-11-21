@@ -1337,6 +1337,10 @@ const trainCounts = countClasses(
     dataset.targets.slice(0, trainSize)
 );
 
+    const validationCounts = countClasses(
+    dataset.targets.slice(trainSize, testStart)
+);
+    
 const testCounts = countClasses(
     dataset.targets.slice(testStart)
 );
