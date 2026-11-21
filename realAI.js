@@ -1512,9 +1512,11 @@ alert(
         return false;
 
     } finally {
+        
         if (testXs) testXs.dispose();
         if (testYs) testYs.dispose();
-
+        if (predictionTensor) predictionTensor.dispose();
+        
         if (evaluation) {
             const tensors = Array.isArray(evaluation)
                 ? evaluation
