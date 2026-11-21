@@ -1346,10 +1346,13 @@ const testCounts = countClasses(
 );
 
 alert(
-    "TRAIN vs TEST DISTRIBUTION\n\n" +
-    "Number | Train | Test\n" +
+    "TRAIN vs VALIDATION vs TEST\n\n" +
+    "Number | Train | Validation | Test\n" +
     Array.from({ length: 10 }, (_, n) =>
-        n + " | " + trainCounts[n] + " | " + testCounts[n]
+        n + " | " +
+        trainCounts[n] + " | " +
+        validationCounts[n] + " | " +
+        testCounts[n]
     ).join("\n")
 );
     
