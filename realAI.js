@@ -1260,7 +1260,7 @@ if (
     continue;
 }
 
-        X.push(input);
+        X.push(input.map(Number));
         Y.push(target);
     }
 
