@@ -1370,6 +1370,24 @@ const testCounts = countClasses(
     dataset.targets.slice(testStart)
 );
 
+    const lastTrainTarget = dataset.targets[trainSize - 1];
+
+const firstValidationTarget = dataset.targets[trainSize];
+
+const lastValidationTarget = dataset.targets[testStart - 1];
+
+const firstTestTarget = dataset.targets[testStart];
+
+console.log(
+    "CHRONOLOGICAL SPLIT CHECK",
+    {
+        lastTrainTarget,
+        firstValidationTarget,
+        lastValidationTarget,
+        firstTestTarget
+    }
+);
+    
 alert(
     "TRAIN vs VALIDATION vs TEST\n\n" +
     "Number | Train | Validation | Test\n" +
