@@ -1378,14 +1378,12 @@ const lastValidationTarget = dataset.targets[testStart - 1];
 
 const firstTestTarget = dataset.targets[testStart];
 
-console.log(
-    "CHRONOLOGICAL SPLIT CHECK",
-    {
-        lastTrainTarget,
-        firstValidationTarget,
-        lastValidationTarget,
-        firstTestTarget
-    }
+    alert(
+    "CHRONOLOGICAL SPLIT CHECK\n\n" +
+    "Last Train Target = " + lastTrainTarget + "\n" +
+    "First Validation Target = " + firstValidationTarget + "\n" +
+    "Last Validation Target = " + lastValidationTarget + "\n" +
+    "First Test Target = " + firstTestTarget
 );
     
 alert(
