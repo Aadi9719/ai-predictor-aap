@@ -1333,6 +1333,18 @@ if (
     const validationSize = Math.floor(total * 0.15);
     const testStart = trainSize + validationSize;
 
+    if (
+    trainSize <= 0 ||
+    validationSize <= 0 ||
+    testStart >= total
+) {
+    console.error("INVALID DATA SPLIT");
+    return {
+        ready: false,
+        message: "Invalid train/validation/test split"
+    };
+    }
+    
     const countClasses = (targets) => {
     const counts = Array(10).fill(0);
 
