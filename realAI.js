@@ -1313,6 +1313,19 @@ function buildMLTrainValidationTestSet() {
 
     const total = dataset.inputs.length;
 
+    const expectedSamples = total;
+
+if (
+    dataset.inputs.length !== dataset.targets.length ||
+    total !== dataset.targets.length
+) {
+    console.error("DATASET LENGTH MISMATCH");
+    return {
+        ready: false,
+        message: "Input and target length mismatch"
+    };
+}
+    
     // Time-based split:
     // 70% Training, 15% Validation, 15% Test
 
