@@ -1,11 +1,3 @@
-// ========================================
-// PREDICTION.JS
-// FINAL PREDICTION ENGINE
-// ========================================
-
-// ========================================
-// COLOR
-// ========================================
 alert("PREDICTION.JS LOADED");
 
 function getColorPrediction(number) {
@@ -26,10 +18,6 @@ function getColorPrediction(number) {
 
 }
 
-// ========================================
-// BIG / SMALL
-// ========================================
-
 function getBigSmallPrediction(number) {
 
     number = Number(number);
@@ -38,11 +26,6 @@ function getBigSmallPrediction(number) {
         ? "🔵 BIG"
         : "🟡 SMALL";
 }
-
-
-// ========================================
-// TREND PREDICTION
-// ========================================
 
 function getTrendPrediction() {
 
@@ -83,11 +66,6 @@ function getTrendPrediction() {
 
     return best;
 }
-
-
-// ========================================
-// TREND SCORE
-// ========================================
 
 function getTrendScore() {
 
@@ -131,11 +109,6 @@ function getTrendScore() {
         )
     );
 }
-
-
-// ========================================
-// HOT / COLD
-// ========================================
 
 function getHotColdNumbers() {
 
@@ -191,14 +164,6 @@ function getHotColdNumbers() {
         cold: cold
     };
 }
-
-
-// ========================================
-// REAL AI MODEL PREDICTION
-// ========================================
-// Optional signal only.
-// Does NOT guarantee the future result.
-// ========================================
 
 async function getRealAIPrediction(input) {
 
@@ -371,11 +336,6 @@ alert(
     }
 }
 
-// ========================================
-// PHASE 3 — NEURAL NETWORK TRAINING
-// Educational ML / forecasting demo
-// ========================================
-
 let aiModel = null;
 
 async function trainAIModel(
@@ -515,11 +475,6 @@ if (!validValidationInputs || !validValidationTargets) {
             throw new Error("Candidate model has non-finite weights.");
         }
         
-// ========================================
-// VALIDATION-BASED MODEL SELECTION
-// Test data will NOT be used here.
-// ========================================
-
 if (!validationXs || !validationYs) {
     throw new Error("Validation data is required.");
 }
@@ -657,10 +612,6 @@ alert(
     }
 }
 
-// ========================================
-// PHASE 3 — AUTOMATIC RETRAINING
-// ========================================
-
 async function retrainAIModel() {
 
     alert("TEST: retrainAIModel STARTED");
@@ -763,10 +714,6 @@ if (!testResult) {
 
     return success;
 }
-
-// ========================================
-// PHASE 3 — MODEL SAVE / LOAD
-// ========================================
 
 async function saveAIModel() {
     if (!aiModel) {
