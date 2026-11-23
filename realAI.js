@@ -1218,6 +1218,8 @@ function buildMLDataset() {
         ? allResults
         : [];
 
+    alert("TOTAL SAVED RESULTS = " + allResults.length);
+    
     if (history.length < 20) {
         return {
             samples: 0,
