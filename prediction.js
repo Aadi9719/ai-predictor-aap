@@ -550,10 +550,12 @@ if (previousModel) {
     const previousValidation =
         await getValidationMetrics(previousModel);
 
-    console.log(
-        "PREVIOUS VALIDATION LOSS:",
-        previousValidation.loss
-    );
+    alert(
+    "PREVIOUS MODEL VALIDATION RESULTS\n\n" +
+    "Loss = " + previousValidation.loss.toFixed(4) +
+    "\nAccuracy = " +
+    (previousValidation.accuracy * 100).toFixed(2) + "%"
+);
 
     console.log(
         "PREVIOUS VALIDATION ACCURACY:",
