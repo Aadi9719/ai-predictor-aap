@@ -525,9 +525,11 @@ if (
     throw new Error("Invalid candidate validation metrics.");
 }
 
-console.log(
-    "CANDIDATE VALIDATION LOSS:",
-    candidateValidation.loss
+alert(
+    "CANDIDATE VALIDATION RESULTS\n\n" +
+    "Loss = " + candidateValidation.loss.toFixed(4) +
+    "\nAccuracy = " +
+    (candidateValidation.accuracy * 100).toFixed(2) + "%"
 );
 
 console.log(
