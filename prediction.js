@@ -941,66 +941,119 @@ if (!testResult) {
 }
 
 async function saveAIModel() {
-    if (!aiModel) {
+
+    const candidateModel = aiModel;
+
+    const previousModel =
+        window.__previousAIModelForRollback || null;
+
+    const needsPromotion =
+        window.__candidateAIModelNeedsSave === true;
+
+    if (!candidateModel) {
         console.warn("AI model available nahi hai.");
         return false;
     }
 
-    const outputShape = aiModel.outputs[0].shape;
-
-if (
-    !Array.isArray(outputShape) ||
-    outputShape.length !== 2 ||
-    outputShape[1] !== 10
-) {
-    console.error(
-        "Save rejected: Model must have 10 output classes."
-    );
-    return false;
-}
-    
-    const previousModel = window.__previousAIModelForRollback || null;
-    const needsPromotion = window.__candidateAIModelNeedsSave === true;
-
     try {
-        // Keep a backup of the current saved model before replacing its storage key.
-        // The backup key is intentionally separate from the production model key.
-        if (needsPromotion && previousModel) {
-            await previousModel.save("localstorage://phase3-ai-model-v3-backup");
+
+        const outputShape =
+            candidateModel.outputs[0].shape;
+
+        if (
+            !Array.isArray(outputShape) ||
+            outputShape.length !== 2 ||
+            outputShape[1] !== 10
+        ) {
+            throw new Error(
+                "Model must have 10 output classes."
+            );
         }
 
-        await aiModel.save("localstorage://phase3-ai-model-v3");
+        // Save previous model as backup first
+        if (needsPromotion && previousModel) {
+            await previousModel.save(
+                "localstorage://phase3-ai-model-v3-backup"
+            );
+        }
 
-        alert("SAVE SUCCESS\n\nAI model successfully save ho gaya.");
-        
+        // Save candidate as active model
+        await candidateModel.save(
+            "localstorage://phase3-ai-model-v3"
+        );
+
         window.__candidateAIModelNeedsSave = false;
         window.__previousAIModelForRollback = null;
-        if (previousModel && previousModel !== aiModel) previousModel.dispose();
+
+        if (
+            previousModel &&
+            previousModel !== candidateModel
+        ) {
+            previousModel.dispose();
+        }
+
+        alert(
+            "SAVE SUCCESS\n\n" +
+            "AI model successfully save ho gaya."
+        );
+
         return true;
+
     } catch (error) {
 
-        alert("SAVE ERROR\n\n" + error.message);
+        alert(
+            "SAVE ERROR\n\n" +
+            error.message
+        );
 
-        // Restore the previous in-memory model if candidate saving fails.
-        if (needsPromotion && previousModel) {
-            const rejectedCandidate = aiModel;
-            aiModel = previousModel;
+        // Restore previous model in memory
+        if (needsPromotion) {
+
+            if (previousModel) {
+
+                aiModel = previousModel;
+
+            } else {
+
+                aiModel = null;
+
+            }
+
+            if (
+                candidateModel &&
+                candidateModel !== previousModel
+            ) {
+                candidateModel.dispose();
+            }
+
             window.__previousAIModelForRollback = null;
             window.__candidateAIModelNeedsSave = false;
-            if (rejectedCandidate && rejectedCandidate !== previousModel) rejectedCandidate.dispose();
 
-            // If production storage was partially changed, try restoring its backup.
-            try {
-                const backupModel = await tf.loadLayersModel(
-                    "localstorage://phase3-ai-model-v3-backup"
-                );
-                await backupModel.save("localstorage://phase3-ai-model-v3");
-                backupModel.dispose();
-                console.warn("Previous saved model restored from backup.");
-            } catch (restoreError) {
-                console.error("Could not restore saved-model backup:", restoreError);
+            // Restore saved model from backup when available
+            if (previousModel) {
+                try {
+                    const backupModel =
+                        await tf.loadLayersModel(
+                            "localstorage://phase3-ai-model-v3-backup"
+                        );
+
+                    await backupModel.save(
+                        "localstorage://phase3-ai-model-v3"
+                    );
+
+                    backupModel.dispose();
+
+                } catch (restoreError) {
+
+                    console.error(
+                        "Backup restore failed:",
+                        restoreError
+                    );
+
+                }
             }
         }
+
         return false;
     }
 }
