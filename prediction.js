@@ -339,7 +339,6 @@ alert(
 let aiModel = null;
 
 async function trainAIModel(
-
     inputs,
     targets,
     validationInputs = null,
@@ -348,135 +347,357 @@ async function trainAIModel(
     testTargets = null
 ) {
 
-    alert("TRAIN AI MODEL VERSION 2");
-    
+    alert("TRAIN AI MODEL VERSION 3");
+
     if (
         !Array.isArray(inputs) ||
         !Array.isArray(targets) ||
         inputs.length < 20 ||
         inputs.length !== targets.length
     ) {
-        console.warn("Not enough training data.");
+        alert("INVALID TRAINING DATA");
         return false;
     }
 
     if (typeof tf === "undefined") {
-        console.error("TensorFlow.js load nahi hua.");
+        alert("TENSORFLOW NOT LOADED");
         return false;
     }
 
-    // Keep the currently working model alive while training a candidate.
+    if (
+        !Array.isArray(validationInputs) ||
+        !Array.isArray(validationTargets) ||
+        validationInputs.length === 0 ||
+        validationInputs.length !== validationTargets.length
+    ) {
+        alert("VALIDATION DATA REQUIRED");
+        return false;
+    }
+
+    const validRows = rows =>
+        rows.every(row =>
+            Array.isArray(row) &&
+            row.length === 5 &&
+            row.every(value =>
+                Number.isInteger(Number(value)) &&
+                Number(value) >= 0 &&
+                Number(value) <= 9
+            )
+        );
+
+    const validLabels = labels =>
+        labels.every(value =>
+            Number.isInteger(Number(value)) &&
+            Number(value) >= 0 &&
+            Number(value) <= 9
+        );
+
+    if (
+        !validRows(inputs) ||
+        !validLabels(targets) ||
+        !validRows(validationInputs) ||
+        !validLabels(validationTargets)
+    ) {
+        alert("INVALID TRAINING OR VALIDATION VALUES");
+        return false;
+    }
+
     const previousModel = aiModel;
+
     let candidateModel = null;
     let xs = null;
     let ys = null;
     let validationXs = null;
     let validationYs = null;
+
     let accepted = false;
+
+    async function getValidationMetrics(model) {
+
+        let evaluation = null;
+
+        try {
+
+            evaluation = model.evaluate(
+                validationXs,
+                validationYs,
+                {
+                    batchSize: 16,
+                    verbose: 0
+                }
+            );
+
+            const tensors = Array.isArray(evaluation)
+                ? evaluation
+                : [evaluation];
+
+            if (tensors.length < 2) {
+                throw new Error(
+                    "Validation loss or accuracy missing."
+                );
+            }
+
+            const lossData =
+                await tensors[0].data();
+
+            const accuracyData =
+                await tensors[1].data();
+
+            const loss = Number(lossData[0]);
+            const accuracy = Number(accuracyData[0]);
+
+            if (
+                !Number.isFinite(loss) ||
+                !Number.isFinite(accuracy)
+            ) {
+                throw new Error(
+                    "Invalid validation metrics."
+                );
+            }
+
+            return {
+                loss,
+                accuracy
+            };
+
+        } finally {
+
+            if (evaluation) {
+
+                const tensors = Array.isArray(evaluation)
+                    ? evaluation
+                    : [evaluation];
+
+                tensors.forEach(t => t.dispose());
+            }
+        }
+    }
 
     try {
 
-        const validInputs = inputs.every(row =>
-            Array.isArray(row) && row.length === 5 &&
-            row.every(value => Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 9)
-        );
-        const validTargets = targets.every(value =>
-            Number.isInteger(Number(value)) && Number(value) >= 0 && Number(value) <= 9
+        // STEP 1: CREATE CANDIDATE MODEL
+
+        candidateModel = tf.sequential();
+
+        candidateModel.add(
+            tf.layers.dense({
+                inputShape: [5],
+                units: 32,
+                activation: "relu"
+            })
         );
 
-        if (!validInputs || !validTargets) {
-            console.error("Candidate training skipped: invalid input/target values.");
-            return false;
-        }
+        candidateModel.add(
+            tf.layers.dense({
+                units: 16,
+                activation: "relu"
+            })
+        );
 
-candidateModel = tf.sequential();
-        candidateModel.add(tf.layers.dense({ inputShape: [5], units: 32, activation: "relu" }));
-        candidateModel.add(tf.layers.dense({ units: 16, activation: "relu" }));
-        candidateModel.add(tf.layers.dense({ units: 10, activation: "softmax" }));
+        candidateModel.add(
+            tf.layers.dense({
+                units: 10,
+                activation: "softmax"
+            })
+        );
+
         candidateModel.compile({
             optimizer: tf.train.adam(0.001),
             loss: "sparseCategoricalCrossentropy",
             metrics: ["accuracy"]
         });
 
-        xs = tf.tensor2d(inputs.map(row => row.map(Number)));
-        ys = tf.tensor1d(targets.map(Number));
+        // STEP 2: CREATE TENSORS
 
-        if (
-    !Array.isArray(validationInputs) ||
-    !Array.isArray(validationTargets) ||
-    validationInputs.length === 0 ||
-    validationInputs.length !== validationTargets.length
-) {
-    throw new Error("Valid validation data is required.");
-}
+        xs = tf.tensor2d(
+            inputs.map(row => row.map(Number)),
+            [inputs.length, 5]
+        );
 
-const validValidationInputs =
-    validationInputs.every(row =>
-        Array.isArray(row) &&
-        row.length === 5 &&
-        row.every(value =>
-            Number.isInteger(Number(value)) &&
-            Number(value) >= 0 &&
-            Number(value) <= 9
-        )
-    );
+        ys = tf.tensor1d(
+            targets.map(Number),
+            "int32"
+        );
 
-const validValidationTargets =
-    validationTargets.every(value =>
-        Number.isInteger(Number(value)) &&
-        Number(value) >= 0 &&
-        Number(value) <= 9
-    );
+        validationXs = tf.tensor2d(
+            validationInputs.map(row => row.map(Number)),
+            [validationInputs.length, 5]
+        );
 
-if (!validValidationInputs || !validValidationTargets) {
-    throw new Error("Invalid validation data.");
-}
-            validationXs = tf.tensor2d(validationInputs.map(row => row.map(Number)));
-            validationYs = tf.tensor1d(validationTargets.map(Number));
-    
-        const finiteInput = Array.from(xs.dataSync()).every(Number.isFinite);
-        const finiteTargets = Array.from(ys.dataSync()).every(Number.isFinite);
-        alert("INPUT FINITE = " + finiteInput + "\nTARGET FINITE = " + finiteTargets);
+        validationYs = tf.tensor1d(
+            validationTargets.map(Number),
+            "int32"
+        );
+
+        // STEP 3: CHECK FINITE VALUES
+
+        const finiteInput =
+            Array.from(xs.dataSync()).every(Number.isFinite);
+
+        const finiteTargets =
+            Array.from(ys.dataSync()).every(Number.isFinite);
+
         if (!finiteInput || !finiteTargets) {
-            throw new Error("Training tensors contain non-finite values.");
+            throw new Error(
+                "Training tensors contain invalid values."
+            );
         }
 
-        alert("CANDIDATE MODEL FIT START");
-        
+        alert(
+            "CANDIDATE TRAINING START\n\n" +
+            "Training Samples = " + inputs.length +
+            "\nValidation Samples = " +
+            validationInputs.length
+        );
+
+        // STEP 4: TRAIN CANDIDATE
+
         await candidateModel.fit(xs, ys, {
+
             epochs: 30,
             batchSize: 16,
             shuffle: false,
-            validationData: validationXs && validationYs ? [validationXs, validationYs] : undefined,
-            verbose: 0,
-            callbacks: {
-    onEpochEnd: async function (epoch, logs) {
-        if (epoch === 0 || (epoch + 1) % 10 === 0 || epoch === 29) {
-            alert(
-                "TRAINING PROGRESS\n\n" +
-                "Epoch: " + (epoch + 1) + " / 30\n\n" +
-                "Training Logs:\n" +
-                JSON.stringify(logs, null, 2)
-            );
-        }
-    }
-            }
+
+            validationData: [
+                validationXs,
+                validationYs
+            ],
+
+            verbose: 0
         });
 
-        alert("MODEL FIT COMPLETED");
-        
-        const candidateWeights = candidateModel.getWeights();
-        const candidateWeightsFinite = candidateWeights.every(weight =>
-            Array.from(weight.dataSync()).every(Number.isFinite)
-        );
-        alert("CANDIDATE WEIGHTS FINITE = " + candidateWeightsFinite);
-        if (!candidateWeightsFinite) {
-            throw new Error("Candidate model has non-finite weights.");
+        alert("CANDIDATE TRAINING COMPLETED");
+
+        // STEP 5: CHECK CANDIDATE WEIGHTS
+
+        const candidateWeights =
+            candidateModel.getWeights();
+
+        const weightsFinite =
+            candidateWeights.every(weight =>
+                Array.from(
+                    weight.dataSync()
+                ).every(Number.isFinite)
+            );
+
+        if (!weightsFinite) {
+            throw new Error(
+                "Candidate weights contain invalid values."
+            );
         }
-        
-if (!validationXs || !validationYs) {
-    throw new Error("Validation data is required.");
+
+        // STEP 6: CANDIDATE VALIDATION
+
+        const candidateValidation =
+            await getValidationMetrics(candidateModel);
+
+        alert(
+            "CANDIDATE VALIDATION RESULTS\n\n" +
+            "Loss = " +
+            candidateValidation.loss.toFixed(4) +
+            "\nAccuracy = " +
+            (candidateValidation.accuracy * 100).toFixed(2) +
+            "%"
+        );
+
+        // STEP 7: PREVIOUS MODEL VALIDATION
+
+        let previousValidation = null;
+
+        if (previousModel) {
+
+            if (!previousModel.optimizer) {
+
+                previousModel.compile({
+                    optimizer: tf.train.adam(0.001),
+                    loss: "sparseCategoricalCrossentropy",
+                    metrics: ["accuracy"]
+                });
+            }
+
+            previousValidation =
+                await getValidationMetrics(previousModel);
+
+            alert(
+                "PREVIOUS MODEL VALIDATION RESULTS\n\n" +
+                "Loss = " +
+                previousValidation.loss.toFixed(4) +
+                "\nAccuracy = " +
+                (previousValidation.accuracy * 100).toFixed(2) +
+                "%"
+            );
+        }
+
+        // STEP 8: MODEL SELECTION
+
+        if (
+            previousValidation &&
+            candidateValidation.loss >= previousValidation.loss
+        ) {
+
+            alert(
+                "CANDIDATE REJECTED\n\n" +
+                "Validation loss better nahi hua.\n" +
+                "Purana model safe hai."
+            );
+
+            return false;
+        }
+
+        // STEP 9: ACCEPT CANDIDATE
+
+        aiModel = candidateModel;
+
+        if (typeof window !== "undefined") {
+
+            window.__previousAIModelForRollback =
+                previousModel;
+
+            window.__candidateAIModelNeedsSave = true;
+        }
+
+        accepted = true;
+
+        candidateModel = null;
+
+        alert(
+            "CANDIDATE ACCEPTED\n\n" +
+            "Validation loss improved.\n" +
+            "New model selected."
+        );
+
+        return true;
+
+    } catch (error) {
+
+        alert(
+            "TRAINING ERROR\n\n" +
+            error.message
+        );
+
+        console.error(
+            "trainAIModel error:",
+            error
+        );
+
+        return false;
+
+    } finally {
+
+        if (xs) xs.dispose();
+        if (ys) ys.dispose();
+
+        if (validationXs) validationXs.dispose();
+        if (validationYs) validationYs.dispose();
+
+        if (candidateModel) {
+            candidateModel.dispose();
+        }
+
+        if (!accepted) {
+            aiModel = previousModel;
+        }
+    }
 }
 
 async function getValidationMetrics(model) {
