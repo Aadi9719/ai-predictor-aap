@@ -511,7 +511,8 @@ async function trainAIModel(
 
         xs = tf.tensor2d(
             inputs.map(row => row.map(Number)),
-            [inputs.length, 5]
+            [inputs.length, 5],
+            "float32"
         );
 
         ys = tf.tensor1d(
@@ -521,7 +522,8 @@ async function trainAIModel(
 
         validationXs = tf.tensor2d(
             validationInputs.map(row => row.map(Number)),
-            [validationInputs.length, 5]
+            [validationInputs.length, 5],
+            "float32"
         );
 
         validationYs = tf.tensor1d(
